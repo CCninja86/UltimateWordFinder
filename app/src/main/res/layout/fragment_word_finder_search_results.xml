@@ -1,0 +1,105 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.example.james.ultimatescrabbleapp.WordFinderSearchResultsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ListView
+        android:layout_width="261dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/listSearchResults"
+        android:layout_gravity="left|top"
+        tools:listitem="@android:layout/simple_list_item_1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/btnMinWordScore"
+        android:layout_toStartOf="@+id/btnMinWordScore"
+        android:choiceMode="multipleChoice"
+        android:listSelector="#00000000"
+        android:layout_below="@+id/btnOfficial"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Official?"
+        android:id="@+id/btnOfficial"
+        android:layout_gravity="right|top"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/listSearchResults"
+        android:layout_toEndOf="@+id/listSearchResults"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Min. Word Score"
+        android:id="@+id/btnMinWordScore"
+        android:layout_above="@+id/btnGetDefinition"
+        android:layout_alignLeft="@+id/btnGetDefinition"
+        android:layout_alignStart="@+id/btnGetDefinition"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Definition"
+        android:id="@+id/btnGetDefinition"
+        android:layout_above="@+id/btnCompareScores"
+        android:layout_alignLeft="@+id/btnCompareScores"
+        android:layout_alignStart="@+id/btnCompareScores"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Compare Scores"
+        android:id="@+id/btnCompareScores"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressOfficial"
+        android:layout_below="@+id/btnOfficial"
+        android:layout_toRightOf="@+id/listSearchResults"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:indeterminate="false"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Checking Word:"
+        android:id="@+id/textViewProgress"
+        android:layout_below="@+id/progressOfficial"
+        android:layout_toRightOf="@+id/listSearchResults"
+        android:layout_toEndOf="@+id/listSearchResults"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select All"
+        android:id="@+id/btnSelectAll"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deselect All"
+        android:id="@+id/btnDeselectAll"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/btnSelectAll"
+        android:layout_toEndOf="@+id/btnSelectAll"/>
+</RelativeLayout>
