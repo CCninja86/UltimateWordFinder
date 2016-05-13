@@ -1,8 +1,11 @@
 package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +54,8 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
 
     private Player player;
 
+    private String m_text = "";
+
 
 
     /**
@@ -92,22 +97,15 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_words, container, false);
 
-        textViewDoubleLetter = (TextView) view.findViewById(R.id.textViewDoubleLetter);
-        textViewTripleLetter = (TextView) view.findViewById(R.id.textViewTripleLetter);
         textViewDoubleWord = (TextView) view.findViewById(R.id.textViewDoubleWord);
         textViewTripleWord = (TextView) view.findViewById(R.id.textViewTripleWord);
-        editTextDoubleLetter = (EditText) view.findViewById(R.id.editTextDoubleLetter);
-        editTextTripleLetter = (EditText) view.findViewById(R.id.editTextTripleLetter);
         editTextDoubleWord = (EditText) view.findViewById(R.id.editTextDoubleWord);
         editTextTripleWord = (EditText) view.findViewById(R.id.editTextTripleWord);
         editTextWords = (EditText) view.findViewById(R.id.editTextWords);
 
-        textViewDoubleLetter.setVisibility(View.INVISIBLE);
-        textViewTripleLetter.setVisibility(View.INVISIBLE);
+
         textViewDoubleWord.setVisibility(View.INVISIBLE);
         textViewTripleWord.setVisibility(View.INVISIBLE);
-        editTextDoubleLetter.setVisibility(View.INVISIBLE);
-        editTextTripleLetter.setVisibility(View.INVISIBLE);
         editTextDoubleWord.setVisibility(View.INVISIBLE);
         editTextTripleWord.setVisibility(View.INVISIBLE);
 
@@ -118,30 +116,6 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                 CheckBox selectedCheckBox = null;
 
                 switch (view.getId()) {
-                    case R.id.checkDoubleLetter:
-                        selectedCheckBox = (CheckBox) view.findViewById(R.id.checkDoubleLetter);
-
-                        if (selectedCheckBox.isChecked()) {
-                            textViewDoubleLetter.setVisibility(View.VISIBLE);
-                            editTextDoubleLetter.setVisibility(View.VISIBLE);
-                        } else {
-                            textViewDoubleLetter.setVisibility(View.INVISIBLE);
-                            editTextDoubleLetter.setVisibility(View.INVISIBLE);
-                        }
-
-                        break;
-                    case R.id.checkTripleLetter:
-                        selectedCheckBox = (CheckBox) view.findViewById(R.id.checkTripleLetter);
-
-                        if (selectedCheckBox.isChecked()) {
-                            textViewTripleLetter.setVisibility(View.VISIBLE);
-                            editTextTripleLetter.setVisibility(View.VISIBLE);
-                        } else {
-                            textViewTripleLetter.setVisibility(View.INVISIBLE);
-                            editTextTripleLetter.setVisibility(View.INVISIBLE);
-                        }
-
-                        break;
                     case R.id.checkDoubleWord:
                         selectedCheckBox = (CheckBox) view.findViewById(R.id.checkDoubleWord);
 
@@ -191,18 +165,14 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
             public void onClick(View view) {
                 ArrayList<String> words = new ArrayList<String>();
 
-                if(editTextWords.getText().toString().contains(",")){
+                if(!editTextWords.getText().toString().isEmpty()){
                     String[] enteredWords = editTextWords.getText().toString().split(",");
 
                     for(String enteredWord : enteredWords){
                         words.add(enteredWord);
                     }
-                } else {
-                    words.add(editTextWords.getText().toString());
                 }
 
-                ArrayList<String> doubleLetters = new ArrayList<String>();
-                ArrayList<String> tripleLetters = new ArrayList<String>();
                 Map<String, Integer> wordsWithBonuses = new HashMap<String, Integer>();
                 boolean doubleLetter = false;
                 boolean tripleLetter = false;
@@ -225,22 +195,6 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                     }
                 }
 
-                if(!editTextDoubleLetter.getText().toString().isEmpty()){
-                    String[] letters = editTextDoubleLetter.getText().toString().split(",");
-
-                    for(String letter : letters){
-                        doubleLetters.add(letter.toUpperCase());
-                    }
-                }
-
-                if(!editTextTripleLetter.getText().toString().isEmpty()){
-                    String[] letters = editTextTripleLetter.getText().toString().split(",");
-
-                    for(String letter : letters){
-                        tripleLetters.add(letter.toUpperCase());
-                    }
-                }
-
                 if(checkDoubleLetter.isChecked()){
                     doubleLetter = true;
                 }
@@ -257,8 +211,83 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                     tripleWord = true;
                 }
 
+                final Map<String, Integer> wordsWithBonusesFinal = wordsWithBonuses;
+                final boolean doubleLetterFinal = doubleLetter;
+                final boolean tripleLetterFinal = tripleLetter;
+                final boolean doubleWordFinal = doubleWord;
+                final boolean tripleWordFinal = tripleWord;
+
                 for(String playedWord : words){
-                    player.addWordScore(playedWord.toUpperCase(), wordsWithBonuses, doubleLetter, tripleLetter, doubleWord, tripleWord, doubleLetters, tripleLetters);
+                    final String playedWordFinal = playedWord;
+                    final ArrayList<String> doubleLetters = new ArrayList<>();
+                    final ArrayList<String> tripleLetters = new ArrayList<>();
+
+                    if(doubleLetter || tripleLetter) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Double Letter Bonuses (Current word: " + playedWordFinal + ")");
+                        builder.setMessage("Enter the letters that are on a double letter bonus, separated by a comma (no spaces)");
+
+                        final EditText input = new EditText(getContext());
+
+                        input.setInputType(InputType.TYPE_CLASS_TEXT);
+                        builder.setView(input);
+
+                        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                m_text = input.getText().toString();
+
+                                String[] letters = m_text.split(",");
+
+                                for (String letter : letters) {
+                                    doubleLetters.add(letter.toUpperCase());
+                                }
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Triple Letter Bonuses (Current word: " + playedWordFinal + ")");
+                                builder.setMessage("Enter the letters that are on a triple letter bonus, separated by a comma (no spaces)");
+
+                                final EditText input = new EditText(getContext());
+
+                                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                                builder.setView(input);
+
+                                builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        m_text = input.getText().toString();
+
+                                        String[] letters = m_text.split(",");
+
+                                        for (String letter : letters) {
+                                            tripleLetters.add(letter.toUpperCase());
+                                        }
+
+                                        player.addWordScore(playedWordFinal.toUpperCase(), wordsWithBonusesFinal, doubleLetterFinal, tripleLetterFinal, doubleWordFinal, tripleWordFinal, doubleLetters, tripleLetters);
+                                    }
+                                });
+
+                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+
+                                builder.show();
+                            }
+                        });
+
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+
+                        builder.show();
+                    }
+
                 }
 
                 Toast.makeText(getContext(), "Words added for " + player.getName() + "", Toast.LENGTH_LONG).show();
