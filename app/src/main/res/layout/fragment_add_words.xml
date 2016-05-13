@@ -50,58 +50,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Double Letter(s)"
-        android:id="@+id/textViewDoubleLetter"
-        android:textSize="20dp"
-        android:layout_above="@+id/editTextDoubleLetter"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextDoubleLetter"
-        android:layout_marginBottom="26dp"
-        android:layout_above="@+id/textViewTripleLetter"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/textViewDoubleLetter"
-        android:layout_alignEnd="@+id/textViewDoubleLetter"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextTripleLetter"
-        android:layout_above="@+id/btnAddWords"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/textViewTripleLetter"
-        android:layout_alignEnd="@+id/textViewTripleLetter"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Triple Letter(s)"
-        android:id="@+id/textViewTripleLetter"
-        android:layout_above="@+id/editTextTripleLetter"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textSize="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Double Word(s)"
         android:id="@+id/textViewDoubleWord"
-        android:layout_alignTop="@+id/textViewDoubleLetter"
-        android:layout_toRightOf="@+id/textViewDoubleLetter"
-        android:layout_marginLeft="34dp"
-        android:layout_marginStart="34dp"
-        android:layout_alignRight="@+id/btnAddWords"
-        android:layout_alignEnd="@+id/btnAddWords"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:layout_below="@+id/checkTripleWord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="24dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -109,32 +64,21 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Triple Word(s)"
         android:id="@+id/textViewTripleWord"
-        android:layout_alignTop="@+id/textViewTripleLetter"
-        android:layout_alignLeft="@+id/editTextDoubleWord"
-        android:layout_alignStart="@+id/editTextDoubleWord"
-        android:layout_alignRight="@+id/btnAddWords"
-        android:layout_alignEnd="@+id/btnAddWords"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/editTextDoubleWord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editTextDoubleWord"
         android:layout_below="@+id/textViewDoubleWord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/textViewDoubleWord"
-        android:layout_alignStart="@+id/textViewDoubleWord"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextTripleWord"
-        android:layout_alignTop="@+id/editTextTripleLetter"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/textViewTripleWord"
-        android:layout_alignStart="@+id/textViewTripleWord"/>
+        android:layout_alignParentEnd="true"/>
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -175,5 +119,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:checked="false"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextTripleWord"
+        android:layout_below="@+id/textViewTripleWord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>
