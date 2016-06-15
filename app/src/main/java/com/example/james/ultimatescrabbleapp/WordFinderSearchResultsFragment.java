@@ -43,6 +43,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
     private ArrayList<String> searchResults;
     private ResultListAdapter adapter;
     private Dictionary dictionary;
+    private ListView listResults;
 
     /**
      * Use this factory method to create a new instance of
@@ -84,7 +85,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         Bundle bundle = getArguments();
         Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();
-        final ListView listResults = (ListView) view.findViewById(R.id.listSearchResults);
+        this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
         this.searchResults = bundle.getStringArrayList("Search Results");
         this.adapter = new ResultListAdapter(getActivity(), this.searchResults);
         listResults.setAdapter(adapter);
@@ -250,7 +251,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                         break;
                     case R.id.btnGetDefinition:
-                        ArrayList<String> selectedWords = new ArrayList<String>();
+                        ArrayList<String> selectedWords = new ArrayList<>();
 
                         int length = listResults.getCount();
                         SparseBooleanArray checkedWords = listResults.getCheckedItemPositions();
@@ -265,11 +266,34 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                         if(selectedWords.size() > 1){
                             Toast.makeText(getContext(), "Please only select one word at a time for this feature.", Toast.LENGTH_LONG).show();
                         } else {
-                            mListener.onFragmentInteraction("definition", selectedWords);
+                            mListener.onResultsFragmentInteraction("definition", selectedWords);
                         }
 
                         break;
                     case R.id.btnCompareScores:
+                        ArrayList<String> wordsToCompare = new ArrayList<>();
+
+                        int listLength = listResults.getCount();
+                        SparseBooleanArray wordsChecked = listResults.getCheckedItemPositions();
+
+                        for(int i = 0; i < listLength; i++){
+                            if(wordsChecked.get(i)){
+                                String word = listResults.getItemAtPosition(i).toString();
+                                wordsToCompare.add(word);
+                            }
+                        }
+
+                        if(wordsToCompare.size() >= 1){
+                            for(int i = 0; i < listResults.getAdapter().getCount(); i++){
+                                listResults.setItemChecked(i, false);
+                            }
+
+                            adapter.notifyDataSetChanged();
+
+                            mListener.onResultsFragmentInteraction("compare", wordsToCompare);
+                        } else {
+                            Toast.makeText(getContext(), "Please select at least one word to use this feature", Toast.LENGTH_LONG).show();
+                        }
 
                         break;
                     case R.id.btnSelectAll:
@@ -332,6 +356,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
     @Override
     public void onDetach() {
         super.onDetach();
+
         mListener = null;
     }
 
@@ -347,7 +372,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String action, ArrayList<String> selectedWords);
+        public void onResultsFragmentInteraction(String action, ArrayList<String> selectedWords);
     }
 
 }

@@ -12,7 +12,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener {
+public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener {
 
 
     private com.example.james.ultimatescrabbleapp.Dictionary dictionary;
@@ -27,7 +27,6 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         Fragment wordFinderFragment = new WordFinderMainFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.containerWordFinder, wordFinderFragment);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -54,7 +53,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onFragmentInteraction(View view, ArrayList<Word> searchMatches) {
+    public void onSearchFragmentInteraction(View view, ArrayList<Word> searchMatches) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         switch (view.getId()){
@@ -84,10 +83,19 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onFragmentInteraction(String action, ArrayList<String> selectedWords) {
+    public void onResultsFragmentInteraction(String action, ArrayList<String> selectedWords) {
         if(action.equals("definition")){
             final Intent browserActivity = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.dictionary.com/browse/" + selectedWords.get(0)));
             startActivity(browserActivity);
+        } else if(action.equals("compare")){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            Fragment scoreComparisonFragment = new WordFinderScoreComparisonFragment();
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("wordsToCompare", selectedWords);
+            scoreComparisonFragment.setArguments(bundle);
+            transaction.replace(R.id.containerWordFinder, scoreComparisonFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
     }
 
@@ -107,5 +115,10 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onScoreComparisonFragmentInteraction(Uri uri) {
+
     }
 }

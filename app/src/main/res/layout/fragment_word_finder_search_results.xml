@@ -29,8 +29,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/listSearchResults"
-        android:layout_toEndOf="@+id/listSearchResults"/>
+        android:layout_toEndOf="@+id/listSearchResults"
+        />
 
     <Button
         android:layout_width="wrap_content"
@@ -91,7 +91,8 @@
         android:id="@+id/btnSelectAll"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:textSize="12dp"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -101,5 +102,7 @@
         android:id="@+id/btnDeselectAll"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/btnSelectAll"
-        android:layout_toEndOf="@+id/btnSelectAll"/>
+        android:layout_toLeftOf="@+id/btnOfficial"
+        android:layout_toStartOf="@+id/btnOfficial"
+        android:textSize="12dp"/>
 </RelativeLayout>

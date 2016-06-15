@@ -135,7 +135,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         btnAdvancedSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onFragmentInteraction(view, null);
+                mListener.onSearchFragmentInteraction(view, null);
             }
         });
 
@@ -262,7 +262,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             if (matches.size() < 1) {
                 Toast.makeText(getContext(), "No Matches Found", Toast.LENGTH_LONG).show();
             } else {
-                mListener.onFragmentInteraction(view, matches);
+                mListener.onSearchFragmentInteraction(view, matches);
             }
         }
     }
@@ -489,7 +489,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(View view, ArrayList<Word> searchMatches);
+        public void onSearchFragmentInteraction(View view, ArrayList<Word> searchMatches);
     }
 
     public void updateWordProgressLabel(String text){
