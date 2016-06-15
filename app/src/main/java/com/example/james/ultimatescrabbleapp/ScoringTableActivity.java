@@ -52,7 +52,6 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
         scoringFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.container, scoringFragment);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

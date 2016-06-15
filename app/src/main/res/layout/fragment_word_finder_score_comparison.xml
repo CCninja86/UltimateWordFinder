@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.example.james.ultimatescrabbleapp.WordFinderScoreComparisonFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ListView
+        android:layout_width="201dp"
+        android:layout_height="200dp"
+        android:id="@+id/listViewWords"
+        android:layout_gravity="left|top"
+        tools:listitem="@android:layout/simple_list_item_1"
+        android:choiceMode="multipleChoice"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/btnCompareWords"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Compare"
+        android:id="@+id/btnCompareWords"
+        android:layout_gravity="right|top"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <ListView
+        android:layout_width="202dp"
+        android:layout_height="200dp"
+        android:id="@+id/listViewComparison"
+        android:layout_gravity="left|bottom"
+        tools:listitem="@android:layout/simple_list_item_1"
+        android:choiceMode="none"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

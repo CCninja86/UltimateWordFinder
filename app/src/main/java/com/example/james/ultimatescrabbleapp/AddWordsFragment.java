@@ -286,6 +286,8 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                         });
 
                         builder.show();
+                    } else {
+                        player.addWordScore(playedWordFinal.toUpperCase(), wordsWithBonusesFinal, doubleLetterFinal, tripleLetterFinal, doubleWordFinal, tripleWordFinal, doubleLetters, tripleLetters);
                     }
 
                 }
