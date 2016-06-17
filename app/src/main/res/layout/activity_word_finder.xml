@@ -8,9 +8,9 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.example.james.ultimatescrabbleapp.WordFinderActivity">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/containerWordFinder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"></LinearLayout>
 
 </RelativeLayout>
