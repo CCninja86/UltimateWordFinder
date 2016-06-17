@@ -26,17 +26,19 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         Bundle bundle = getIntent().getBundleExtra("selection");
         int selection = bundle.getInt("selection");
 
-        Fragment fragment = null;
+        if(savedInstanceState == null) {
+            Fragment fragment = null;
 
-        if(selection == 1){
-            fragment = new WordFinderDictionaryFragment();
-        } else {
-            fragment = new WordFinderMainFragment();
+            if (selection == 1) {
+                fragment = new WordFinderDictionaryFragment();
+            } else {
+                fragment = new WordFinderMainFragment();
+            }
+
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerWordFinder, fragment);
+            fragmentTransaction.commit();
         }
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.containerWordFinder, fragment);
-        fragmentTransaction.commit();
     }
 
     @Override

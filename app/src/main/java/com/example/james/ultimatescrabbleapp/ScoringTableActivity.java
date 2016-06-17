@@ -34,25 +34,27 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
         setContentView(R.layout.activity_scoring_table);
 
 
-
         Bundle bundle = getIntent().getExtras();
         this.players = bundle.getStringArrayList("Player List");
 
         scrabbleGame = new Scrabble();
         scrabbleGame.initialiseTiles();
 
-        for(String playerName : players){
+        for (String playerName : players) {
             Player player = new Player(playerName, scrabbleGame);
             scrabbleGame.addPlayer(player);
         }
 
         bundle = new Bundle();
         bundle.putSerializable("Scrabble Game", scrabbleGame);
-        Fragment scoringFragment = new ScoringFragment();
-        scoringFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.container, scoringFragment);
-        fragmentTransaction.commit();
+
+        if(savedInstanceState == null) {
+            Fragment scoringFragment = new ScoringFragment();
+            scoringFragment.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.container, scoringFragment);
+            fragmentTransaction.commit();
+        }
     }
 
     @Override
