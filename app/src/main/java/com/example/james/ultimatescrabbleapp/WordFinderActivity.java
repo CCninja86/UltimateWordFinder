@@ -12,7 +12,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener {
+public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener {
 
 
     private com.example.james.ultimatescrabbleapp.Dictionary dictionary;
@@ -23,10 +23,19 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_finder);
 
+        Bundle bundle = getIntent().getBundleExtra("selection");
+        int selection = bundle.getInt("selection");
 
-        Fragment wordFinderFragment = new WordFinderMainFragment();
+        Fragment fragment = null;
+
+        if(selection == 1){
+            fragment = new WordFinderDictionaryFragment();
+        } else {
+            fragment = new WordFinderMainFragment();
+        }
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.containerWordFinder, wordFinderFragment);
+        fragmentTransaction.replace(R.id.containerWordFinder, fragment);
         fragmentTransaction.commit();
     }
 
@@ -119,6 +128,11 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onScoreComparisonFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onDictionaryFragmentInteraction(Uri uri) {
 
     }
 }

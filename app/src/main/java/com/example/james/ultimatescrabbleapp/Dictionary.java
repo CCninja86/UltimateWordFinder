@@ -2,6 +2,8 @@ package com.example.james.ultimatescrabbleapp;
 
 
 
+import android.app.ProgressDialog;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -9,7 +11,8 @@ import java.util.ArrayList;
  * Created by James on 18/11/2015.
  */
 public class Dictionary implements Serializable {
-    private ArrayList<Word> words;
+    private ArrayList<Word> wordList;
+    private ArrayList<String> stringWordList;
     public static DatabaseHandler database;
 
     /**'
@@ -17,7 +20,8 @@ public class Dictionary implements Serializable {
      * @throws java.io.IOException
      */
     public Dictionary() {
-        this.words = new ArrayList<>();
+        this.wordList = new ArrayList<>();
+        this.stringWordList = new ArrayList<>();
     }
 
     /**
@@ -25,7 +29,17 @@ public class Dictionary implements Serializable {
      * @return the list of words
      */
     public ArrayList<Word> getWordList() {
-        return this.words;
+        return this.wordList;
+    }
+
+    private void populateStringWordList(){
+        for(Word word : this.wordList){
+            stringWordList.add(word.getWord());
+        }
+    }
+
+    public ArrayList<String> getStringWordList(){
+        return this.stringWordList;
     }
 
     /**
@@ -34,7 +48,7 @@ public class Dictionary implements Serializable {
      * @return the word at the specified index
      */
     public String getWordAtIndex(int index) {
-        Object[] wordArray = this.words.toArray();
+        Object[] wordArray = this.wordList.toArray();
 
         return wordArray[index - 1].toString();
     }
@@ -42,7 +56,7 @@ public class Dictionary implements Serializable {
     public ArrayList<Word> getWords(String letter, int position, int length){
         ArrayList<Word> wordsToReturn = new ArrayList<>();
 
-        for(Word word : this.words){
+        for(Word word : this.wordList){
             if((word.getWord().indexOf(letter) == position) && word.getWord().length() == length){
                 wordsToReturn.add(word);
             }
@@ -54,7 +68,7 @@ public class Dictionary implements Serializable {
     public ArrayList<Word> getWordsOfLength(int length){
         ArrayList<Word> wordsToReturn = new ArrayList<>();
 
-        for(Word word : this.words){
+        for(Word word : this.wordList){
             if(word.getWord().length() == length){
                 wordsToReturn.add(word);
             }
@@ -66,7 +80,7 @@ public class Dictionary implements Serializable {
     public ArrayList<Word> getWordsStartingWith(String prefix){
         ArrayList<Word> wordsToReturn = new ArrayList<>();
 
-        for(Word word : this.words){
+        for(Word word : this.wordList){
             if(word.getWord().startsWith(prefix)){
                 wordsToReturn.add(word);
             }
@@ -75,10 +89,23 @@ public class Dictionary implements Serializable {
         return wordsToReturn;
     }
 
+    public ArrayList<String> getStringWordsStartingWith(String prefix){
+        ArrayList<String> wordsToReturn = new ArrayList<>();
+
+        for(String word : this.stringWordList){
+            if(word.startsWith(prefix)){
+                wordsToReturn.add(word);
+            }
+        }
+
+        return wordsToReturn;
+    }
+
+
     public ArrayList<Word> getWordsEndingWith(String suffix){
         ArrayList<Word> wordsToReurn = new ArrayList<>();
 
-        for(Word word : this.words){
+        for(Word word : this.wordList){
             if(word.getWord().endsWith(suffix)){
                 wordsToReurn.add(word);
             }
@@ -88,7 +115,7 @@ public class Dictionary implements Serializable {
     }
 
     public void addWord(Word word){
-        this.words.add(word);
+        this.wordList.add(word);
     }
 
     /**
@@ -114,7 +141,7 @@ public class Dictionary implements Serializable {
     public boolean isWordOfficial(String word){
         boolean isOfficial = false;
 
-        for(Word wordInDictionary : this.words){
+        for(Word wordInDictionary : this.wordList){
             if(wordInDictionary.getWord().equals(word)){
                 isOfficial = wordInDictionary.isWordOfficial();
             }
@@ -159,6 +186,7 @@ public class Dictionary implements Serializable {
     }
 
     public void setWordList(){
-        this.words = this.database.getAllWords();
+        this.wordList = this.database.getAllWords();
+        populateStringWordList();
     }
 }
