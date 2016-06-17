@@ -1,10 +1,15 @@
 package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -20,6 +25,10 @@ import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Handler;
@@ -107,7 +116,6 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                     context = getActivity().getApplicationContext();
                     LoadFragmentTask task = new LoadFragmentTask();
                     task.execute();
-
                 } else {
                     mListener.onScoringFragmentButtonInteraction(view);
                 }
@@ -179,6 +187,12 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
 
     private class LoadFragmentTask extends AsyncTask<Void, Void, Void> {
 
+        private static final int DICTIONARY = 1;
+        private static final int WORD_FINDER = 2;
+        private int selection;
+        private boolean hasActiveInternetConnection;
+        private String alertDialogMessage;
+
         public LoadFragmentTask(){
 
         }
@@ -186,8 +200,8 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         @Override
         protected void onPreExecute(){
             progressDialog = new ProgressDialog(getContext());
-            progressDialog.setTitle("Setting up dictionary");
-            progressDialog.setMessage("Loading...this may take a while depending on the speed of your device");
+            progressDialog.setTitle("Performing first-time setup...");
+            progressDialog.setMessage("Loading Dictionary...this could take several minutes depending on the speed of your device");
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -206,8 +220,23 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                 g.setDictionary(dictionary);
             }
 
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.setMessage("Checking Internet Connection...");
+                }
+            });
 
 
+            boolean hasActiveInternetConnection = hasActiveInternetConnection(getContext());
+            String internetConnectionText = "\nNote: You are not currently connected to the Internet. Getting the definitions of words currently requires an Internet connection, as it opens a webpage." +
+                    " Definitions may be available offline in a future update.";
+
+            alertDialogMessage = "Would you like to open the full Word Finder or just a basic Dictionary?";
+
+            if(!hasActiveInternetConnection){
+                alertDialogMessage += internetConnectionText;
+            }
 
             return null;
         }
@@ -219,10 +248,59 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                 progressDialog = null;
             }
 
-            Intent intent = new Intent(context, WordFinderActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+
+
+            AlertDialog.Builder builderSelection = new AlertDialog.Builder(getContext());
+            builderSelection.setTitle("Word Finder or Dictionary?");
+            builderSelection.setMessage(alertDialogMessage);
+
+            builderSelection.setNegativeButton("Dictionary", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    selection = DICTIONARY;
+                    setup(selection);
+                }
+            });
+
+            builderSelection.setPositiveButton("Word Finder", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    selection = WORD_FINDER;
+                    setup(selection);
+                }
+            });
+
+           builderSelection.show();
+
         }
     }
 
+    private void setup(int selection){
+        Bundle bundle = new Bundle();
+        bundle.putInt("selection", selection);
+        Intent intent = new Intent(context, WordFinderActivity.class);
+        intent.putExtra("selection", bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    private boolean hasActiveInternetConnection(Context context){
+        boolean success = false;
+
+        try {
+            URL url = new URL("https://www.google.com");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(10000);
+            connection.connect();
+            success = connection.getResponseCode() == 200;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
 }
+
+
+
+
