@@ -57,6 +57,16 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
     private Handler handler;
     public transient Context context;
 
+    private Globals g;
+    private Dictionary dictionary;
+
+    private static final int DICTIONARY = 1;
+    private static final int WORD_FINDER = 2;
+    private int selection;
+
+    private boolean hasActiveInternetConnection;
+
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -102,6 +112,10 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scoring, container, false);
+
+        g = Globals.getInstance();
+        dictionary = g.getDictionary();
+
         Bundle bundle = getArguments();
         this.scrabbleGame = (Scrabble) bundle.getSerializable("Scrabble Game");
 
@@ -113,9 +127,35 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View view) {
                 if(view.getId() == R.id.btnWordFinder){
-                    context = getActivity().getApplicationContext();
-                    LoadFragmentTask task = new LoadFragmentTask();
-                    task.execute();
+                    if(dictionary == null) {
+                        final AlertDialog.Builder builderConfirm = new AlertDialog.Builder(getContext());
+                        builderConfirm.setTitle("First-time Setup");
+                        builderConfirm.setMessage("Both the Dictionary and Word Finder features utilise a very large database. " +
+                                "Due to this, a first-time setup is required to use these features. This setup can take several minutes, " +
+                                "depending on the speed of your device. Would you like to perform the first-time setup now?");
+
+                        builderConfirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+
+                        builderConfirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                context = getActivity().getApplicationContext();
+                                LoadFragmentTask task = new LoadFragmentTask();
+                                task.execute();
+                            }
+                        });
+
+                        builderConfirm.show();
+                    } else {
+                        context = getActivity().getApplicationContext();
+                        LoadFragmentTask task = new LoadFragmentTask();
+                        task.execute();
+                    }
                 } else {
                     mListener.onScoringFragmentButtonInteraction(view);
                 }
@@ -187,11 +227,9 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
 
     private class LoadFragmentTask extends AsyncTask<Void, Void, Void> {
 
-        private static final int DICTIONARY = 1;
-        private static final int WORD_FINDER = 2;
-        private int selection;
-        private boolean hasActiveInternetConnection;
-        private String alertDialogMessage;
+
+
+
 
         public LoadFragmentTask(){
 
@@ -201,7 +239,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         protected void onPreExecute(){
             progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Performing first-time setup...");
-            progressDialog.setMessage("Loading Dictionary...this could take several minutes depending on the speed of your device");
+            progressDialog.setMessage("Loading Dictionary...");
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -209,9 +247,6 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Globals g = Globals.getInstance();
-            Dictionary dictionary = g.getDictionary();
-
             if(dictionary == null){
                 dictionary = new com.example.james.ultimatescrabbleapp.Dictionary();
                 final DatabaseHandler database = new DatabaseHandler(context);
@@ -227,16 +262,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                 }
             });
 
-
-            boolean hasActiveInternetConnection = hasActiveInternetConnection(getContext());
-            String internetConnectionText = "\nNote: You are not currently connected to the Internet. Getting the definitions of words currently requires an Internet connection, as it opens a webpage." +
-                    " Definitions may be available offline in a future update.";
-
-            alertDialogMessage = "Would you like to open the full Word Finder or just a basic Dictionary?";
-
-            if(!hasActiveInternetConnection){
-                alertDialogMessage += internetConnectionText;
-            }
+            hasActiveInternetConnection = hasActiveInternetConnection();
 
             return null;
         }
@@ -248,34 +274,41 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                 progressDialog = null;
             }
 
-
-
-            AlertDialog.Builder builderSelection = new AlertDialog.Builder(getContext());
-            builderSelection.setTitle("Word Finder or Dictionary?");
-            builderSelection.setMessage(alertDialogMessage);
-
-            builderSelection.setNegativeButton("Dictionary", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    selection = DICTIONARY;
-                    setup(selection);
-                }
-            });
-
-            builderSelection.setPositiveButton("Word Finder", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    selection = WORD_FINDER;
-                    setup(selection);
-                }
-            });
-
-           builderSelection.show();
-
+            choose();
         }
     }
 
-    private void setup(int selection){
+    private void choose(){
+        String alertMessage = "Would you like to open the Word Finder or Basic Dictionary?";
+
+        if(!hasActiveInternetConnection){
+            alertMessage += "\n\nNote: You are not connected to the Internet. You will not be able to view the definitions of words. All other features will be available.";
+        }
+
+        AlertDialog.Builder builderSelection = new AlertDialog.Builder(getContext());
+        builderSelection.setTitle("Word Finder or Dictionary?");
+        builderSelection.setMessage(alertMessage);
+
+        builderSelection.setNegativeButton("Dictionary", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                selection = DICTIONARY;
+                setup();
+            }
+        });
+
+        builderSelection.setPositiveButton("Word Finder", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                selection = WORD_FINDER;
+                setup();
+            }
+        });
+
+        builderSelection.show();
+    }
+
+    private void setup(){
         Bundle bundle = new Bundle();
         bundle.putInt("selection", selection);
         Intent intent = new Intent(context, WordFinderActivity.class);
@@ -284,7 +317,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         context.startActivity(intent);
     }
 
-    private boolean hasActiveInternetConnection(Context context){
+    private boolean hasActiveInternetConnection(){
         boolean success = false;
 
         try {
