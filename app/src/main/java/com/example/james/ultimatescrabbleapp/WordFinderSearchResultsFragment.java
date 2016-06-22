@@ -316,6 +316,10 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                         if(listSize > 100){
                             listSize = listResults.getChildCount();
+
+                            Toast.makeText(getContext(), "More than 100 items in list, selecting all currently visible items...", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "100 or less items in list, selecting all items in list...", Toast.LENGTH_LONG).show();
                         }
 
                         for(int i = 0; i < listSize; i++){
