@@ -6,6 +6,10 @@ import android.app.ProgressDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by James on 18/11/2015.
@@ -13,6 +17,7 @@ import java.util.ArrayList;
 public class Dictionary implements Serializable {
     private ArrayList<Word> wordList;
     private ArrayList<String> stringWordList;
+    private Map<String, Word> wordMap;
     public static DatabaseHandler database;
 
     /**'
@@ -22,6 +27,7 @@ public class Dictionary implements Serializable {
     public Dictionary() {
         this.wordList = new ArrayList<>();
         this.stringWordList = new ArrayList<>();
+        this.wordMap = new HashMap<String, Word>();
     }
 
     /**
@@ -38,19 +44,14 @@ public class Dictionary implements Serializable {
         }
     }
 
-    public ArrayList<String> getStringWordList(){
-        return this.stringWordList;
+    private void createWordMap(){
+        for(Word word : this.wordList){
+            this.wordMap.put(word.getWord(), word);
+        }
     }
 
-    /**
-     * Returns the word at the specified index in the dictionary
-     * @param index the index of the dictionary
-     * @return the word at the specified index
-     */
-    public String getWordAtIndex(int index) {
-        Object[] wordArray = this.wordList.toArray();
-
-        return wordArray[index - 1].toString();
+    public ArrayList<String> getStringWordList(){
+        return this.stringWordList;
     }
 
     public ArrayList<Word> getWords(String letter, int position, int length){
@@ -139,15 +140,15 @@ public class Dictionary implements Serializable {
     }
 
     public boolean isWordOfficial(String word){
-        boolean isOfficial = false;
+        //boolean isOfficial = false;
 
-        for(Word wordInDictionary : this.wordList){
+        /*for(Word wordInDictionary : this.wordList){
             if(wordInDictionary.getWord().equals(word)){
                 isOfficial = wordInDictionary.isWordOfficial();
             }
-        }
+        }*/
 
-        return isOfficial;
+        return this.wordMap.get(word).isWordOfficial();
     }
 
     /**
@@ -188,5 +189,6 @@ public class Dictionary implements Serializable {
     public void setWordList(){
         this.wordList = this.database.getAllWords();
         populateStringWordList();
+        createWordMap();
     }
 }

@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 
@@ -138,13 +139,20 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                                     // For each word in the list of selected words
                                     for (String result : selectedResults) {
+                                        float current = (float) wordCount;
+                                        float total = (float) selectedResults.size();
+                                        final float percentage = round((current*100)/total, 2);
+
+
                                         final String word = result;
+
                                         ((Activity) getContext()).runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                textViewProgress.setText("Checking word: \n" + word);
+                                                textViewProgress.setText("Checking words...(" + percentage + "%)");
                                             }
                                         });
+
                                         // Check that it's an official Scrabble word
                                         wordIsValid = dictionary.isWordOfficial(result);
 
@@ -167,6 +175,13 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             });
                                         }
                                     }
+
+                                    ((Activity) getContext()).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            textViewProgress.setText("Checking Words...\nDone!");
+                                        }
+                                    });
 
                                     // If the number of selected words is greater than 0
                                     if (selectedResults.size() > 0) {
@@ -333,6 +348,12 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         btnDeselectAll.setOnClickListener(onClickListener);
 
         return view;
+    }
+
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

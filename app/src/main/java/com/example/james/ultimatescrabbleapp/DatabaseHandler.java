@@ -115,7 +115,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     public ArrayList<Word> getAllWords() {
         ArrayList<Word> wordList = new ArrayList<Word>();
 
-        String selectQuery = "SELECT * FROM " + TABLE_WORDS;
+        String selectQuery = "SELECT * FROM " + TABLE_WORDS + " ORDER BY word ASC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
