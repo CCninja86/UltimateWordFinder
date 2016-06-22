@@ -312,7 +312,13 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                         break;
                     case R.id.btnSelectAll:
-                        for(int i = 0; i < listResults.getAdapter().getCount(); i++){
+                        int listSize = listResults.getAdapter().getCount();
+
+                        if(listSize > 100){
+                            listSize = listResults.getChildCount();
+                        }
+
+                        for(int i = 0; i < listSize; i++){
                             if(listResults.isItemChecked(i) == false){
                                 listResults.setItemChecked(i, true);
                                 adapter.toggleSelected(new Integer(i));
