@@ -1,8 +1,12 @@
 package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.SparseBooleanArray;
@@ -11,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,6 +24,7 @@ import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -45,6 +52,8 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
     private ResultListAdapter adapter;
     private Dictionary dictionary;
     private ListView listResults;
+
+    private ProgressDialog progressDialog;
 
     /**
      * Use this factory method to create a new instance of
@@ -91,6 +100,38 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         this.adapter = new ResultListAdapter(getActivity(), this.searchResults);
         listResults.setAdapter(adapter);
 
+        final CheckBox checkBoxSmartSelection = (CheckBox) view.findViewById(R.id.checkBoxSmartSelection);
+
+        checkBoxSmartSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(checkBoxSmartSelection.isChecked()) {
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                    alertDialog.setTitle("Are you sure?");
+                    alertDialog.setMessage("Disabling Smart Selection will allow you to select the entire list when clicking 'Select All'." +
+                            "WARNING: Trying to 'Select All' with a large list could cause the app to hang/crash. Are you sure you want to do this?");
+
+                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            checkBoxSmartSelection.setChecked(true);
+                        }
+                    });
+
+                    alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            checkBoxSmartSelection.setChecked(false);
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
+                }
+            }
+        });
+
         listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -101,6 +142,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
         final ProgressBar progressOfficial = (ProgressBar) view.findViewById(R.id.progressOfficial);
         final TextView textViewProgress = (TextView) view.findViewById(R.id.textViewProgress);
+        textViewProgress.setText("Checking words...\n(0.00%)");
 
         this.onClickListener = new View.OnClickListener() {
             @Override
@@ -314,20 +356,42 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                     case R.id.btnSelectAll:
                         int listSize = listResults.getAdapter().getCount();
 
-                        if(listSize > 100){
-                            listSize = listResults.getChildCount();
 
-                            Toast.makeText(getContext(), "More than 100 items in list, selecting all currently visible items...", Toast.LENGTH_LONG).show();
+                        if(!checkBoxSmartSelection.isChecked()){
+                            if(listSize > 100){
+                                int firstVisible = listResults.getFirstVisiblePosition();
+                                int lastVisible = listResults.getLastVisiblePosition();
+
+                                for(int i = firstVisible; i < lastVisible; i++){
+                                    if(listResults.isItemChecked(i) == false){
+                                        listResults.setItemChecked(i, true);
+                                        adapter.toggleSelected(new Integer(i));
+                                    }
+                                }
+
+                                Toast.makeText(getContext(), "More than 100 items in list, selecting all currently visible items...", Toast.LENGTH_LONG).show();
+                            } else {
+                                for(int i = 0; i < listSize; i++){
+                                    if(listResults.isItemChecked(i) == false){
+                                        listResults.setItemChecked(i, true);
+                                        adapter.toggleSelected(new Integer(i));
+                                    }
+                                }
+
+                                Toast.makeText(getContext(), "100 or less items in list, selecting all items in list...", Toast.LENGTH_LONG).show();
+                            }
+
                         } else {
-                            Toast.makeText(getContext(), "100 or less items in list, selecting all items in list...", Toast.LENGTH_LONG).show();
-                        }
-
-                        for(int i = 0; i < listSize; i++){
-                            if(listResults.isItemChecked(i) == false){
-                                listResults.setItemChecked(i, true);
-                                adapter.toggleSelected(new Integer(i));
+                            for(int i = 0; i < listSize; i++){
+                                if(listResults.isItemChecked(i) == false){
+                                    listResults.setItemChecked(i, true);
+                                    adapter.toggleSelected(new Integer(i));
+                                }
                             }
                         }
+
+
+
                         adapter.notifyDataSetChanged();
                         break;
                     case R.id.btnDeselectAll:
