@@ -30,6 +30,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/listSearchResults"
+        android:layout_toRightOf="@+id/listSearchResults"
         />
 
     <Button
@@ -77,11 +78,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Checking Words..."
         android:id="@+id/textViewProgress"
         android:layout_below="@+id/progressOfficial"
         android:layout_toRightOf="@+id/listSearchResults"
-        android:layout_toEndOf="@+id/listSearchResults"/>
+        android:layout_alignRight="@+id/progressOfficial"
+        android:layout_alignEnd="@+id/progressOfficial" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -105,4 +106,15 @@
         android:layout_toLeftOf="@+id/btnOfficial"
         android:layout_toStartOf="@+id/btnOfficial"
         android:textSize="12dp"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disable Smart Selection"
+        android:id="@+id/checkBoxSmartSelection"
+        android:layout_below="@+id/btnCompareScores"
+        android:layout_toRightOf="@+id/listSearchResults"
+        android:layout_toEndOf="@+id/listSearchResults"
+        android:layout_marginTop="27dp"
+        android:checked="false" />
 </RelativeLayout>
