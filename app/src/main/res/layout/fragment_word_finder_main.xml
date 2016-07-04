@@ -53,7 +53,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/editTextLettersBoard"
-        android:layout_alignEnd="@+id/editTextLettersBoard"/>
+        android:layout_alignEnd="@+id/editTextLettersBoard" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -80,72 +80,82 @@
         android:text="Populate Database"
         android:id="@+id/btnPopulateDatabase"
         android:visibility="visible"
-        android:layout_below="@+id/btnAdvancedSearch"
+        android:layout_above="@+id/progressDatabase"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressDatabase"
-        android:layout_below="@+id/btnPopulateDatabase"
+        android:indeterminate="false"
+        android:visibility="visible"
+        android:layout_above="@+id/textViewRestartTimer"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button"
-        android:indeterminate="false"
-        android:visibility="visible"/>
+        android:layout_alignRight="@+id/btnSearch"
+        android:layout_alignEnd="@+id/btnSearch" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Inserting Word: "
         android:id="@+id/textViewWordProgress"
-        android:layout_below="@+id/progressDatabase"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        android:layout_above="@+id/textViewReconnect"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reconnecting in"
         android:id="@+id/textViewReconnect"
-        android:layout_below="@+id/textViewRestartTimer"
+        android:visibility="visible"
+        android:layout_above="@+id/btnSearch"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:visibility="visible"/>
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Checking Webpage:"
         android:id="@+id/textViewWebpage"
-        android:layout_below="@+id/textViewWordProgress"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        android:layout_above="@+id/textViewWordProgress"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Restarting in"
         android:id="@+id/textViewRestartTimer"
-        android:layout_below="@+id/textViewWebpage"
-        android:layout_alignParentLeft="true"
+        android:visibility="visible"
         android:layout_alignParentStart="true"
-        android:visibility="visible"/>
+        android:layout_above="@+id/textViewWebpage"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Advanced Search"
         android:id="@+id/btnAdvancedSearch"
-        android:layout_below="@+id/checkOnlyLettersRack"
+        android:layout_below="@+id/checkBoxIncludeKnown"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Include Known Letters on Board"
+        android:id="@+id/checkBoxIncludeKnown"
+        android:checked="false"
+        android:layout_below="@+id/checkOnlyLettersRack"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

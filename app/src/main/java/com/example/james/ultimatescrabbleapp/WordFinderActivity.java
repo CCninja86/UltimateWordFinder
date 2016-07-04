@@ -16,7 +16,8 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
 
     private com.example.james.ultimatescrabbleapp.Dictionary dictionary;
-
+    private WordFinderMainFragment wordFinderMainFragment;
+    private WordFinderDictionaryFragment wordFinderDictionaryFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +27,17 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         Bundle bundle = getIntent().getBundleExtra("selection");
         int selection = bundle.getInt("selection");
 
-        if(savedInstanceState == null) {
-            Fragment fragment = null;
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
+        if(savedInstanceState == null) {
             if (selection == 1) {
-                fragment = new WordFinderDictionaryFragment();
+                wordFinderDictionaryFragment = new WordFinderDictionaryFragment();
+                fragmentTransaction.replace(R.id.containerWordFinder, wordFinderDictionaryFragment);
             } else {
-                fragment = new WordFinderMainFragment();
+                wordFinderMainFragment = new WordFinderMainFragment();
+                fragmentTransaction.replace(R.id.containerWordFinder, wordFinderMainFragment);
             }
 
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.containerWordFinder, fragment);
             fragmentTransaction.commit();
         }
     }
@@ -136,5 +137,11 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     @Override
     public void onDictionaryFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        wordFinderMainFragment.backButtonWasPressed();
     }
 }
