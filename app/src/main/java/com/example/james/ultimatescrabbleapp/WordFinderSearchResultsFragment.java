@@ -107,7 +107,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         switchSmartSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!switchSmartSelection.isChecked()) {
+                if(!isChecked) {
                     final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                     alertDialog.setTitle("Are you sure?");
                     alertDialog.setMessage("Disabling Smart Selection will allow you to select the entire list when clicking 'Select All'." +

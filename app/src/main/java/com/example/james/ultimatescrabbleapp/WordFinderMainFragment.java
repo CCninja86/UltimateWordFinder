@@ -3,6 +3,7 @@ package com.example.james.ultimatescrabbleapp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,12 +11,15 @@ import android.app.Fragment;
 import android.os.Environment;
 import android.os.Looper;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -64,8 +68,11 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
     private EditText editTextLettersBoard;
     private EditText editTextLettersRack;
     private CheckBox checkOnlyLettersRack;
+    private CheckBox checkIncludeKnown;
     private TextView textViewWordProgress;
     private ProgressDialog progressDialog;
+
+    private boolean textFlag;
 
 
     /**
@@ -99,6 +106,12 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    public void backButtonWasPressed(){
+        String prevText = editTextLettersRack.getText().toString();
+        editTextLettersRack.setText(prevText.substring(0, prevText.length() - 2));
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,8 +130,97 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         editTextLettersBoard = (EditText) view.findViewById(R.id.editTextLettersBoard);
         editTextLettersRack = (EditText) view.findViewById(R.id.editTextLettersRack);
         checkOnlyLettersRack = (CheckBox) view.findViewById(R.id.checkOnlyLettersRack);
+        checkIncludeKnown = (CheckBox) view.findViewById(R.id.checkBoxIncludeKnown);
         Button btnSearch = (Button) view.findViewById(R.id.btnSearch);
         Button btnAdvancedSearch = (Button) view.findViewById(R.id.btnAdvancedSearch);
+
+        editTextLettersBoard.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(textFlag){
+                    textFlag = false;
+                    return;
+                } else {
+                    textFlag = true;
+
+                    if(s.equals("-")){
+                        return;
+                    } else {
+                        if(editTextLettersBoard.getText().toString().length() > 1) {
+                            String[] characters = editTextLettersBoard.getText().toString().split("");
+                            String newString = "";
+
+                            for (String character : characters) {
+                                if(!character.equals("-")){
+                                    newString += character + "-";
+                                }
+                            }
+
+                            newString = newString.substring(0, newString.length() - 1);
+                            newString = newString.substring(1, newString.length());
+
+                            editTextLettersBoard.setText(newString);
+                            editTextLettersBoard.setSelection(editTextLettersBoard.getText().length());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        editTextLettersRack.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(textFlag){
+                    textFlag = false;
+                    return;
+                } else {
+                    textFlag = true;
+
+                    if(s.equals("-")){
+                        return;
+                    } else {
+                        if(editTextLettersRack.getText().toString().length() > 1) {
+                            String[] characters = editTextLettersRack.getText().toString().split("");
+                            String newString = "";
+
+                            for (String character : characters) {
+                                if(!character.equals("-")){
+                                    newString += character + "-";
+                                }
+                            }
+
+                            newString = newString.substring(0, newString.length() - 1);
+                            newString = newString.substring(1, newString.length());
+
+                            editTextLettersRack.setText(newString);
+                            editTextLettersRack.setSelection(editTextLettersRack.getText().length());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
 
@@ -133,9 +235,45 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         });
 
         btnAdvancedSearch.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 mListener.onSearchFragmentInteraction(view, null);
+            }
+        });
+
+        checkIncludeKnown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    String[] lettersOnBoard = editTextLettersBoard.getText().toString().split("-");
+                    ArrayList<String> lettersToInclude = new ArrayList<>();
+
+                    for(String letter : lettersOnBoard){
+                        if(!letter.equals("?")){
+                            lettersToInclude.add(letter);
+                        }
+                    }
+
+                    for(String toInclude : lettersToInclude){
+                        editTextLettersRack.setText(editTextLettersRack.getText().toString() + "-" + toInclude);
+                    }
+                } else {
+                    int numKnownLetters = 0;
+
+                    for(String letter : editTextLettersBoard.getText().toString().split("-")){
+                        if(!letter.equals("?")){
+                            numKnownLetters++;
+                        }
+                    }
+
+                    if(numKnownLetters > 0){
+                        String newString = editTextLettersRack.getText().toString();
+                        newString = newString.substring(0, newString.length() - (numKnownLetters * 2));
+                        editTextLettersRack.setText(newString);
+                    }
+                }
             }
         });
 
@@ -452,6 +590,8 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
 
         return counter;
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     /*public void onButtonPressed(Uri uri) {
