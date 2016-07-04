@@ -107,14 +107,14 @@
         android:layout_toStartOf="@+id/btnOfficial"
         android:textSize="12dp"/>
 
-    <CheckBox
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Disable Smart Selection"
-        android:id="@+id/checkBoxSmartSelection"
+        android:text="Smart Selection"
+        android:id="@+id/switchSmartSelection"
         android:layout_below="@+id/btnCompareScores"
-        android:layout_toRightOf="@+id/listSearchResults"
-        android:layout_toEndOf="@+id/listSearchResults"
-        android:layout_marginTop="27dp"
+        android:layout_toRightOf="@+id/btnDeselectAll"
+        android:layout_toEndOf="@+id/btnDeselectAll"
+        android:layout_marginTop="39dp"
         android:checked="false" />
 </RelativeLayout>

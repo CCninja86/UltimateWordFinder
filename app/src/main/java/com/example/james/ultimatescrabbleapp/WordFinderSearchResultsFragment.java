@@ -19,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -100,12 +101,13 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         this.adapter = new ResultListAdapter(getActivity(), this.searchResults);
         listResults.setAdapter(adapter);
 
-        final CheckBox checkBoxSmartSelection = (CheckBox) view.findViewById(R.id.checkBoxSmartSelection);
+        final Switch switchSmartSelection = (Switch) view.findViewById(R.id.switchSmartSelection);
+        switchSmartSelection.setChecked(true);
 
-        checkBoxSmartSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchSmartSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(checkBoxSmartSelection.isChecked()) {
+                if(!switchSmartSelection.isChecked()) {
                     final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                     alertDialog.setTitle("Are you sure?");
                     alertDialog.setMessage("Disabling Smart Selection will allow you to select the entire list when clicking 'Select All'." +
@@ -115,14 +117,14 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            checkBoxSmartSelection.setChecked(true);
+                            switchSmartSelection.setChecked(false);
                         }
                     });
 
                     alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            checkBoxSmartSelection.setChecked(false);
+                            switchSmartSelection.setChecked(true);
                             dialog.dismiss();
                         }
                     });
@@ -357,7 +359,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                         int listSize = listResults.getAdapter().getCount();
 
 
-                        if(!checkBoxSmartSelection.isChecked()){
+                        if(switchSmartSelection.isChecked()){
                             if(listSize > 100){
                                 int firstVisible = listResults.getFirstVisiblePosition();
                                 int lastVisible = listResults.getLastVisiblePosition();
