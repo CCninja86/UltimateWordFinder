@@ -108,7 +108,11 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
 
     public void backButtonWasPressed(){
         String prevText = editTextLettersRack.getText().toString();
-        editTextLettersRack.setText(prevText.substring(0, prevText.length() - 2));
+
+        if(prevText.length() > 0){
+            editTextLettersRack.setText(prevText.substring(0, prevText.length() - 2));
+        }
+
     }
 
 
