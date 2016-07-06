@@ -186,8 +186,8 @@ public class Dictionary implements Serializable {
         this.database = null;
     }
 
-    public void setWordList(){
-        this.wordList = this.database.getAllWords();
+    public void setWordList(ProgressDialog progressDialog){
+        this.wordList = this.database.getAllWords(progressDialog);
         populateStringWordList();
         createWordMap();
     }

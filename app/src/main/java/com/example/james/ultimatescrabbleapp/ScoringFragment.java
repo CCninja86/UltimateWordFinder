@@ -240,7 +240,8 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Performing first-time setup...");
             progressDialog.setMessage("Loading Dictionary...");
-            progressDialog.setIndeterminate(true);
+            progressDialog.setProgress(0);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -251,7 +252,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                 dictionary = new com.example.james.ultimatescrabbleapp.Dictionary();
                 final DatabaseHandler database = new DatabaseHandler(context);
                 dictionary.linkDatabase(database);
-                dictionary.setWordList();
+                dictionary.setWordList(progressDialog);
                 g.setDictionary(dictionary);
             }
 
