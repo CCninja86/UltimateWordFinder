@@ -1,6 +1,7 @@
 package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -112,16 +113,22 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         return matchedWord;
     }
 
-    public ArrayList<Word> getAllWords() {
-        ArrayList<Word> wordList = new ArrayList<Word>();
+    public ArrayList<Word> getAllWords(ProgressDialog progressDialog) {
+        ArrayList<Word> wordList = new ArrayList<>();
 
-        String selectQuery = "SELECT * FROM " + TABLE_WORDS + " ORDER BY word ASC";
+        String selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
+        progressDialog.setMax(cursor.getCount());
+        int progress = 0;
+
+
         if (cursor.moveToFirst()) {
             do {
+                progress++;
+                progressDialog.setProgress(progress);
                 Word word = new Word();
                 word.setId(Integer.parseInt(cursor.getString(0)));
                 word.setWord(cursor.getString(1));
