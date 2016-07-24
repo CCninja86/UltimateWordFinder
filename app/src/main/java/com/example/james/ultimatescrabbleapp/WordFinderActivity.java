@@ -142,6 +142,9 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        wordFinderMainFragment.backButtonWasPressed();
+
+        if(wordFinderMainFragment != null) {
+            wordFinderMainFragment.backButtonWasPressed();
+        }
     }
 }

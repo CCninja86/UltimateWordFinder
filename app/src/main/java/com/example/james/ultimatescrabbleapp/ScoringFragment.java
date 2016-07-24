@@ -17,6 +17,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -116,8 +117,8 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         g = Globals.getInstance();
         dictionary = g.getDictionary();
 
-        Bundle bundle = getArguments();
-        this.scrabbleGame = (Scrabble) bundle.getSerializable("Scrabble Game");
+        //Bundle bundle = getArguments();
+        this.scrabbleGame = g.getGame();
 
         Button showScoresButton = (Button) view.findViewById(R.id.btnShowScores);
         Button tileBreakdownButton = (Button) view.findViewById(R.id.btnTileBreakdown);
@@ -237,6 +238,8 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected void onPreExecute(){
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
             progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Performing first-time setup...");
             progressDialog.setMessage("Loading Dictionary...");
@@ -274,6 +277,8 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
+
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
             choose();
         }

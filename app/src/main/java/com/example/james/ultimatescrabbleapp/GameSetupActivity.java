@@ -1,6 +1,8 @@
 package com.example.james.ultimatescrabbleapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameSetupActivity extends AppCompatActivity {
 
@@ -27,8 +31,12 @@ public class GameSetupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_setup);
 
+        playerNames = new ArrayList<>();
 
-        playerNames = new ArrayList<String>();
+        if(savedInstanceState != null){
+            playerNames = savedInstanceState.getStringArrayList("Players");
+        }
+
         playerList = (ListView) findViewById(R.id.listPlayer);
         txtPlayerName = (EditText) findViewById(R.id.txtPlayerName);
         playerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -39,7 +47,8 @@ public class GameSetupActivity extends AppCompatActivity {
             }
 
         });
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerNames);
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playerNames);
         playerList.setAdapter(adapter);
     }
 
@@ -65,6 +74,13 @@ public class GameSetupActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedState){
+       super.onSaveInstanceState(savedState);
+
+        savedState.putStringArrayList("Players", playerNames);
+    }
+
     public void onClick(View v){
         switch(v.getId()){
             case R.id.btnAddPlayer:
@@ -88,6 +104,7 @@ public class GameSetupActivity extends AppCompatActivity {
                 playerList.invalidateViews();
                 break;
             case R.id.btnStartGame:
+
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("Player List", playerNames);
                 Intent intent = new Intent(this, ScoringTableActivity.class);

@@ -6,6 +6,7 @@ package com.example.james.ultimatescrabbleapp;
 public class Globals {
     private static Globals instance;
     private Dictionary dictionary;
+    private Scrabble game;
 
     private Globals(){
 
@@ -17,6 +18,14 @@ public class Globals {
 
     public Dictionary getDictionary(){
         return this.dictionary;
+    }
+
+    public void setGame(Scrabble game){
+        this.game = game;
+    }
+
+    public Scrabble getGame(){
+        return  this.game;
     }
 
     public static synchronized Globals getInstance(){
