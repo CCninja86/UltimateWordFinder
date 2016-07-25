@@ -121,43 +121,15 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     public ArrayList<Word> getAllWords(ProgressDialog progressDialog) {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<Word> wordList = new ArrayList<>();
-        int numRows = getWordsCount();
+        String selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        int numRows = cursor.getCount();
         progressDialog.setMax(numRows);
         int progress = 0;
 
-        int limit = 0;
 
-        while(limit + 100 < numRows){
-            String selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC LIMIT '" + limit + "', 100";
-            Cursor cursor = db.rawQuery(selectQuery, null);
-
-            if (cursor.moveToFirst()) {
-                do {
-                    progress++;
-                    progressDialog.setProgress(progress);
-                    Word word = new Word();
-                    word.setId(Integer.parseInt(cursor.getString(0)));
-                    word.setWord(cursor.getString(1));
-                    word.setBaseScore(Integer.parseInt(cursor.getString(2)));
-
-                    boolean wordIsOfficial = false;
-
-                    if (cursor.getString(3).equals("1")) {
-                        wordIsOfficial = true;
-                    }
-
-                    word.setWordIsOfficial(wordIsOfficial);
-                    wordList.add(word);
-                } while (cursor.moveToNext());
-
-                cursor.close();
-                limit += 100;
-            }
-        }
-
-
-        String selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC LIMIT '" + (numRows - limit) + "', 100";
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC";
+        cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -185,11 +157,12 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
 
 
+
         return wordList;
     }
 
     public int getWordsCount() {
-        String countQuery = "SELECT * FROM " + TABLE_WORDS;
+        String countQuery = "SELECT * FROM " + TABLE_WORDS + " ORDER BY word ASC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
