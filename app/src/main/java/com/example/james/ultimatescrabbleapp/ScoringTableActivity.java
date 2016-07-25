@@ -27,15 +27,17 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
 
     private ArrayList<String> players;
     private Scrabble scrabbleGame;
+    private Globals g;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoring_table);
 
-
+        g = Globals.getInstance();
         Bundle bundle = getIntent().getExtras();
         this.players = bundle.getStringArrayList("Player List");
+
 
         scrabbleGame = new Scrabble();
         scrabbleGame.initialiseTiles();
@@ -45,12 +47,14 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
             scrabbleGame.addPlayer(player);
         }
 
-        bundle = new Bundle();
-        bundle.putSerializable("Scrabble Game", scrabbleGame);
+        g.setGame(scrabbleGame);
+
+//        bundle = new Bundle();
+//        bundle.putSerializable("Scrabble Game", scrabbleGame);
 
         if(savedInstanceState == null) {
             Fragment scoringFragment = new ScoringFragment();
-            scoringFragment.setArguments(bundle);
+            //scoringFragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.container, scoringFragment);
             fragmentTransaction.commit();

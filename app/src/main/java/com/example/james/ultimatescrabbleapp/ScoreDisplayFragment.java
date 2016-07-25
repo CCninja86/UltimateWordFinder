@@ -10,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -35,6 +39,8 @@ public class ScoreDisplayFragment extends android.support.v4.app.Fragment {
 
     private Scrabble scrabbleGame;
     private ArrayAdapter<String> adapter;
+
+    private Globals g;
 
     /**
      * Use this factory method to create a new instance of
@@ -68,13 +74,31 @@ public class ScoreDisplayFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedState){
+        super.onSaveInstanceState(savedState);
+
+//        Gson gson = new Gson();
+//        String players = gson.toJson(scrabbleGame.getPlayers());
+//        savedState.putString("Players", players);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_score_display, container, false);
 
-        Bundle bundle = getArguments();
-        this.scrabbleGame = (Scrabble) bundle.getSerializable("Scrabble Game");
+        g = Globals.getInstance();
+
+        //Bundle bundle = getArguments();
+        this.scrabbleGame = g.getGame();
+//        Map<String, Player> playerMap = this.scrabbleGame.getPlayerMap();
+//
+//        for(String key : playerMap.keySet()){
+//            Player player = playerMap.get(key);
+//            this.scrabbleGame.getPlayerByName(key).setScore(player.getScore());
+//            this.scrabbleGame.getPlayerByName(key).setPlayerWordHistory(player.getPlayerWordHistory());
+//        }
 
         ArrayList<String> playerOverallScores = new ArrayList<String>();
 

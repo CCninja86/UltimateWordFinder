@@ -42,6 +42,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/btnShowScores"
         android:layout_toLeftOf="@+id/btnWordFinder"
-        android:layout_toStartOf="@+id/btnWordFinder"/>
+        android:layout_toStartOf="@+id/btnWordFinder"
+        android:textSize="12dp" />
 
 </RelativeLayout>

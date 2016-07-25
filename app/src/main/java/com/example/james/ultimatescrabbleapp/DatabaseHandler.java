@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +22,9 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
 
 /**
@@ -96,6 +100,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         Cursor cursor = db.rawQuery("SELECT id, word, word_base_score, word_is_official FROM words WHERE word LIKE '" + word + "'", null);
 
+
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             int wordId = Integer.parseInt(cursor.getString(0));
@@ -114,16 +119,45 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     }
 
     public ArrayList<Word> getAllWords(ProgressDialog progressDialog) {
-        ArrayList<Word> wordList = new ArrayList<>();
-
-        String selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC";
-
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        progressDialog.setMax(cursor.getCount());
+        ArrayList<Word> wordList = new ArrayList<>();
+        int numRows = getWordsCount();
+        progressDialog.setMax(numRows);
         int progress = 0;
 
+        int limit = 0;
+
+        while(limit + 100 < numRows){
+            String selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC LIMIT '" + limit + "', 100";
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    progress++;
+                    progressDialog.setProgress(progress);
+                    Word word = new Word();
+                    word.setId(Integer.parseInt(cursor.getString(0)));
+                    word.setWord(cursor.getString(1));
+                    word.setBaseScore(Integer.parseInt(cursor.getString(2)));
+
+                    boolean wordIsOfficial = false;
+
+                    if (cursor.getString(3).equals("1")) {
+                        wordIsOfficial = true;
+                    }
+
+                    word.setWordIsOfficial(wordIsOfficial);
+                    wordList.add(word);
+                } while (cursor.moveToNext());
+
+                cursor.close();
+                limit += 100;
+            }
+        }
+
+
+        String selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC LIMIT '" + (numRows - limit) + "', 100";
+        Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -136,14 +170,20 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
                 boolean wordIsOfficial = false;
 
-                if(cursor.getString(3).equals("1")){
+                if (cursor.getString(3).equals("1")) {
                     wordIsOfficial = true;
                 }
 
                 word.setWordIsOfficial(wordIsOfficial);
                 wordList.add(word);
             } while (cursor.moveToNext());
+
+            cursor.close();
         }
+
+
+
+
 
         return wordList;
     }

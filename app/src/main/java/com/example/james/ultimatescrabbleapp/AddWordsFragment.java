@@ -163,7 +163,7 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
         addWordsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<String> words = new ArrayList<String>();
+                ArrayList<String> words = new ArrayList<>();
 
                 if(!editTextWords.getText().toString().isEmpty()){
                     String[] enteredWords = editTextWords.getText().toString().split(",");

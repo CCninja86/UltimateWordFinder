@@ -15,6 +15,8 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,10 +29,17 @@ public class Scrabble implements Serializable{
     private ArrayList<String> wordHistory;
     private int totalTiles = 100;
 
+    private Map<String, Player> playerMap;
+
     public Scrabble() {
-        this.players = new ArrayList<Player>();
-        this.tiles = new ArrayList<Tile>();
-        this.wordHistory = new ArrayList<String>();
+        this.players = new ArrayList<>();
+        this.tiles = new ArrayList<>();
+        this.wordHistory = new ArrayList<>();
+        this.playerMap = new HashMap<>();
+
+        for(Player player : players){
+            playerMap.put(player.getName(), player);
+        }
     }
 
     public void initialiseTiles() {
@@ -79,6 +88,14 @@ public class Scrabble implements Serializable{
 
     public ArrayList<Player> getPlayers() {
         return this.players;
+    }
+
+    public void clearPlayers(){
+        this.players = new ArrayList<>();
+    }
+
+    public Map<String, Player> getPlayerMap(){
+        return this.playerMap;
     }
 
     public Player getPlayerByName(String name) {
