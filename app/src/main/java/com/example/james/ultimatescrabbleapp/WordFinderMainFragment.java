@@ -385,14 +385,17 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         protected Void doInBackground(Void... voids) {
             searchDictionary(lettersInInput);
 
+
+
+            if(!filterTextEmpty){
+                filterResults(lettersInInput);
+            }
+
             if(progressDialog != null && progressDialog.isShowing()){
                 progressDialog.dismiss();
                 progressDialog = null;
             }
 
-            if(!filterTextEmpty){
-                filterResults(lettersInInput);
-            }
             return null;
         }
 
@@ -488,6 +491,14 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         Set<String> lettersNotInRack = new HashSet<String>();
         Map<String, Integer> letterCounts = new HashMap<>();
 
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.setMessage("Filtering results...initialising...");
+                progressDialog.setIndeterminate(true);
+            }
+        });
+
         for (int i = 0; i < lettersOnBoard.length; i++) {
             String letterBoard = lettersOnBoard[i];
 
@@ -521,6 +532,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             if (numMatches == 0) {
                 lettersNotInRack.add(letter);
             }
+
         }
 
         for (String letter : lettersInRack) {
@@ -535,6 +547,20 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
 
         int counter;
 
+        int progress = 0;
+        progressDialog.setProgress(progress);
+        progressDialog.setMax(this.matches.size());
+
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.setIndeterminate(false);
+                progressDialog.setMessage("Filtering results...");
+
+            }
+        });
+
         for (Word word : this.matches) {
             counter = 0;
             for (String letter : lettersNotInRack) {
@@ -547,6 +573,8 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
                 letterFilterMatches.add(word);
             }
 
+            progress++;
+            progressDialog.setProgress(progress);
         }
 
         Iterator iterator = letterFilterMatches.iterator();
@@ -572,7 +600,6 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
                     }
                 }
             }
-
         }
 
         if (checkOnlyLettersRack.isChecked()) {
