@@ -10,6 +10,6 @@ Add Words Fragment:
 
 Word Finder:
 
-- doesn't support blank tiles
+- doesn't support blank tiles in player rack
 
 MUST IMPLEMENT SHARED PREFERENCES
