@@ -494,10 +494,13 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressDialog.setMessage("Filtering results...initialising...");
-                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Filtering results...");
             }
         });
+
+        int progress = 0;
+        progressDialog.setProgress(progress);
+        progressDialog.setMax(lettersOnBoard.length);
 
         for (int i = 0; i < lettersOnBoard.length; i++) {
             String letterBoard = lettersOnBoard[i];
@@ -513,6 +516,9 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
                     }
                 }
             }
+
+            progress++;
+            progressDialog.setProgress(progress);
         }
 
         for (String letter : alphabet) {
@@ -547,7 +553,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
 
         int counter;
 
-        int progress = 0;
+        progress = 0;
         progressDialog.setProgress(progress);
         progressDialog.setMax(this.matches.size());
 
