@@ -44,7 +44,7 @@ import java.util.Set;
  * Activities that contain this fragment must implement the
  * {@link WordFinderMainFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link WordFinderMainFragment#newInstance} factory method to
+ * Use the {@link WordFinderMainFragment#newInstance} factory method toJa
  * create an instance of this fragment.
  */
 public class WordFinderMainFragment extends android.support.v4.app.Fragment {
@@ -110,7 +110,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         String prevText = editTextLettersRack.getText().toString();
 
         if(prevText.length() > 0){
-            editTextLettersRack.setText(prevText.substring(0, prevText.length() - 2));
+            editTextLettersRack.setText(prevText.substring(0, prevText.length() - 1));
         }
 
     }
@@ -494,7 +494,9 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressDialog.setMessage("Filtering results...");
+                if(progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.setMessage("Filtering results...");
+                }
             }
         });
 
@@ -561,8 +563,10 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressDialog.setIndeterminate(false);
-                progressDialog.setMessage("Filtering results...");
+                if(progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.setIndeterminate(false);
+                    progressDialog.setMessage("Filtering results...");
+                }
 
             }
         });
