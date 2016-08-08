@@ -110,7 +110,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         String prevText = editTextLettersRack.getText().toString();
 
         if(prevText.length() > 0){
-            editTextLettersRack.setText(prevText.substring(0, prevText.length() - 1));
+            editTextLettersRack.setText(prevText.substring(0, prevText.length()));
         }
 
     }
