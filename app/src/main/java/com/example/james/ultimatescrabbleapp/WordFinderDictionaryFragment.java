@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -86,28 +87,17 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
 
         final EditText editTextSearch = (EditText) view.findViewById(R.id.editTextSearch);
         final ListView listViewResults = (ListView) view.findViewById(R.id.listViewResults);
+        Button btnSearch = (Button) view.findViewById(R.id.btnSearch);
 
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+        btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onClick(View v) {
                 ArrayList<String> results = dictionary.getStringWordsStartingWith(editTextSearch.getText().toString());
                 adapter = new ResultListAdapter(getActivity(), results);
                 listViewResults.setAdapter(adapter);
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
         });
-
-
-
+        
         listViewResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
