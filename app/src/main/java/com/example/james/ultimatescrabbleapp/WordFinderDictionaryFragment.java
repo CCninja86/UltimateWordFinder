@@ -102,8 +102,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String word = listViewResults.getItemAtPosition(i).toString();
-                final Intent browserActivity = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.dictionary.com/browse/" + word));
-                startActivity(browserActivity);
+                mListener.onDictionaryFragmentInteraction(word);
             }
         });
 
@@ -111,9 +110,9 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(String word) {
         if (mListener != null) {
-            mListener.onDictionaryFragmentInteraction(uri);
+            mListener.onDictionaryFragmentInteraction(word);
         }
     }
 
@@ -146,7 +145,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onDictionaryFragmentInteraction(Uri uri);
+        public void onDictionaryFragmentInteraction(String word);
     }
 
 }

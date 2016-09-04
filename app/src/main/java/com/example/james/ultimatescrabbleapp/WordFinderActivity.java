@@ -12,7 +12,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener {
+public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDefinitionFragment.OnFragmentInteractionListener {
 
 
     private com.example.james.ultimatescrabbleapp.Dictionary dictionary;
@@ -97,8 +97,14 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     @Override
     public void onResultsFragmentInteraction(String action, ArrayList<String> selectedWords) {
         if(action.equals("definition")){
-            final Intent browserActivity = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.dictionary.com/browse/" + selectedWords.get(0)));
-            startActivity(browserActivity);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            Fragment wordDefinitionFragment = new WordDefinitionFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("word", selectedWords.get(0));
+            wordDefinitionFragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         } else if(action.equals("compare")){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             Fragment scoreComparisonFragment = new WordFinderScoreComparisonFragment();
@@ -135,8 +141,15 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onDictionaryFragmentInteraction(Uri uri) {
-
+    public void onDictionaryFragmentInteraction(String word) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        Fragment wordDefinitionFragment = new WordDefinitionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("word", word);
+        wordDefinitionFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -146,5 +159,10 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         if(wordFinderMainFragment != null) {
             wordFinderMainFragment.backButtonWasPressed();
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
