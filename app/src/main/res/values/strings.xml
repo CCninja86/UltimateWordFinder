@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_scoring_table">Players and Scoring</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_word_finder">WordFinderActivity</string>
     <string name="title_activity_browser">BrowserActivity</string>

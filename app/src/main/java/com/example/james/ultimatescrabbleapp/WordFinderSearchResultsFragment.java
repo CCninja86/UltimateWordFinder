@@ -325,6 +325,10 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                         if(selectedWords.size() > 1){
                             Toast.makeText(getContext(), "Please only select one word at a time for this feature.", Toast.LENGTH_LONG).show();
                         } else {
+                            for(int i = 0; i < listResults.getAdapter().getCount(); i++){
+                                listResults.setItemChecked(i, false);
+                            }
+
                             mListener.onResultsFragmentInteraction("definition", selectedWords);
                         }
 
