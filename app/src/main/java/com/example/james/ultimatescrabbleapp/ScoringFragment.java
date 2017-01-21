@@ -253,8 +253,8 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         protected Void doInBackground(Void... voids) {
             if(dictionary == null){
                 dictionary = new com.example.james.ultimatescrabbleapp.Dictionary();
-                final DatabaseHandler database = new DatabaseHandler(context);
-                dictionary.linkDatabase(database);
+                final CSVReader csvReader = new CSVReader(context);
+                dictionary.linkCSVReader(csvReader);
                 dictionary.setWordList(progressDialog);
                 g.setDictionary(dictionary);
             }

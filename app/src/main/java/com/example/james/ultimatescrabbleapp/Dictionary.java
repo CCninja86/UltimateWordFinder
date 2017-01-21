@@ -19,6 +19,7 @@ public class Dictionary implements Serializable {
     private ArrayList<String> stringWordList;
     private Map<String, Word> wordMap;
     public static DatabaseHandler database;
+    CSVReader csvReader;
 
     /**'
      * Creates a new Dictionary object with the list of words from the text file (from the database.txt once done transferring)
@@ -182,12 +183,16 @@ public class Dictionary implements Serializable {
         this.database = database;
     }
 
+    public void linkCSVReader(CSVReader csvReader){
+        this.csvReader = csvReader;
+    }
+
     public void unlinkDatabase(){
         this.database = null;
     }
 
     public void setWordList(ProgressDialog progressDialog){
-        this.wordList = this.database.getAllWords(progressDialog);
+        this.wordList = this.csvReader.readFile("words.csv", progressDialog);
         populateStringWordList();
         createWordMap();
     }

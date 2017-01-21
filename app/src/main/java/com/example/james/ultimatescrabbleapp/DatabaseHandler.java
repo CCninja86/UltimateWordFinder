@@ -123,6 +123,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         ArrayList<Word> wordList = new ArrayList<>();
         String selectQuery = "SELECT id, word, word_base_score, word_is_official FROM " + TABLE_WORDS + " ORDER BY word ASC";
         Cursor cursor = db.rawQuery(selectQuery, null);
+
+
         int numRows = cursor.getCount();
         progressDialog.setMax(numRows);
         int progress = 0;
@@ -132,30 +134,28 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-            do {
-                progress++;
-                progressDialog.setProgress(progress);
-                Word word = new Word();
-                word.setId(Integer.parseInt(cursor.getString(0)));
-                word.setWord(cursor.getString(1));
-                word.setBaseScore(Integer.parseInt(cursor.getString(2)));
+                do {
+                    progress++;
+                    progressDialog.setProgress(progress);
+                    Word word = new Word();
+                    word.setId(Integer.parseInt(cursor.getString(0)));
+                    word.setWord(cursor.getString(1));
+                    word.setBaseScore(Integer.parseInt(cursor.getString(2)));
 
-                boolean wordIsOfficial = false;
 
-                if (cursor.getString(3).equals("1")) {
-                    wordIsOfficial = true;
-                }
+                    boolean wordIsOfficial = false;
 
-                word.setWordIsOfficial(wordIsOfficial);
-                wordList.add(word);
-            } while (cursor.moveToNext());
+                    if (cursor.getString(3).equals("1")) {
+                        wordIsOfficial = true;
+                    }
 
-            cursor.close();
+                    word.setWordIsOfficial(wordIsOfficial);
+                    wordList.add(word);
+                } while (cursor.moveToNext());
+
+                cursor.close();
+
         }
-
-
-
-
 
 
         return wordList;
