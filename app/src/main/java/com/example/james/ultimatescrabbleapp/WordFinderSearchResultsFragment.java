@@ -142,9 +142,8 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
             }
         });
 
-        final ProgressBar progressOfficial = (ProgressBar) view.findViewById(R.id.progressOfficial);
-        final TextView textViewProgress = (TextView) view.findViewById(R.id.textViewProgress);
-        textViewProgress.setText("Checking words...\n(0.00%)");
+
+
 
         this.onClickListener = new View.OnClickListener() {
             @Override
@@ -153,6 +152,11 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                 switch (view.getId()){
                     case R.id.btnOfficial:
+                        progressDialog = new ProgressDialog(getContext());
+                        progressDialog.setIndeterminate(true);
+                        progressDialog.setMessage("Checking Official Words...");
+                        progressDialog.show();
+
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -178,8 +182,6 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                     int officialWordCount = 0;
                                     int wordCount = 0;
                                     boolean wordIsValid = false;
-                                    progressOfficial.setProgress(0);
-                                    progressOfficial.setMax(selectedResults.size());
 
                                     // For each word in the list of selected words
                                     for (String result : selectedResults) {
@@ -190,42 +192,24 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                                         final String word = result;
 
-                                        ((Activity) getContext()).runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textViewProgress.setText("Checking words...(" + percentage + "%)");
-                                            }
-                                        });
-
                                         // Check that it's an official Scrabble word
                                         wordIsValid = dictionary.isWordOfficial(result);
 
-                                        if (!dictionary.database.getReadableDatabase().isOpen()) {
-                                            break;
-                                        } else {
-                                            // If the word is an official Scrabble word, increase the number of official words and add it to a list
-                                            if (wordIsValid) {
-                                                officialWordCount++;
-                                                officialWords.add(result);
-                                            }
 
-                                            wordCount++;
-                                            final int progress = wordCount;
-                                            ((Activity) getContext()).runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    progressOfficial.setProgress(progress);
-                                                }
-                                            });
+                                        // If the word is an official Scrabble word, increase the number of official words and add it to a list
+                                        if (wordIsValid) {
+                                            officialWordCount++;
+                                            officialWords.add(result);
                                         }
+
+                                        wordCount++;
+
                                     }
 
-                                    ((Activity) getContext()).runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            textViewProgress.setText("Checking Words...\nDone!");
-                                        }
-                                    });
+                                    if(progressDialog != null && progressDialog.isShowing()){
+                                        progressDialog.dismiss();
+                                        progressDialog = null;
+                                    }
 
                                     // If the number of selected words is greater than 0
                                     if (selectedResults.size() > 0) {
