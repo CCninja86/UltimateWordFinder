@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Looper;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -176,7 +177,12 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                 }
                                 // If there are words selected, add all those words to the selectedResults list, otherwise notify the user that they must select atleast one word
                                 if (selectedResults.size() < 1) {
-                                    Toast.makeText(getContext(), "Please select at least one word", Toast.LENGTH_LONG).show();
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), "Please select at least one word", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
                                 } else {
                                     // Initialise some variables
                                     int officialWordCount = 0;
@@ -204,11 +210,6 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                                         wordCount++;
 
-                                    }
-
-                                    if(progressDialog != null && progressDialog.isShowing()){
-                                        progressDialog.dismiss();
-                                        progressDialog = null;
                                     }
 
                                     // If the number of selected words is greater than 0
@@ -269,6 +270,11 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                         }
                                     }
                                 }
+
+                                if(progressDialog != null && progressDialog.isShowing()){
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
+                                }
                             }
                         }).start();
 
@@ -288,8 +294,10 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                         if(selectedResults.size() > 1){
                             Toast.makeText(getContext(), "Please only select one word at a time for this feature.", Toast.LENGTH_LONG).show();
-                        } else {
+                        } else if(selectedResults.size() == 1){
                             Toast.makeText(getContext(), String.valueOf(dictionary.getBaseWordScore(selectedResults.get(0))), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Please select at least one word", Toast.LENGTH_LONG).show();
                         }
 
                         break;
@@ -308,12 +316,14 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                         if(selectedWords.size() > 1){
                             Toast.makeText(getContext(), "Please only select one word at a time for this feature.", Toast.LENGTH_LONG).show();
-                        } else {
+                        } else if(selectedWords.size() == 1){
                             for(int i = 0; i < listResults.getAdapter().getCount(); i++){
                                 listResults.setItemChecked(i, false);
                             }
 
                             mListener.onResultsFragmentInteraction("definition", selectedWords);
+                        } else {
+                            Toast.makeText(getContext(), "Please select at least one word", Toast.LENGTH_LONG).show();
                         }
 
                         break;
@@ -338,8 +348,10 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                             adapter.notifyDataSetChanged();
 
                             mListener.onResultsFragmentInteraction("compare", wordsToCompare);
-                        } else {
+                        } else if(wordsToCompare.size() == 1) {
                             Toast.makeText(getContext(), "Please select at least one word to use this feature", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Please select at least one word", Toast.LENGTH_LONG).show();
                         }
 
                         break;
