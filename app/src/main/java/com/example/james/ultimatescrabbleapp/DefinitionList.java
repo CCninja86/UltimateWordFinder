@@ -1,11 +1,12 @@
 package com.example.james.ultimatescrabbleapp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by james on 4/09/2016.
  */
-public class DefinitionList {
+public class DefinitionList implements Serializable {
 
     ArrayList<Definition> definitions;
 
@@ -23,5 +24,9 @@ public class DefinitionList {
 
     public ArrayList<Definition> getDefinitions(){
         return definitions;
+    }
+
+    public void clearList(){
+        this.definitions.clear();
     }
 }

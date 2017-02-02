@@ -16,7 +16,8 @@
         android:onClick="onClick"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/btnRemovePlayer"
-        android:layout_toStartOf="@+id/btnRemovePlayer"/>
+        android:layout_toStartOf="@+id/btnRemovePlayer"
+        style="@style/Widget.AppCompat.Button.Colored" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -48,7 +49,8 @@
         android:onClick="onClick"
         android:layout_above="@+id/listPlayer"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        style="@style/Widget.AppCompat.Button.Colored" />
 
     <Button
         android:layout_width="wrap_content"
@@ -58,7 +60,8 @@
         android:onClick="onClick"
         android:layout_alignTop="@+id/listPlayer"
         android:layout_alignLeft="@+id/btnAddPlayer"
-        android:layout_alignStart="@+id/btnAddPlayer"/>
+        android:layout_alignStart="@+id/btnAddPlayer"
+        style="@style/Widget.AppCompat.Button.Colored" />
 
     <Button
         android:layout_width="wrap_content"
@@ -68,5 +71,6 @@
         android:layout_below="@+id/btnClear"
         android:layout_alignLeft="@+id/btnClear"
         android:layout_alignStart="@+id/btnClear"
-        android:onClick="onClick"/>
+        android:onClick="onClick"
+        style="@style/Widget.AppCompat.Button.Colored" />
 </RelativeLayout>

@@ -4,29 +4,21 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Looper;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -51,7 +43,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
     private View.OnClickListener onClickListener;
 
     private ArrayList<String> searchResults;
-    private ResultListAdapter adapter;
+    private ListViewAdapter adapter;
     private Dictionary dictionary;
     private ListView listResults;
 
@@ -99,7 +91,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         this.dictionary = g.getDictionary();
         this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
         this.searchResults = bundle.getStringArrayList("Search Results");
-        this.adapter = new ResultListAdapter(getActivity(), this.searchResults);
+        this.adapter = new ListViewAdapter(getActivity(), this.searchResults, R.layout.row);
         listResults.setAdapter(adapter);
 
         final Switch switchSmartSelection = (Switch) view.findViewById(R.id.switchSmartSelection);
@@ -225,7 +217,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ResultListAdapter(getActivity(), searchResults);
+                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
@@ -242,7 +234,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ResultListAdapter(getActivity(), searchResults);
+                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
@@ -259,7 +251,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ResultListAdapter(getActivity(), searchResults);
+                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override

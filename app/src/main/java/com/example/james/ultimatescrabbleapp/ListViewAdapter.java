@@ -14,13 +14,15 @@ import java.util.ArrayList;
 /**
  * Created by James on 30/11/2015.
  */
-public class ResultListAdapter extends ArrayAdapter<String> {
+public class ListViewAdapter extends ArrayAdapter<String> {
 
     private ArrayList<String> words;
     private  ArrayList<Integer> selectedItems;
+    private int layout;
 
-    public ResultListAdapter(Activity context, ArrayList<String> words){
-        super(context, R.layout.row, words);
+    public ListViewAdapter(Activity context, ArrayList<String> words, int layout){
+        super(context, layout, words);
+        this.layout = layout;
         this.words = words;
         this.selectedItems = new ArrayList<>();
     }
@@ -57,13 +59,13 @@ public class ResultListAdapter extends ArrayAdapter<String> {
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.row, null);
+            convertView = inflater.inflate(layout, null);
         }
 
         String word = words.get(position);
 
         if(word != null){
-            TextView textView = (TextView) convertView.findViewById(R.id.textViewWord);
+            TextView textView = (TextView) convertView.findViewById(R.id.textViewItem);
 
             if(textView != null){
                 textView.setText(word);

@@ -31,7 +31,7 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/listSearchResults"
         android:layout_toRightOf="@+id/listSearchResults"
-        />
+        style="@style/Widget.AppCompat.Button.Colored" />
 
     <Button
         android:layout_width="wrap_content"
@@ -42,7 +42,8 @@
         android:layout_alignLeft="@+id/btnGetDefinition"
         android:layout_alignStart="@+id/btnGetDefinition"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        style="@style/Widget.AppCompat.Button.Colored" />
 
     <Button
         android:layout_width="wrap_content"
@@ -53,7 +54,8 @@
         android:layout_alignLeft="@+id/btnCompareScores"
         android:layout_alignStart="@+id/btnCompareScores"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        style="@style/Widget.AppCompat.Button.Colored" />
 
     <Button
         android:layout_width="wrap_content"
@@ -62,10 +64,11 @@
         android:id="@+id/btnCompareScores"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        style="@style/Widget.AppCompat.Button.Colored" />
 
     <Button
-        style="?android:attr/buttonStyleSmall"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select All"
@@ -76,7 +79,7 @@
         android:textSize="12dp"/>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Deselect All"

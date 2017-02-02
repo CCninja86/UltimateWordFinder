@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
-        android:id="@+id/textViewWord"
+        android:id="@+id/textViewItem"
         />
 
 </RelativeLayout>

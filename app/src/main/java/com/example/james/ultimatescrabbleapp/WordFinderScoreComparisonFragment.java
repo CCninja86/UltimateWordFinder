@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import com.example.james.ultimatescrabbleapp.R;
 
 import java.util.ArrayList;
 
@@ -37,7 +34,7 @@ public class WordFinderScoreComparisonFragment extends android.support.v4.app.Fr
 
     private OnFragmentInteractionListener mListener;
 
-    private ResultListAdapter adapter;
+    private ListViewAdapter adapter;
     Dictionary dictionary;
 
     /**
@@ -86,7 +83,7 @@ public class WordFinderScoreComparisonFragment extends android.support.v4.app.Fr
         Bundle bundle = getArguments();
         final ArrayList<String> wordsToCompare = bundle.getStringArrayList("wordsToCompare");
 
-        this.adapter = new ResultListAdapter(getActivity(), wordsToCompare);
+        this.adapter = new ListViewAdapter(getActivity(), wordsToCompare, R.layout.row);
         listWords.setAdapter(adapter);
 
         listWords.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -124,7 +121,7 @@ public class WordFinderScoreComparisonFragment extends android.support.v4.app.Fr
                     wordScoreComparisons.add(comparisonString);
                 }
 
-                ResultListAdapter resultAdapter = new ResultListAdapter(getActivity(), wordScoreComparisons);
+                ListViewAdapter resultAdapter = new ListViewAdapter(getActivity(), wordScoreComparisons, R.layout.row);
                 listScoreComparison.setAdapter(resultAdapter);
             }
         });
