@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDefinitionFragment.OnFragmentInteractionListener, SynonymResultListFragment.OnFragmentInteractionListener {
+public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDefinitionFragment.OnFragmentInteractionListener, SynonymResultListFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener {
 
 
     private com.example.james.ultimatescrabbleapp.Dictionary dictionary;
@@ -120,6 +120,16 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
+    public void onResultsFragmentInteraction(DefinitionList definitionList) {
+        loadDefinitionsFragment(definitionList);
+    }
+
+    @Override
+    public void onResultsFragmentInteraction(ArrayList<String> synonyms) {
+        loadSynonymsFragment(synonyms);
+    }
+
+    @Override
     public void onAdvancedSearchFragmentInteraction(View view, ArrayList<Word> matches) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment searchResultsFragment = new WordFinderSearchResultsFragment();
@@ -158,24 +168,32 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onDictionaryFragmentInteraction(DefinitionList definitionList) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        Fragment wordDefinitionFragment = new WordDefinitionFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("Definition List", new Gson().toJson(definitionList));
-        wordDefinitionFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        loadDefinitionsFragment(definitionList);
     }
 
     @Override
     public void onDictionaryFragmentInteraction(ArrayList<String> synonyms) {
+        loadSynonymsFragment(synonyms);
+    }
+
+    private void loadSynonymsFragment(ArrayList<String> synonyms){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment synonymFragment = new SynonymResultListFragment();
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("Synonyms", synonyms);
         synonymFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.containerWordFinder, synonymFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void loadDefinitionsFragment(DefinitionList definitionList){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        Fragment wordDefinitionFragment = new WordDefinitionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("Definition List", new Gson().toJson(definitionList));
+        wordDefinitionFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

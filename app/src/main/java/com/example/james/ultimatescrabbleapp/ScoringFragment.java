@@ -131,8 +131,8 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                     if(dictionary == null) {
                         final AlertDialog.Builder builderConfirm = new AlertDialog.Builder(getContext());
                         builderConfirm.setTitle("First-time Setup");
-                        builderConfirm.setMessage("Both the Dictionary and Word Finder features utilise a very large database. " +
-                                "Due to this, a first-time setup is required to use these features. This setup can take several minutes, " +
+                        builderConfirm.setMessage("Both the Dictionary and Word Finder features utilise a large database of words. " +
+                                "Due to this, a first-time setup is required to use these features. This setup may take a while, " +
                                 "depending on the speed of your device. Would you like to perform the first-time setup now?");
 
                         builderConfirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -288,7 +288,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         String alertMessage = "Would you like to open the Word Finder or Basic Dictionary?";
 
         if(!hasActiveInternetConnection){
-            alertMessage += "\n\nNote: You are not connected to the Internet. You will not be able to view the definitions of words. All other features will be available.";
+            alertMessage += "\n\nNote: You are not connected to the Internet. You will not be able to view the definitions or synonyms of words. All other features will be available.";
         }
 
         AlertDialog.Builder builderSelection = new AlertDialog.Builder(getContext());

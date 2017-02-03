@@ -1,14 +1,23 @@
 package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 
 /**
@@ -72,9 +81,89 @@ public class WordHistoryFragment extends android.support.v4.app.Fragment {
 
         Bundle bundle = getArguments();
         this.player = (Player) bundle.getSerializable("Player");
-        ListView listWordHistory = (ListView) view.findViewById(R.id.listWordHistory);
-        this.adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, this.player.getPlayerWordHistory());
+        final ListView listWordHistory = (ListView) view.findViewById(R.id.listWordHistory);
+        this.adapter = new ListViewAdapter(getActivity(),this.player.getPlayerWordHistory(), R.layout.row);
         listWordHistory.setAdapter(this.adapter);
+
+        listWordHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                final String word = listWordHistory.getItemAtPosition(position).toString();
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                builder.setTitle("Set Blank Tile");
+                builder.setMessage("Would you like to set the blank tiles for this word to make it easier to remember the full word?");
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+
+                        builder.setMessage("Enter the blank tiles in order, separated by a comma (no spaces).");
+
+                        final EditText input = new EditText(getActivity());
+
+                        input.setInputType(InputType.TYPE_CLASS_TEXT);
+                        builder.setView(input);
+
+                        builder.setPositiveButton("Set Blanks", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String text = input.getText().toString();
+
+                                String[] blankTiles = text.split(",");
+
+                                int counter = 0;
+
+                                String[] wordCharacters = word.split("");
+                                ArrayList<String> newWordCharacters = new ArrayList<>();
+
+                                for(int i = 0; i < wordCharacters.length; i++){
+                                    String character = wordCharacters[i];
+
+                                    if(character.equals("?")){
+                                        newWordCharacters.add(blankTiles[counter].toUpperCase());
+                                        counter++;
+                                    } else {
+                                        newWordCharacters.add(character);
+                                    }
+                                }
+
+                                String newWord = "";
+
+                                for(String character : newWordCharacters){
+                                    newWord += character;
+                                }
+
+                                player.updatePlayerWordHistory(word, newWord);
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.show();
+                    }
+                });
+
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         return view;
     }

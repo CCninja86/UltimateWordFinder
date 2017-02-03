@@ -18,7 +18,7 @@
         android:layout_toStartOf="@+id/btnMinWordScore"
         android:choiceMode="multipleChoice"
         android:listSelector="#00000000"
-        android:layout_below="@+id/btnOfficial"/>
+        android:layout_below="@+id/switchOfficialSelection" />
 
     <Button
         android:layout_width="wrap_content"
@@ -31,40 +31,6 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/listSearchResults"
         android:layout_toRightOf="@+id/listSearchResults"
-        style="@style/Widget.AppCompat.Button.Colored" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Min. Word Score"
-        android:id="@+id/btnMinWordScore"
-        android:layout_above="@+id/btnGetDefinition"
-        android:layout_alignLeft="@+id/btnGetDefinition"
-        android:layout_alignStart="@+id/btnGetDefinition"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        style="@style/Widget.AppCompat.Button.Colored" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Definition"
-        android:id="@+id/btnGetDefinition"
-        android:layout_above="@+id/btnCompareScores"
-        android:layout_alignLeft="@+id/btnCompareScores"
-        android:layout_alignStart="@+id/btnCompareScores"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        style="@style/Widget.AppCompat.Button.Colored" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Compare Scores"
-        android:id="@+id/btnCompareScores"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         style="@style/Widget.AppCompat.Button.Colored" />
 
     <Button
@@ -100,4 +66,48 @@
         android:layout_toEndOf="@+id/btnDeselectAll"
         android:layout_marginTop="39dp"
         android:checked="false" />
+
+    <Switch
+        android:text="Use your selection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchOfficialSelection"
+        android:checked="true"
+        android:layout_below="@+id/btnOfficial"
+        android:layout_toRightOf="@+id/listSearchResults"
+        android:layout_toEndOf="@+id/listSearchResults"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp" />
+
+    <TextView
+        android:text="[numResults]"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/listSearchResults"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textViewNumResults"
+        android:textStyle="normal|bold" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Min. Word Score"
+        android:id="@+id/btnMinWordScore"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_below="@+id/switchOfficialSelection"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="42dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Compare Scores"
+        android:id="@+id/btnCompareScores"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_below="@+id/btnMinWordScore"
+        android:layout_toRightOf="@+id/listSearchResults"
+        android:layout_toEndOf="@+id/listSearchResults" />
+
 </RelativeLayout>

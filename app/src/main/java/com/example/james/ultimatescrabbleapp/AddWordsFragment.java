@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qsl.faar.protocol.analytics.AttributeType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 
 /**
@@ -222,78 +226,86 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                     final ArrayList<String> doubleLetters = new ArrayList<>();
                     final ArrayList<String> tripleLetters = new ArrayList<>();
 
-                    if(doubleLetter || tripleLetter) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle("Double Letter Bonuses (Current word: " + playedWordFinal + ")");
-                        builder.setMessage("Enter the letters that are on a double letter bonus, separated by a comma (no spaces)");
 
-                        final EditText input = new EditText(getContext());
+                    if(doubleLetter || tripleLetter){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle("Double Letter Bonuses (Current word: " + playedWordFinal + ")");
+                            builder.setMessage("Enter the letters that are on a double letter bonus, separated by a comma (no spaces). Leave empty if no double letter bonuses.");
 
-                        input.setInputType(InputType.TYPE_CLASS_TEXT);
-                        builder.setView(input);
+                            final EditText input = new EditText(getContext());
 
-                        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                m_text = input.getText().toString();
+                            input.setInputType(InputType.TYPE_CLASS_TEXT);
+                            builder.setView(input);
 
-                                String[] letters = m_text.split(",");
+                            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    m_text = input.getText().toString();
 
-                                for (String letter : letters) {
-                                    doubleLetters.add(letter.toUpperCase());
-                                }
+                                    String[] letters = m_text.split(",");
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setTitle("Triple Letter Bonuses (Current word: " + playedWordFinal + ")");
-                                builder.setMessage("Enter the letters that are on a triple letter bonus, separated by a comma (no spaces)");
+                                    for (String letter : letters) {
+                                        doubleLetters.add(letter.toUpperCase());
+                                    }
 
-                                final EditText input = new EditText(getContext());
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setTitle("Triple Letter Bonuses (Current word: " + playedWordFinal + ")");
+                                    builder.setMessage("Enter the letters that are on a triple letter bonus, separated by a comma (no spaces). Leave empty if no triple letter bonuses.");
 
-                                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                                builder.setView(input);
+                                    final EditText input = new EditText(getContext());
 
-                                builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        m_text = input.getText().toString();
+                                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                                    builder.setView(input);
 
-                                        String[] letters = m_text.split(",");
+                                    builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            m_text = input.getText().toString();
 
-                                        for (String letter : letters) {
-                                            tripleLetters.add(letter.toUpperCase());
+                                            String[] letters = m_text.split(",");
+
+                                            for (String letter : letters) {
+                                                tripleLetters.add(letter.toUpperCase());
+                                            }
+
+                                            player.addWordScore(playedWordFinal.toUpperCase(), wordsWithBonusesFinal, doubleLetterFinal, tripleLetterFinal, doubleWordFinal, tripleWordFinal, doubleLetters, tripleLetters);
+                                            Toast.makeText(getContext(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
                                         }
+                                    });
 
-                                        player.addWordScore(playedWordFinal.toUpperCase(), wordsWithBonusesFinal, doubleLetterFinal, tripleLetterFinal, doubleWordFinal, tripleWordFinal, doubleLetters, tripleLetters);
-                                    }
-                                });
+                                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+                                        }
+                                    });
 
-                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.cancel();
-                                    }
-                                });
+                                    builder.show();
 
-                                builder.show();
-                            }
-                        });
+                                }
+                            });
 
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
 
-                        builder.show();
+                            builder.show();
                     } else {
                         player.addWordScore(playedWordFinal.toUpperCase(), wordsWithBonusesFinal, doubleLetterFinal, tripleLetterFinal, doubleWordFinal, tripleWordFinal, doubleLetters, tripleLetters);
+                        Toast.makeText(getContext(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
+
                     }
+
+                    mListener.onAddWordsFragmentInteraction(view);
+
+
 
                 }
 
-                Toast.makeText(getContext(), "Words added for " + player.getName() + "", Toast.LENGTH_LONG).show();
-                mListener.onAddWordsFragmentInteraction(view);
+
             }
         });
 

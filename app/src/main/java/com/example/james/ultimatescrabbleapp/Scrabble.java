@@ -43,7 +43,7 @@ public class Scrabble implements Serializable{
     }
 
     public void initialiseTiles() {
-        this.tiles.add(new Tile(" ", 0, false, 2));
+        this.tiles.add(new Tile("?", 0, false, 2));
         this.tiles.add(new Tile("A", 1, true, 9));
         this.tiles.add(new Tile("B", 3, false, 2));
         this.tiles.add(new Tile("C", 3, false, 2));

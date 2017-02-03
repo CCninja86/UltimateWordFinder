@@ -50,7 +50,9 @@ public class Player implements Serializable {
             tripleLetterBonuses = tripleLetters;
         }
 
-        for(String letter : letters){
+        for(int i = 0; i < letters.length; i++){
+            String letter = letters[i];
+
             if(!letter.equals("")) {
                 for (Tile tile : tiles) {
                     if (tile.getLetter().equals(letter)) {
@@ -106,6 +108,11 @@ public class Player implements Serializable {
      */
     public void setPlayerWordHistory(ArrayList<String> playerWordHistory) {
         this.playerWordHistory = playerWordHistory;
+    }
+
+    public void updatePlayerWordHistory(String oldItem, String newItem){
+        int oldItemIndex = this.playerWordHistory.indexOf(oldItem);
+        this.playerWordHistory.set(oldItemIndex, newItem);
     }
 
     /**

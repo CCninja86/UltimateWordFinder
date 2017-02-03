@@ -209,7 +209,6 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
                 bundle.putSerializable("Scrabble Game", scrabbleGame);
                 scoringFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.container, scoringFragment);
-                fragmentTransaction.addToBackStack(null);
                 break;
         }
 

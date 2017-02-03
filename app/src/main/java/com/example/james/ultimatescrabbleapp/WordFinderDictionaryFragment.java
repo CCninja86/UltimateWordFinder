@@ -120,7 +120,13 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
                 Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
                 if(vibrator.hasVibrator()){
-                    vibrator.vibrate(500);
+                    vibrator.vibrate(250);
+
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 final CharSequence options[] = new CharSequence[]{"Definitions", "Synonyms"};

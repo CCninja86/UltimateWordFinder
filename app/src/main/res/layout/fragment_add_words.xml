@@ -44,7 +44,8 @@
         android:id="@+id/btnAddWords"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        style="@style/Widget.AppCompat.Button.Colored" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,18 +58,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="24dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Triple Word(s)"
-        android:id="@+id/textViewTripleWord"
-        android:textSize="20dp"
-        android:layout_marginTop="27dp"
-        android:layout_below="@+id/editTextDoubleWord"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -129,5 +118,17 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Triple Word(s)"
+        android:id="@+id/textViewTripleWord"
+        android:textSize="20dp"
+        android:layout_below="@+id/editTextDoubleWord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
 
 </RelativeLayout>
