@@ -1,7 +1,9 @@
 package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -34,6 +36,10 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ProgressDialog progressDialog;
+    private Dictionary dictionary;
+    private ArrayList<Word> matches;
 
     /**
      * Use this factory method to create a new instance of
@@ -81,9 +87,9 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
         final TextView editTextStartsWith = (TextView) view.findViewById(R.id.editTextStartsWith);
         final TextView editTextEndsWith = (TextView) view.findViewById(R.id.editTextEndsWith);
 
-        final ArrayList<Word> matches = new ArrayList<>();
+        matches = new ArrayList<>();
         Globals g = Globals.getInstance();
-        final Dictionary dictionary = g.getDictionary();
+        dictionary = g.getDictionary();
 
         seekBarNumLetters.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -112,25 +118,68 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
                 String suffix = editTextEndsWith.getText().toString();
                 int length = seekBarNumLetters.getProgress();
 
-                for (Word word : dictionary.getWordList()) {
-                    if (word.getWord().contains(searchTerm) && word.getWord().startsWith(prefix) && word.getWord().endsWith(suffix)) {
-                        if (length != 0) {
-                            if (word.getWord().length() == length) {
-                                matches.add(word);
-                            }
-                        } else {
-                            matches.add(word);
-                        }
-
-                    }
-                }
-
-                mListener.onAdvancedSearchFragmentInteraction(view, matches);
+                SearchWordsTask searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, length);
+                searchWordsTask.execute();
             }
         });
 
 
         return view;
+    }
+
+    private class SearchWordsTask extends AsyncTask<Void, Void, Void> {
+
+        private String searchTerm;
+        private String prefix;
+        private String suffix;
+        private int length;
+        private View view;
+
+        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int length){
+            this.searchTerm = searchTerm;
+            this.prefix = prefix;
+            this.suffix = suffix;
+            this.length = length;
+            this.view = view;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Searching...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            for (Word word : dictionary.getWordList()) {
+                if (word.getWord().contains(searchTerm) && word.getWord().startsWith(prefix) && word.getWord().endsWith(suffix)) {
+                    if (length != 0) {
+                        if (word.getWord().length() == length) {
+                            matches.add(word);
+                        }
+                    } else {
+                        matches.add(word);
+                    }
+
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            if(progressDialog != null && progressDialog.isShowing()){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+
+            mListener.onAdvancedSearchFragmentInteraction(view, matches);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

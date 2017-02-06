@@ -595,6 +595,11 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             progressDialog.setProgress(progress);
         }
 
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
+
+
         Iterator iterator = letterFilterMatches.iterator();
         String[] lettersInWord = null;
 
