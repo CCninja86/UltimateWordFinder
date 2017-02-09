@@ -184,10 +184,10 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                 Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
                 if(vibrator.hasVibrator()){
-                    vibrator.vibrate(250);
+                    vibrator.vibrate(125);
 
                     try {
-                        Thread.sleep(250);
+                        Thread.sleep(125);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

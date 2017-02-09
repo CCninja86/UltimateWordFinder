@@ -21,9 +21,16 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -67,6 +74,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
 
     private boolean hasActiveInternetConnection;
 
+    InterstitialAd interstitialAd;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -113,6 +121,21 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scoring, container, false);
+
+        interstitialAd = new InterstitialAd(getContext());
+
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                setup();
+                requestNewInterstitial();
+            }
+        });
+
+        requestNewInterstitial();
+
 
         g = Globals.getInstance();
         dictionary = g.getDictionary();
@@ -185,6 +208,12 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
 
         return view;
     }
+
+    private void requestNewInterstitial(){
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("72A09D092AFFDE0C64546FD216A276F4").build();
+        interstitialAd.loadAd(adRequest);
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     /*public void onButtonPressed(Uri uri) {
@@ -299,7 +328,10 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 selection = DICTIONARY;
-                setup();
+
+                if(interstitialAd.isLoaded()){
+                    interstitialAd.show();
+                }
             }
         });
 
@@ -307,7 +339,10 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 selection = WORD_FINDER;
-                setup();
+
+                if(interstitialAd.isLoaded()){
+                    interstitialAd.show();
+                }
             }
         });
 
@@ -315,6 +350,8 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
     }
 
     private void setup(){
+
+
         Bundle bundle = new Bundle();
         bundle.putInt("selection", selection);
         Intent intent = new Intent(context, WordFinderActivity.class);
