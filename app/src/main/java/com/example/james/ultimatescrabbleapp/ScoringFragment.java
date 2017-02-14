@@ -75,6 +75,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
     private boolean hasActiveInternetConnection;
 
     InterstitialAd interstitialAd;
+    String user = "me";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -122,19 +123,22 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scoring, container, false);
 
-        interstitialAd = new InterstitialAd(getContext());
+        if(user == null || !user.equals("me")){
+            interstitialAd = new InterstitialAd(getContext());
 
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+            interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
 
-        interstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                setup();
-                requestNewInterstitial();
-            }
-        });
+            interstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    setup();
+                    requestNewInterstitial();
+                }
+            });
 
-        requestNewInterstitial();
+            requestNewInterstitial();
+        }
+
 
 
         g = Globals.getInstance();
@@ -329,9 +333,14 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 selection = DICTIONARY;
 
-                if(interstitialAd.isLoaded()){
-                    interstitialAd.show();
+                if(user == null || !user.equals("me")){
+                    if(interstitialAd.isLoaded()){
+                        interstitialAd.show();
+                    }
+                } else {
+                    setup();
                 }
+
             }
         });
 
@@ -340,8 +349,12 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 selection = WORD_FINDER;
 
-                if(interstitialAd.isLoaded()){
-                    interstitialAd.show();
+                if(user == null || !user.equals("me")){
+                    if(interstitialAd.isLoaded()){
+                        interstitialAd.show();
+                    }
+                } else {
+                    setup();
                 }
             }
         });
