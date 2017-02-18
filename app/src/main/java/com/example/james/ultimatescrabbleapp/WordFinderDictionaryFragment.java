@@ -57,7 +57,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
     private Dictionary dictionary;
     DefinitionList definitionList = new DefinitionList();
     ArrayList<String> synonyms = new ArrayList<>();
-    private ListViewAdapter adapter;
+    private ResultListViewAdapter adapter;
 
     ProgressDialog progressDialog;
 
@@ -109,7 +109,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
             @Override
             public void onClick(View v) {
                 ArrayList<String> results = dictionary.getStringWordsStartingWith(editTextSearch.getText().toString());
-                adapter = new ListViewAdapter(getActivity(), results, R.layout.row);
+                adapter = new ResultListViewAdapter(getActivity(), results, R.layout.row);
                 listViewResults.setAdapter(adapter);
             }
         });

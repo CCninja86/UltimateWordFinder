@@ -67,7 +67,7 @@ public class SynonymResultListFragment extends android.support.v4.app.Fragment {
         Bundle bundle = getArguments();
         ArrayList<String> results = bundle.getStringArrayList("Synonyms");
 
-        ListViewAdapter adapter = new ListViewAdapter(getActivity(), results, R.layout.row_result_list);
+        ResultListViewAdapter adapter = new ResultListViewAdapter(getActivity(), results, R.layout.row_result_list);
         ListView listResults = (ListView) view.findViewById(R.id.listViewResults);
         listResults.setAdapter(adapter);
 

@@ -6,13 +6,17 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -101,63 +105,94 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_words, container, false);
 
-        textViewDoubleWord = (TextView) view.findViewById(R.id.textViewDoubleWord);
-        textViewTripleWord = (TextView) view.findViewById(R.id.textViewTripleWord);
-        editTextDoubleWord = (EditText) view.findViewById(R.id.editTextDoubleWord);
-        editTextTripleWord = (EditText) view.findViewById(R.id.editTextTripleWord);
+//        textViewDoubleWord = (TextView) view.findViewById(R.id.textViewDoubleWord);
+//        textViewTripleWord = (TextView) view.findViewById(R.id.textViewTripleWord);
+//        editTextDoubleWord = (EditText) view.findViewById(R.id.editTextDoubleWord);
+//        editTextTripleWord = (EditText) view.findViewById(R.id.editTextTripleWord);
         editTextWords = (EditText) view.findViewById(R.id.editTextWords);
+        final ListView listViewWordScores = (ListView) view.findViewById(R.id.listViewWordScores);
 
-
-        textViewDoubleWord.setVisibility(View.INVISIBLE);
-        textViewTripleWord.setVisibility(View.INVISIBLE);
-        editTextDoubleWord.setVisibility(View.INVISIBLE);
-        editTextTripleWord.setVisibility(View.INVISIBLE);
-
-
-        clickListener = new View.OnClickListener() {
+        editTextWords.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                CheckBox selectedCheckBox = null;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                switch (view.getId()) {
-                    case R.id.checkDoubleWord:
-                        selectedCheckBox = (CheckBox) view.findViewById(R.id.checkDoubleWord);
-
-                        if (selectedCheckBox.isChecked()) {
-                            textViewDoubleWord.setVisibility(View.VISIBLE);
-                            editTextDoubleWord.setVisibility(View.VISIBLE);
-                        } else {
-                            textViewDoubleWord.setVisibility(View.INVISIBLE);
-                            editTextDoubleWord.setVisibility(View.INVISIBLE);
-                        }
-
-                        break;
-                    case R.id.checkTripleWord:
-                        selectedCheckBox = (CheckBox) view.findViewById(R.id.checkTripleWord);
-
-                        if (selectedCheckBox.isChecked()) {
-                            textViewTripleWord.setVisibility(View.VISIBLE);
-                            editTextTripleWord.setVisibility(View.VISIBLE);
-                        } else {
-                            textViewTripleWord.setVisibility(View.INVISIBLE);
-                            editTextTripleWord.setVisibility(View.INVISIBLE);
-                        }
-
-                        break;
-                }
             }
-        };
 
-        final CheckBox checkDoubleLetter = (CheckBox) view.findViewById(R.id.checkDoubleLetter);
-        final CheckBox checkTripleLetter = (CheckBox) view.findViewById(R.id.checkTripleLetter);
-        final CheckBox checkDoubleWord = (CheckBox) view.findViewById(R.id.checkDoubleWord);
-        final CheckBox checkTripleWord = (CheckBox) view.findViewById(R.id.checkTripleWord);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ArrayList<String> words = new ArrayList<>();
+
+                if(!editTextWords.getText().toString().isEmpty()){
+                    String[] enteredWords = editTextWords.getText().toString().split(",");
+
+                    for(String enteredWord : enteredWords){
+                        words.add(enteredWord);
+                    }
+                }
+
+                WordScoresListViewAdapter adapter = new WordScoresListViewAdapter(getActivity(), words, R.layout.word_scores_row);
+                listViewWordScores.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
-        checkDoubleLetter.setOnClickListener(clickListener);
-        checkTripleLetter.setOnClickListener(clickListener);
-        checkDoubleWord.setOnClickListener(clickListener);
-        checkTripleWord.setOnClickListener(clickListener);
+//        textViewDoubleWord.setVisibility(View.INVISIBLE);
+//        textViewTripleWord.setVisibility(View.INVISIBLE);
+//        editTextDoubleWord.setVisibility(View.INVISIBLE);
+//        editTextTripleWord.setVisibility(View.INVISIBLE);
+
+
+//        clickListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CheckBox selectedCheckBox = null;
+//
+//                switch (view.getId()) {
+//                    case R.id.checkDoubleWord:
+//                        selectedCheckBox = (CheckBox) view.findViewById(R.id.checkDoubleWord);
+//
+//                        if (selectedCheckBox.isChecked()) {
+//                            textViewDoubleWord.setVisibility(View.VISIBLE);
+//                            editTextDoubleWord.setVisibility(View.VISIBLE);
+//                        } else {
+//                            textViewDoubleWord.setVisibility(View.INVISIBLE);
+//                            editTextDoubleWord.setVisibility(View.INVISIBLE);
+//                        }
+//
+//                        break;
+//                    case R.id.checkTripleWord:
+//                        selectedCheckBox = (CheckBox) view.findViewById(R.id.checkTripleWord);
+//
+//                        if (selectedCheckBox.isChecked()) {
+//                            textViewTripleWord.setVisibility(View.VISIBLE);
+//                            editTextTripleWord.setVisibility(View.VISIBLE);
+//                        } else {
+//                            textViewTripleWord.setVisibility(View.INVISIBLE);
+//                            editTextTripleWord.setVisibility(View.INVISIBLE);
+//                        }
+//
+//                        break;
+//                }
+//            }
+//        };
+
+//        final CheckBox checkDoubleLetter = (CheckBox) view.findViewById(R.id.checkDoubleLetter);
+//        final CheckBox checkTripleLetter = (CheckBox) view.findViewById(R.id.checkTripleLetter);
+//        final CheckBox checkDoubleWord = (CheckBox) view.findViewById(R.id.checkDoubleWord);
+//        final CheckBox checkTripleWord = (CheckBox) view.findViewById(R.id.checkTripleWord);
+
+
+//        checkDoubleLetter.setOnClickListener(clickListener);
+//        checkTripleLetter.setOnClickListener(clickListener);
+//        checkDoubleWord.setOnClickListener(clickListener);
+//        checkTripleWord.setOnClickListener(clickListener);
 
         Bundle bundle = getArguments();
         this.player = (Player) bundle.getSerializable("Player");
@@ -199,21 +234,21 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                     }
                 }
 
-                if(checkDoubleLetter.isChecked()){
-                    doubleLetter = true;
-                }
-
-                if(checkTripleLetter.isChecked()){
-                    tripleLetter = true;
-                }
-
-                if(checkDoubleWord.isChecked()){
-                    doubleWord = true;
-                }
-
-                if(checkTripleWord.isChecked()){
-                    tripleWord = true;
-                }
+//                if(checkDoubleLetter.isChecked()){
+//                    doubleLetter = true;
+//                }
+//
+//                if(checkTripleLetter.isChecked()){
+//                    tripleLetter = true;
+//                }
+//
+//                if(checkDoubleWord.isChecked()){
+//                    doubleWord = true;
+//                }
+//
+//                if(checkTripleWord.isChecked()){
+//                    tripleWord = true;
+//                }
 
                 final Map<String, Integer> wordsWithBonusesFinal = wordsWithBonuses;
                 final boolean doubleLetterFinal = doubleLetter;

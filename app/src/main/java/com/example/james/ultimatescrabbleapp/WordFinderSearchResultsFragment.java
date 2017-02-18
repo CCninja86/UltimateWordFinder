@@ -25,8 +25,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -63,7 +61,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
     private View.OnClickListener onClickListener;
 
     private ArrayList<String> searchResults;
-    private ListViewAdapter adapter;
+    private ResultListViewAdapter adapter;
     private Dictionary dictionary;
     DefinitionList definitionList = new DefinitionList();
     ArrayList<String> synonyms = new ArrayList<>();
@@ -115,7 +113,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         this.dictionary = g.getDictionary();
         this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
         this.searchResults = bundle.getStringArrayList("Search Results");
-        this.adapter = new ListViewAdapter(getActivity(), this.searchResults, R.layout.row);
+        this.adapter = new ResultListViewAdapter(getActivity(), this.searchResults, R.layout.row);
         listResults.setAdapter(adapter);
         textViewNumResults.setText("Found " + listResults.getCount() + " results");
 
@@ -319,7 +317,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
+                                            adapter = new ResultListViewAdapter(getActivity(), searchResults, R.layout.row);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
@@ -338,7 +336,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
+                                            adapter = new ResultListViewAdapter(getActivity(), searchResults, R.layout.row);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
@@ -357,7 +355,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
+                                            adapter = new ResultListViewAdapter(getActivity(), searchResults, R.layout.row);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override

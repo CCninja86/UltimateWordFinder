@@ -34,7 +34,7 @@ public class WordFinderScoreComparisonFragment extends android.support.v4.app.Fr
 
     private OnFragmentInteractionListener mListener;
 
-    private ListViewAdapter adapter;
+    private ResultListViewAdapter adapter;
     Dictionary dictionary;
 
     /**
@@ -83,7 +83,7 @@ public class WordFinderScoreComparisonFragment extends android.support.v4.app.Fr
         Bundle bundle = getArguments();
         final ArrayList<String> wordsToCompare = bundle.getStringArrayList("wordsToCompare");
 
-        this.adapter = new ListViewAdapter(getActivity(), wordsToCompare, R.layout.row);
+        this.adapter = new ResultListViewAdapter(getActivity(), wordsToCompare, R.layout.row);
         listWords.setAdapter(adapter);
 
         listWords.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -121,7 +121,7 @@ public class WordFinderScoreComparisonFragment extends android.support.v4.app.Fr
                     wordScoreComparisons.add(comparisonString);
                 }
 
-                ListViewAdapter resultAdapter = new ListViewAdapter(getActivity(), wordScoreComparisons, R.layout.row);
+                ResultListViewAdapter resultAdapter = new ResultListViewAdapter(getActivity(), wordScoreComparisons, R.layout.row);
                 listScoreComparison.setAdapter(resultAdapter);
             }
         });

@@ -14,10 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 
 /**
@@ -82,7 +80,7 @@ public class WordHistoryFragment extends android.support.v4.app.Fragment {
         Bundle bundle = getArguments();
         this.player = (Player) bundle.getSerializable("Player");
         final ListView listWordHistory = (ListView) view.findViewById(R.id.listWordHistory);
-        this.adapter = new ListViewAdapter(getActivity(),this.player.getPlayerWordHistory(), R.layout.row);
+        this.adapter = new ResultListViewAdapter(getActivity(),this.player.getPlayerWordHistory(), R.layout.row);
         listWordHistory.setAdapter(this.adapter);
 
         listWordHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
