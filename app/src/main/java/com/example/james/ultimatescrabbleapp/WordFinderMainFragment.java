@@ -1,6 +1,7 @@
 package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -137,94 +138,35 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         checkIncludeKnown = (CheckBox) view.findViewById(R.id.checkBoxIncludeKnown);
         Button btnSearch = (Button) view.findViewById(R.id.btnSearch);
         Button btnAdvancedSearch = (Button) view.findViewById(R.id.btnAdvancedSearch);
+        Button btnExample = (Button) view.findViewById(R.id.btnExample);
 
-        /*editTextLettersBoard.addTextChangedListener(new TextWatcher() {
-
+        btnExample.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Word Finder Example");
+                builder.setMessage("Letters on Board: f????t\n" +
+                                   "Letters in Rack: orebstu\n" +
+                                   "Contains only letters in your rack: yes\n" +
+                                   "Include known letters on Board: yes\n\n" +
+                                   "Results:\n\n" +
+                                   "forest\n" +
+                                   "forset\n" +
+                                   "fouett\n" +
+                                   "froust\n" +
+                                   "fustet");
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(textFlag){
-                    textFlag = false;
-                    return;
-                } else {
-                    textFlag = true;
-
-                    if(s.equals("-")){
-                        return;
-                    } else {
-                        if(editTextLettersBoard.getText().toString().length() > 1) {
-                            String[] characters = editTextLettersBoard.getText().toString().split("");
-                            String newString = "";
-
-                            for (String character : characters) {
-                                if(!character.equals("-")){
-                                    newString += character + "-";
-                                }
-                            }
-
-                            newString = newString.substring(0, newString.length() - 1);
-                            newString = newString.substring(1, newString.length());
-
-                            editTextLettersBoard.setText(newString);
-                            editTextLettersBoard.setSelection(editTextLettersBoard.getText().length());
-                        }
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
                     }
-                }
+                });
+
+                builder.show();
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
         });
-
-        editTextLettersRack.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(textFlag){
-                    textFlag = false;
-                    return;
-                } else {
-                    textFlag = true;
-
-                    if(s.equals("-")){
-                        return;
-                    } else {
-                        if(editTextLettersRack.getText().toString().length() > 1) {
-                            String[] characters = editTextLettersRack.getText().toString().split("");
-                            String newString = "";
-
-                            for (String character : characters) {
-                                if(!character.equals("-")){
-                                    newString += character + "-";
-                                }
-                            }
-
-                            newString = newString.substring(0, newString.length() - 1);
-                            newString = newString.substring(1, newString.length());
-
-                            editTextLettersRack.setText(newString);
-                            editTextLettersRack.setSelection(editTextLettersRack.getText().length());
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
 
@@ -251,31 +193,33 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    String[] lettersOnBoard = editTextLettersBoard.getText().toString().split("-");
+                    String[] lettersOnBoard = editTextLettersBoard.getText().toString().split("");
                     ArrayList<String> lettersToInclude = new ArrayList<>();
 
                     for(String letter : lettersOnBoard){
-                        if(!letter.equals("?")){
+                        if(!letter.equals("?") && !letter.equals("")){
                             lettersToInclude.add(letter);
                         }
                     }
 
                     for(String toInclude : lettersToInclude){
-                        editTextLettersRack.setText(editTextLettersRack.getText().toString() + "-" + toInclude);
+                        editTextLettersRack.setText(editTextLettersRack.getText().toString() + toInclude);
                     }
                 } else {
                     int numKnownLetters = 0;
 
-                    for(String letter : editTextLettersBoard.getText().toString().split("-")){
-                        if(!letter.equals("?")){
+                    for(String letter : editTextLettersBoard.getText().toString().split("")){
+                        if(!letter.equals("?") && !letter.equals("")){
                             numKnownLetters++;
                         }
                     }
 
                     if(numKnownLetters > 0){
-                        String newString = editTextLettersRack.getText().toString();
-                        newString = newString.substring(0, newString.length() - (numKnownLetters * 2));
-                        editTextLettersRack.setText(newString);
+                        if(editTextLettersRack.getText().toString().length() > 0){
+                            String newString = editTextLettersRack.getText().toString();
+                            newString = newString.substring(0, newString.length() - (numKnownLetters));
+                            editTextLettersRack.setText(newString);
+                        }
                     }
                 }
             }

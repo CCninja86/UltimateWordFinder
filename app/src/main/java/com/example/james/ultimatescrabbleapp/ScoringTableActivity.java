@@ -166,9 +166,15 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
                 builder.setPositiveButton("Change Score", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        int newScore = Integer.parseInt(input.getText().toString());
-                        player.setScore(newScore);
-                        Toast.makeText(getBaseContext(), "Score Changed!", Toast.LENGTH_LONG).show();
+                        String enteredInput = input.getText().toString();
+
+                        if(enteredInput != null && !enteredInput.equals("")){
+                            int newScore = Integer.parseInt(input.getText().toString());
+                            player.setScore(newScore);
+                            Toast.makeText(getBaseContext(), "Score Changed!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getBaseContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
@@ -193,8 +199,13 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String newName = nameInput.getText().toString();
-                        player.setName(newName);
-                        Toast.makeText(getBaseContext(), "Player Name Changed!", Toast.LENGTH_LONG).show();
+
+                        if(newName != null && !newName.equals("")){
+                            player.setName(newName);
+                            Toast.makeText(getBaseContext(), "Player Name Changed!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getBaseContext(), "Please enter a valid name", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
