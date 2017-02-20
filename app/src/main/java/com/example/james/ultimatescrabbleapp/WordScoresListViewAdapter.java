@@ -132,49 +132,55 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
+        LinearLayout.LayoutParams textViewLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, null);
-        }
 
-        String word = words.get(position);
+            String word = words.get(position);
 
-        if(word != null){
-            LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.wordScoreLayout);
+            if(word != null){
+                LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.wordScoreLayout);
 
-            String[] letters = word.split("");
+                String[] letters = word.split("");
 
-            for(String letter : letters){
-                if(!letter.equals("")){
-                    TextView letterTextView = new TextView(getContext());
-                    letterTextView.setText(letter.toUpperCase());
-                    letterTextView.setBackgroundColor(Color.argb(255, 195, 189, 165));
-                    letterTextView.setTextSize(24);
-                    letterTextView.setWidth(200);
-                    letterTextView.setHeight(100);
-                    letterTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-                    letterTextView.setOnClickListener(this.letterOnClickListener);
-
+                for(String letter : letters){
+                    if(!letter.equals("")){
+                        TextView letterTextView = new TextView(getContext());
+                        letterTextView.setText(letter.toUpperCase());
+                        letterTextView.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                        letterTextView.setTextSize(24);
+                        letterTextView.setWidth(200);
+                        letterTextView.setHeight(100);
+                        letterTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+                        letterTextView.setOnClickListener(this.letterOnClickListener);
 
 
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    layoutParams.setMargins(0, 0, 10, 0);
-                    linearLayout.addView(letterTextView, layoutParams);
 
+
+                        textViewLayoutParams.setMargins(0, 0, 10, 0);
+                        linearLayout.addView(letterTextView, textViewLayoutParams);
+
+                    }
                 }
+
+                Button wordBonusButton = new Button(getContext());
+                wordBonusButton.setText("No Word Bonus");
+                wordBonusButton.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                wordBonusButton.setOnClickListener(this.btnOnClickListener);
+
+
+                buttonLayoutParams.setMargins(100, 0, 0, 0);
+                linearLayout.addView(wordBonusButton, buttonLayoutParams);
             }
 
-            Button wordBonusButton = new Button(getContext());
-            wordBonusButton.setText("No Word Bonus");
-            wordBonusButton.setBackgroundColor(Color.argb(255, 195, 189, 165));
-            wordBonusButton.setOnClickListener(this.btnOnClickListener);
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(100, 0, 0, 0);
-
-            linearLayout.addView(wordBonusButton, layoutParams);
         }
+
+
 
         return  convertView;
     }

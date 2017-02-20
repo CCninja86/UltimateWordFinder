@@ -14,13 +14,13 @@ import java.util.ArrayList;
 /**
  * Created by James on 30/11/2015.
  */
-public class ResultListViewAdapter extends ArrayAdapter<String> {
+public class ListViewAdapter extends ArrayAdapter<String> {
 
     private ArrayList<String> words;
     private  ArrayList<Integer> selectedItems;
     private int layout;
 
-    public ResultListViewAdapter(Activity context, ArrayList<String> words, int layout){
+    public ListViewAdapter(Activity context, ArrayList<String> words, int layout){
         super(context, layout, words);
         this.layout = layout;
         this.words = words;

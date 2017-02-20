@@ -7,8 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -72,7 +73,12 @@ public class PlayerDetailsFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_player_details, container, false);
         listActions = (ListView) view.findViewById(R.id.listActions);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.playerDetailsOptions, android.R.layout.simple_list_item_1);
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Add Score");
+        options.add("Word History");
+        options.add("Amend Score");
+        options.add("Change Player Name");
+        ListViewAdapter adapter = new ListViewAdapter(getActivity(), options, R.layout.row);
         listActions.setAdapter(adapter);
         listActions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

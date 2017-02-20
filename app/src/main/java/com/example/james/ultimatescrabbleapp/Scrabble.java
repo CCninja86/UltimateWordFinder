@@ -128,6 +128,16 @@ public class Scrabble implements Serializable{
         return playerNames;
     }
 
+    public ArrayList<String> getPlayerNamesAsArrayList(){
+        ArrayList<String> playerNames = new ArrayList<>();
+
+        for(Player player : this.players){
+            playerNames.add(player.getName());
+        }
+
+        return playerNames;
+    }
+
     public void removePlayer(String playerName) {
         for (int i = 0; i < this.players.size(); i++) {
             if (this.players.get(i).getName() == playerName) {

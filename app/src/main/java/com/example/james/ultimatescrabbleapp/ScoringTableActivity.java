@@ -138,7 +138,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         switch (action){
-            case "Add Word(s)":
+            case "Add Score":
                 Fragment addWordsFragment = new AddWordsFragment();
                 Bundle addWordsBundle = new Bundle();
                 addWordsBundle.putSerializable("Player", player);
@@ -215,7 +215,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
     public void onAddWordsFragmentInteraction(View view) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch(view.getId()){
-            case R.id.btnAddWords:
+            case R.id.btnAddWordScore:
                 Fragment scoringFragment = new ScoringFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Scrabble Game", scrabbleGame);

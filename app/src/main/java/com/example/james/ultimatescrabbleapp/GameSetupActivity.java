@@ -1,8 +1,11 @@
 package com.example.james.ultimatescrabbleapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
@@ -45,11 +49,10 @@ public class GameSetupActivity extends AppCompatActivity {
         txtPlayerName = (EditText) findViewById(R.id.txtPlayerName);
         playerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                String player = playerList.getItemAtPosition(position).toString();
-                txtPlayerName.setText(player);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = playerList.getItemAtPosition(position).toString();
+                txtPlayerName.setText(name);
             }
-
         });
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playerNames);

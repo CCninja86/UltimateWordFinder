@@ -29,8 +29,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Word(s)"
-        android:id="@+id/btnAddWords"
+        android:text="Add Word Score"
+        android:id="@+id/btnAddWordScore"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -40,7 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@+id/editTextWords"
-        android:layout_above="@+id/btnAddWords">
+        android:layout_above="@+id/btnAddManualScore"
+        android:id="@+id/scrollView">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -48,16 +49,24 @@
             android:orientation="vertical" >
 
             <ListView
-                android:layout_width="1500dp"
-                android:layout_height="5000dp"
                 android:layout_below="@+id/editTextWords"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="27dp"
-                android:layout_above="@+id/btnAddWords"
+                android:layout_above="@+id/btnAddManualScore"
                 android:id="@+id/listViewWordScores"
-                />
+                android:layout_height="360dp"
+                android:layout_width="3000dp" />
         </LinearLayout>
     </HorizontalScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Number Score"
+        android:id="@+id/btnAddManualScore"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btnAddWordScore" />
 
 </RelativeLayout>

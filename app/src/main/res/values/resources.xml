@@ -1,9 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="playerDetailsOptions">
-        <item>Add Word(s)</item>
-        <item>Word History</item>
-        <item>Amend Score</item>
-        <item>Change Player Name</item>
-    </string-array>
 </resources>

@@ -2,6 +2,7 @@ package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -16,7 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -105,10 +110,6 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_words, container, false);
 
-//        textViewDoubleWord = (TextView) view.findViewById(R.id.textViewDoubleWord);
-//        textViewTripleWord = (TextView) view.findViewById(R.id.textViewTripleWord);
-//        editTextDoubleWord = (EditText) view.findViewById(R.id.editTextDoubleWord);
-//        editTextTripleWord = (EditText) view.findViewById(R.id.editTextTripleWord);
         editTextWords = (EditText) view.findViewById(R.id.editTextWords);
         final ListView listViewWordScores = (ListView) view.findViewById(R.id.listViewWordScores);
 
@@ -133,7 +134,6 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                 WordScoresListViewAdapter adapter = new WordScoresListViewAdapter(getActivity(), words, R.layout.word_scores_row);
                 listViewWordScores.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -142,205 +142,113 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
             }
         });
 
-
-//        textViewDoubleWord.setVisibility(View.INVISIBLE);
-//        textViewTripleWord.setVisibility(View.INVISIBLE);
-//        editTextDoubleWord.setVisibility(View.INVISIBLE);
-//        editTextTripleWord.setVisibility(View.INVISIBLE);
-
-
-//        clickListener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                CheckBox selectedCheckBox = null;
-//
-//                switch (view.getId()) {
-//                    case R.id.checkDoubleWord:
-//                        selectedCheckBox = (CheckBox) view.findViewById(R.id.checkDoubleWord);
-//
-//                        if (selectedCheckBox.isChecked()) {
-//                            textViewDoubleWord.setVisibility(View.VISIBLE);
-//                            editTextDoubleWord.setVisibility(View.VISIBLE);
-//                        } else {
-//                            textViewDoubleWord.setVisibility(View.INVISIBLE);
-//                            editTextDoubleWord.setVisibility(View.INVISIBLE);
-//                        }
-//
-//                        break;
-//                    case R.id.checkTripleWord:
-//                        selectedCheckBox = (CheckBox) view.findViewById(R.id.checkTripleWord);
-//
-//                        if (selectedCheckBox.isChecked()) {
-//                            textViewTripleWord.setVisibility(View.VISIBLE);
-//                            editTextTripleWord.setVisibility(View.VISIBLE);
-//                        } else {
-//                            textViewTripleWord.setVisibility(View.INVISIBLE);
-//                            editTextTripleWord.setVisibility(View.INVISIBLE);
-//                        }
-//
-//                        break;
-//                }
-//            }
-//        };
-
-//        final CheckBox checkDoubleLetter = (CheckBox) view.findViewById(R.id.checkDoubleLetter);
-//        final CheckBox checkTripleLetter = (CheckBox) view.findViewById(R.id.checkTripleLetter);
-//        final CheckBox checkDoubleWord = (CheckBox) view.findViewById(R.id.checkDoubleWord);
-//        final CheckBox checkTripleWord = (CheckBox) view.findViewById(R.id.checkTripleWord);
-
-
-//        checkDoubleLetter.setOnClickListener(clickListener);
-//        checkTripleLetter.setOnClickListener(clickListener);
-//        checkDoubleWord.setOnClickListener(clickListener);
-//        checkTripleWord.setOnClickListener(clickListener);
-
         Bundle bundle = getArguments();
         this.player = (Player) bundle.getSerializable("Player");
 
 
-        Button addWordsButton = (Button) view.findViewById(R.id.btnAddWords);
-        addWordsButton.setOnClickListener(new View.OnClickListener() {
+        Button addWordScoreButton = (Button) view.findViewById(R.id.btnAddWordScore);
+        Button addManualScoreButton = (Button) view.findViewById(R.id.btnAddManualScore);
+
+        addManualScoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Add Manual Score");
+                builder.setMessage("Enter the custom number");
+                final EditText input = new EditText(getContext());
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                builder.setView(input);
+
+                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        player.addCustomScore(Integer.valueOf(input.getText().toString()));
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
+
+        addWordScoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ArrayList<String> words = new ArrayList<>();
+                String[] enteredWords = null;
 
                 if(!editTextWords.getText().toString().isEmpty()){
-                    String[] enteredWords = editTextWords.getText().toString().split(",");
+                    enteredWords = editTextWords.getText().toString().split(",");
 
                     for(String enteredWord : enteredWords){
                         words.add(enteredWord);
                     }
                 }
 
-                Map<String, Integer> wordsWithBonuses = new HashMap<String, Integer>();
+                Map<String, Integer> wordsWithBonuses = new HashMap<>();
+                ArrayList<String> doubleLetters = new ArrayList<>();
+                ArrayList<String> tripleLetters = new ArrayList<>();
                 boolean doubleLetter = false;
                 boolean tripleLetter = false;
                 boolean doubleWord = false;
                 boolean tripleWord = false;
 
-                if(!editTextDoubleWord.getText().toString().isEmpty()){
-                    String[] doubleWords = editTextDoubleWord.getText().toString().split(",");
-
-                    for(String word : doubleWords){
-                        wordsWithBonuses.put(word, 2);
-                    }
-                }
-
-                if(!editTextTripleWord.getText().toString().isEmpty()){
-                    String[] tripleWords = editTextTripleWord.getText().toString().split(",");
-
-                    for(String word : tripleWords){
-                        wordsWithBonuses.put(word, 3);
-                    }
-                }
-
-//                if(checkDoubleLetter.isChecked()){
-//                    doubleLetter = true;
-//                }
-//
-//                if(checkTripleLetter.isChecked()){
-//                    tripleLetter = true;
-//                }
-//
-//                if(checkDoubleWord.isChecked()){
-//                    doubleWord = true;
-//                }
-//
-//                if(checkTripleWord.isChecked()){
-//                    tripleWord = true;
-//                }
-
-                final Map<String, Integer> wordsWithBonusesFinal = wordsWithBonuses;
-                final boolean doubleLetterFinal = doubleLetter;
-                final boolean tripleLetterFinal = tripleLetter;
-                final boolean doubleWordFinal = doubleWord;
-                final boolean tripleWordFinal = tripleWord;
-
-                for(String playedWord : words){
-                    final String playedWordFinal = playedWord;
-                    final ArrayList<String> doubleLetters = new ArrayList<>();
-                    final ArrayList<String> tripleLetters = new ArrayList<>();
 
 
-                    if(doubleLetter || tripleLetter){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle("Double Letter Bonuses (Current word: " + playedWordFinal + ")");
-                            builder.setMessage("Enter the letters that are on a double letter bonus, separated by a comma (no spaces). Leave empty if no double letter bonuses.");
 
-                            final EditText input = new EditText(getContext());
+                for(int i = 0; i < listViewWordScores.getCount(); i++){
+                    RelativeLayout row = (RelativeLayout) listViewWordScores.getChildAt(i);
 
-                            input.setInputType(InputType.TYPE_CLASS_TEXT);
-                            builder.setView(input);
+                    for(int x = 0; x < row.getChildCount(); x++){
+                        LinearLayout linearLayout = (LinearLayout) row.getChildAt(0);
 
-                            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    m_text = input.getText().toString();
+                        for(int j = 0; j < linearLayout.getChildCount(); j++){
+                            View childView = linearLayout.getChildAt(j);
 
-                                    String[] letters = m_text.split(",");
+                            if(childView.getClass() == TextView.class){
+                                TextView textViewLetter = (TextView) childView;
 
-                                    for (String letter : letters) {
-                                        doubleLetters.add(letter.toUpperCase());
-                                    }
+                                String textViewText = textViewLetter.getText().toString();
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    builder.setTitle("Triple Letter Bonuses (Current word: " + playedWordFinal + ")");
-                                    builder.setMessage("Enter the letters that are on a triple letter bonus, separated by a comma (no spaces). Leave empty if no triple letter bonuses.");
-
-                                    final EditText input = new EditText(getContext());
-
-                                    input.setInputType(InputType.TYPE_CLASS_TEXT);
-                                    builder.setView(input);
-
-                                    builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            m_text = input.getText().toString();
-
-                                            String[] letters = m_text.split(",");
-
-                                            for (String letter : letters) {
-                                                tripleLetters.add(letter.toUpperCase());
-                                            }
-
-                                            player.addWordScore(playedWordFinal.toUpperCase(), wordsWithBonusesFinal, doubleLetterFinal, tripleLetterFinal, doubleWordFinal, tripleWordFinal, doubleLetters, tripleLetters);
-                                            Toast.makeText(getContext(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            dialogInterface.cancel();
-                                        }
-                                    });
-
-                                    builder.show();
-
+                                if(textViewText.contains("x2")){
+                                    doubleLetters.add(textViewText.substring(0, textViewText.indexOf("x") - 1));
+                                    doubleLetter = true;
+                                } else if(textViewText.contains("x3")){
+                                    tripleLetters.add(textViewText.substring(0, textViewText.indexOf("x") - 1));
+                                    tripleLetter = true;
                                 }
-                            });
 
-                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
+                            } else if(childView.getClass() == Button.class){
+                                Button buttonWordBonus = (Button) childView;
+
+                                String buttonText = buttonWordBonus.getText().toString();
+
+                                switch (buttonText){
+                                    case "Double Word":
+                                        wordsWithBonuses.put(enteredWords[i], 2);
+                                        doubleWord = true;
+                                        break;
+                                    case "Triple Word":
+                                        wordsWithBonuses.put(enteredWords[i], 3);
+                                        tripleWord = true;
+                                        break;
                                 }
-                            });
-
-                            builder.show();
-                    } else {
-                        player.addWordScore(playedWordFinal.toUpperCase(), wordsWithBonusesFinal, doubleLetterFinal, tripleLetterFinal, doubleWordFinal, tripleWordFinal, doubleLetters, tripleLetters);
-                        Toast.makeText(getContext(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
-
+                            }
+                        }
                     }
 
-                    mListener.onAddWordsFragmentInteraction(view);
-
-
-
+                    player.addWordScore(enteredWords[i].toUpperCase(), wordsWithBonuses, doubleLetter, tripleLetter, doubleWord, tripleWord, doubleLetters, tripleLetters);
                 }
 
 
+                Toast.makeText(getContext(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
+                mListener.onAddWordsFragmentInteraction(view);
             }
         });
 

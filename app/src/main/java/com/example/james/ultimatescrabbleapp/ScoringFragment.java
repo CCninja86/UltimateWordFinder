@@ -199,7 +199,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         wordFinderButton.setOnClickListener(clickListener);
 
         players = (ListView) view.findViewById(android.R.id.list);
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, scrabbleGame.getPlayerNames());
+        adapter = new ListViewAdapter(getActivity(), scrabbleGame.getPlayerNamesAsArrayList(), R.layout.row);
         players.setAdapter(adapter);
         players.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

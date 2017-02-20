@@ -74,7 +74,7 @@ public class HelpFeedbackFragment extends Fragment {
         ArrayList<String> options = new ArrayList<>();
         options.add("Report a Bug");
 
-        ResultListViewAdapter adapter = new ResultListViewAdapter(getActivity(), options, R.layout.row_options);
+        ListViewAdapter adapter = new ListViewAdapter(getActivity(), options, R.layout.row_options);
         listViewOptions.setAdapter(adapter);
 
         listViewOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
