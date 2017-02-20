@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class ScoringTableActivity extends AppCompatActivity implements ScoringFragment.OnFragmentInteractionListener, PlayerDetailsFragment.OnFragmentInteractionListener,
         AddWordsFragment.OnFragmentInteractionListener, WordHistoryFragment.OnFragmentInteractionListener,
-        ScoreDisplayFragment.OnFragmentInteractionListener, TileBreakdownFragment.OnFragmentInteractionListener, RemoveAdsFragment.OnFragmentInteractionListener {
+        ScoreDisplayFragment.OnFragmentInteractionListener, TileBreakdownFragment.OnFragmentInteractionListener, RemoveAdsFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener {
 
     private ArrayList<String> players;
     private Scrabble scrabbleGame;
@@ -83,11 +83,13 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
                 transaction.commit();
                 return true;
             case R.id.itemRemoveAds:
-                RemoveAdsFragment removeAdsFragment = new RemoveAdsFragment();
+                // WIP
+
+                /*RemoveAdsFragment removeAdsFragment = new RemoveAdsFragment();
                 transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, removeAdsFragment);
                 transaction.addToBackStack(null);
-                transaction.commit();
+                transaction.commit();*/
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -230,5 +232,17 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onFragmentInteraction(String option) {
+        switch (option){
+            case "Report Bug":
+                BugReportFragment bugReportFragment = new BugReportFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, bugReportFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+        }
     }
 }
