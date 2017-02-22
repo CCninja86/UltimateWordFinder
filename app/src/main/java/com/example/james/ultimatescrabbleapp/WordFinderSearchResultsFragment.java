@@ -11,6 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Vibrator;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -118,10 +121,38 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         textViewNumResults.setText("Found " + listResults.getCount() + " results");
 
         final Switch switchSmartSelection = (Switch) view.findViewById(R.id.switchSmartSelection);
+        final Switch switchUseOfficialSelection = (Switch) view.findViewById(R.id.switchOfficialSelection);
         switchSmartSelection.setChecked(true);
 
-        final Switch switchUseOfficialSelection = (Switch) view.findViewById(R.id.switchOfficialSelection);
+        final EditText editTextSearch = (EditText) view.findViewById(R.id.editTextSearch);
 
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String search = editTextSearch.getText().toString();
+                ArrayList<String> results = new ArrayList<>();
+
+                for(String word : searchResults){
+                    if(word.startsWith(search)){
+                        results.add(word);
+                    }
+                }
+
+                adapter = new ListViewAdapter(getActivity(), results, R.layout.row);
+                listResults.setAdapter(adapter);
+                textViewNumResults.setText("Found " + listResults.getCount() + " results");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         switchUseOfficialSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

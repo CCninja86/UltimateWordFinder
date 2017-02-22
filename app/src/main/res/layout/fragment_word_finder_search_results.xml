@@ -18,7 +18,7 @@
         android:layout_toStartOf="@+id/btnMinWordScore"
         android:choiceMode="multipleChoice"
         android:listSelector="#00000000"
-        android:layout_below="@+id/switchOfficialSelection" />
+        android:layout_alignTop="@+id/btnMinWordScore" />
 
     <Button
         android:layout_width="wrap_content"
@@ -109,5 +109,15 @@
         android:layout_below="@+id/btnMinWordScore"
         android:layout_toRightOf="@+id/listSearchResults"
         android:layout_toEndOf="@+id/listSearchResults" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:layout_below="@+id/btnSelectAll"
+        android:layout_alignParentStart="true"
+        android:id="@+id/editTextSearch"
+        android:layout_toStartOf="@+id/btnOfficial" />
 
 </RelativeLayout>

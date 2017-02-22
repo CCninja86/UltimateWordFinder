@@ -3,9 +3,12 @@ package com.example.james.ultimatescrabbleapp;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +29,11 @@ public class SynonymResultListFragment extends android.support.v4.app.Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ListView listResults;
+    private ListViewAdapter adapter;
+    private TextView textViewNumResults;
+    ArrayList<String> synonyms;
 
     public SynonymResultListFragment() {
         // Required empty public constructor
@@ -62,18 +70,47 @@ public class SynonymResultListFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_result_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_synonym_result_list, container, false);
 
         Bundle bundle = getArguments();
-        ArrayList<String> results = bundle.getStringArrayList("Synonyms");
+        synonyms = bundle.getStringArrayList("Synonyms");
 
-        ListViewAdapter adapter = new ListViewAdapter(getActivity(), results, R.layout.row_result_list);
-        ListView listResults = (ListView) view.findViewById(R.id.listViewResults);
+        adapter = new ListViewAdapter(getActivity(), synonyms, R.layout.row_result_list);
+        listResults = (ListView) view.findViewById(R.id.listViewResults);
         listResults.setAdapter(adapter);
 
-        TextView textViewNumResults = (TextView) view.findViewById(R.id.textViewNumResults);
-        textViewNumResults.setText("Found " + results.size() + " results");
+        textViewNumResults = (TextView) view.findViewById(R.id.textViewNumResults);
+        textViewNumResults.setText("Found " + synonyms.size() + " results");
 
+        final EditText editTextSearch = (EditText) view.findViewById(R.id.editTextSearch);
+
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String search = editTextSearch.getText().toString();
+                ArrayList<String> results = new ArrayList<>();
+
+                for(String word : synonyms){
+                    if(word.startsWith(search)){
+                        results.add(word);
+                    }
+                }
+
+                adapter = new ListViewAdapter(getActivity(), results, R.layout.row_result_list);
+                listResults.setAdapter(adapter);
+                textViewNumResults.setText("Found " + listResults.getCount() + " results");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         return view;
