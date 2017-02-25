@@ -145,7 +145,30 @@ public class WordOptionsHandler {
                         for(String header : subjectHeaders){
                             if(definition.startsWith(header)){
                                 String subject = definition.substring(0, definition.indexOf("."));
-                                String[] definitionSublist = definition.split("\\.");
+                                String[] definitionSublist = null;
+
+                                if(!definition.contains("etc.")){
+                                    definitionSublist = definition.split("\\.");
+                                } else {
+                                    StringBuilder stringBuilder = new StringBuilder(definition);
+
+                                    for(int i = 0; i < definition.length(); i++){
+                                        String character = String.valueOf(definition.charAt(i));
+
+                                        if(character.equals(".")){
+                                            String trailingSubstring = definition.substring(i - 3, i);
+
+                                            if(trailingSubstring.equals("etc")){
+                                                stringBuilder.setCharAt(i, ',');
+                                                stringBuilder.setCharAt(i + 1, ' ');
+                                            }
+                                        }
+                                    }
+
+                                    definitionSublist = stringBuilder.toString().split("\\.");
+                                }
+
+
 
                                 for(String def : definitionSublist){
                                     if(!subjectHeaders.contains(def + ".")){
