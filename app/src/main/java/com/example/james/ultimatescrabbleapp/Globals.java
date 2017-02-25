@@ -1,7 +1,5 @@
 package com.example.james.ultimatescrabbleapp;
 
-import com.google.android.gms.ads.InterstitialAd;
-
 /**
  * Created by James on 1/05/2016.
  */

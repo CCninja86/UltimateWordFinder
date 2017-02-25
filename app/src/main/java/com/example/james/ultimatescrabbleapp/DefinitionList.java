@@ -2,8 +2,6 @@ package com.example.james.ultimatescrabbleapp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by james on 4/09/2016.

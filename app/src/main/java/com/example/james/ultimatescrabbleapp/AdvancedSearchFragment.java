@@ -1,19 +1,16 @@
 package com.example.james.ultimatescrabbleapp;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import com.example.james.ultimatescrabbleapp.R;
 
 import java.util.ArrayList;
 
