@@ -66,7 +66,6 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
     private ArrayList<String> searchResults;
     private ListViewAdapter adapter;
     private Dictionary dictionary;
-    DefinitionList definitionList = new DefinitionList();
     ArrayList<String> synonyms = new ArrayList<>();
     private ListView listResults;
 
@@ -229,18 +228,16 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        definitionList.clearList();
                         synonyms.clear();
                         String word = listResults.getItemAtPosition(position).toString();
+                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(mListener, null, getContext(), word);
 
                         switch(which){
                             case 0:
-                                GetResultsTask getResultsTaskDefinitions = new GetResultsTask(word, "Definitions");
-                                getResultsTaskDefinitions.execute();
+                                wordOptionsHandler.loadDefinitions();
                                 break;
                             case 1:
-                                GetResultsTask getResultsTaskSynonyms = new GetResultsTask(word, "Synonyms");
-                                getResultsTaskSynonyms.execute();
+                                wordOptionsHandler.loadSynonyms();
                                 break;
                         }
 
@@ -524,234 +521,6 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         btnDeselectAll.setOnClickListener(onClickListener);
 
         return view;
-    }
-
-    private void executeAsyncTask(AsyncTask task){
-        task.execute();
-    }
-
-    private class GetResultsTask extends AsyncTask<Void, Void, Void>{
-
-        String word;
-        String resultType;
-
-
-        public GetResultsTask(String word, String resultType){
-            this.word = word;
-            this.resultType = resultType;
-        }
-
-        @Override
-        protected void onPreExecute(){
-            progressDialog = new ProgressDialog(getContext());
-            progressDialog.setMessage("Searching...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            if(this.resultType.equals("Definitions")){
-                // Retrieve Definitions
-                String queryURL = "https://owlbot.info/api/v1/dictionary/" + word + "?format=json";
-
-                RetrieveDefinitionsTask task = new RetrieveDefinitionsTask(queryURL, word);
-                executeAsyncTask(task);
-            } else if(this.resultType.equals("Synonyms")){
-                RetrieveSynonymsTask task = new RetrieveSynonymsTask(word);
-                executeAsyncTask(task);
-            }
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result){
-
-        }
-    }
-
-    private class RetrieveSynonymsTask extends AsyncTask<Object, Void, Void>{
-
-        private String word;
-
-        public RetrieveSynonymsTask(String word){
-            this.word = word;
-        }
-
-        @Override
-        protected Void doInBackground(Object... params) {
-            try {
-                if(word.contains(" ")){
-                    word = word.toLowerCase().replaceAll(" ", "%20");
-                }
-
-                URL url = new URL("http://www.thesaurus.com/browse/" + word);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 5.1.1; Vodafone Smart ultra 6"
-                        + " Build/LMY47V) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91"
-                        + " Mobile Safari/537.36");
-
-                if(connection.getResponseCode() == 404){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "I could not find that word", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    String line;
-                    ArrayList<String> entries = new ArrayList<>();
-
-                    while((line = bufferedReader.readLine()) != null){
-                        System.out.println(line);
-                        if(line.contains("class=\"result synstart\"")){
-                            String[] list = line.split("<b>Synonyms:</b>");
-
-
-                            for(int i = 0; i < list.length; i++){
-                                if(i > 0){
-                                    String entry = list[i];
-                                    String newEntry = entry.trim().substring(0, entry.indexOf("</div>") - 1);
-                                    entries.add(newEntry);
-                                }
-                            }
-                        }
-                    }
-
-                    for(String entry : entries){
-                        String[] synonymList = entry.split(", ");
-
-                        for(String synonym : synonymList){
-                            synonyms.add(synonym);
-                        }
-                    }
-
-                    // Remove any potential duplicate entries from ArrayList
-                    Set<String> hashSet = new HashSet<>();
-                    hashSet.addAll(synonyms);
-                    synonyms.clear();
-                    synonyms.addAll(hashSet);
-                    hashSet = null;
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-
-            if(!synonyms.isEmpty()){
-                mListener.onResultsFragmentInteraction(synonyms);
-            }
-
-        }
-    }
-
-    private class RetrieveDefinitionsTask extends AsyncTask<Object, Void, Void> {
-
-        String queryURL;
-        String word;
-
-        private RetrieveDefinitionsTask(String url, String word){
-            this.queryURL = url;
-            this.word = word;
-        }
-
-        @Override
-        protected Void doInBackground(Object... params) {
-            URL searchUrl;
-
-            try {
-                searchUrl = new URL(queryURL);
-                HttpsURLConnection connection = (HttpsURLConnection) searchUrl.openConnection();
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
-
-                while((line = in.readLine()) != null){
-                    line = line.substring(1, line.length() - 1);
-                    String[] definitions = line.split(",\\{");
-
-                    for(String definition: definitions){
-                        if(!definition.startsWith("{")){
-                            definition = "{" + definition;
-                        }
-
-                        Definition def = null;
-
-                        if(definition.contains("}")){
-                            Gson gson = new Gson();
-                            def = gson.fromJson(definition, Definition.class);
-                            definitionList.addDefinition(def);
-                        } else {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    builder.setTitle("Oops!");
-                                    builder.setMessage("I was unable to find a definition for that word. Would you like to search Google for the definition?");
-
-                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            String queryURL = "https://www.google.co.nz/#q=" + word + "+definition";
-                                            final Intent browserActivity = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(queryURL));
-                                            startActivity(browserActivity);
-                                        }
-                                    });
-
-                                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                                    builder.show();
-                                }
-                            });
-                        }
-
-
-                    }
-                }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            if(progressDialog != null && progressDialog.isShowing()){
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-
-            if(definitionList.getDefinitions().size() > 0){
-                mListener.onResultsFragmentInteraction(definitionList);
-            }
-
-        }
     }
 
     public static float round(float d, int decimalPlace) {

@@ -136,6 +136,7 @@
     <orderEntry type="library" exported="" name="support-v4-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-common-10.0.1" level="project" />
+    <orderEntry type="library" exported="" name="jsoup-1.10.2" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="slf4j-api" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-10.0.1" level="project" />

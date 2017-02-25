@@ -10,7 +10,7 @@
         android:id="@+id/listViewResults"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_height="440dp" />
+        android:layout_height="400dp" />
 
     <TextView
         android:text="[NumResults]"

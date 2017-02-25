@@ -5,36 +5,27 @@ package com.example.james.ultimatescrabbleapp;
  */
 public class Definition {
 
-    private String type;
-    private String defenition;
-    private String example;
+    private String subject;
+    private String definition;
 
 
     public Definition(){
 
     }
 
-    public String getType() {
-        return type;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getDefinition() {
-        return defenition;
+        return definition;
     }
 
     public void setDefinition(String definition) {
-        this.defenition = defenition;
-    }
-
-    public String getExample() {
-        return example;
-    }
-
-    public void setExample(String example) {
-        this.example = example;
+        this.definition = definition;
     }
 }

@@ -113,9 +113,8 @@ public class WordDefinitionFragment extends android.support.v4.app.Fragment {
             listHeader.add("Definition " + (i + 1));
 
             List<String> definitionParts = new ArrayList<>();
-            definitionParts.add(definition.getType());
+            definitionParts.add(definition.getSubject());
             definitionParts.add(definition.getDefinition());
-            definitionParts.add(definition.getExample());
 
             listChild.put(listHeader.get(i), definitionParts);
 
