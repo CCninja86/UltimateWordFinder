@@ -457,11 +457,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
                 for (String letterRack : lettersInRack) {
                     for (Word word : this.matches) {
                         if (word.getWord().length() == lettersOnBoard.length) {
-                            if(!letterRack.equals("?")){
-                                if (word.getWord().indexOf(letterRack) == i) {
-                                    filterMatches.add(word);
-                                }
-                            } else {
+                            if (word.getWord().indexOf(letterRack) == i) {
                                 filterMatches.add(word);
                             }
                         }
@@ -480,11 +476,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         for (String letter : alphabet) {
             int numMatches = 0;
             for (String letterInRack : lettersInRack) {
-                if(!letterInRack.equals("?")){
-                    if (letter.equals(letterInRack)) {
-                        numMatches++;
-                    }
-                } else {
+                if (letter.equals(letterInRack)) {
                     numMatches++;
                 }
             }
@@ -550,8 +542,6 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
 
                     if (letterCounts.containsKey(letter)) {
                         letterCountInRack = letterCounts.get(letter);
-                    } else if (letterCounts.containsKey("?")){
-                        letterCountInRack = letterCounts.get("?");
                     }
 
                     if (letterCountInWord > letterCountInRack) {
