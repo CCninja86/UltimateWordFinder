@@ -9,12 +9,13 @@ import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -100,11 +101,6 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
     }
 
     public void backButtonWasPressed(){
-        String prevText = editTextLettersRack.getText().toString();
-
-        if(prevText.length() > 0){
-            editTextLettersRack.setText(prevText.substring(0, prevText.length()));
-        }
 
     }
 
@@ -127,10 +123,31 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         editTextLettersBoard = (EditText) view.findViewById(R.id.editTextLettersBoard);
         editTextLettersRack = (EditText) view.findViewById(R.id.editTextLettersRack);
         checkOnlyLettersRack = (CheckBox) view.findViewById(R.id.checkOnlyLettersRack);
-        checkIncludeKnown = (CheckBox) view.findViewById(R.id.checkBoxIncludeKnown);
         Button btnSearch = (Button) view.findViewById(R.id.btnSearch);
         Button btnAdvancedSearch = (Button) view.findViewById(R.id.btnAdvancedSearch);
         Button btnExample = (Button) view.findViewById(R.id.btnExample);
+
+        editTextLettersRack.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().contains("?")){
+                    checkOnlyLettersRack.setChecked(false);
+                    checkOnlyLettersRack.setEnabled(false);
+                } else {
+                    checkOnlyLettersRack.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         btnExample.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +157,6 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
                 builder.setMessage("Letters on Board: f????t\n" +
                                    "Letters in Rack: orebstu\n" +
                                    "Contains only letters in your rack: yes\n" +
-                                   "Include known letters on Board: yes\n\n" +
                                    "Results:\n\n" +
                                    "forest\n" +
                                    "forset\n" +
@@ -180,42 +196,6 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        checkIncludeKnown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    String[] lettersOnBoard = editTextLettersBoard.getText().toString().split("");
-                    ArrayList<String> lettersToInclude = new ArrayList<>();
-
-                    for(String letter : lettersOnBoard){
-                        if(!letter.equals("?") && !letter.equals("")){
-                            lettersToInclude.add(letter);
-                        }
-                    }
-
-                    for(String toInclude : lettersToInclude){
-                        editTextLettersRack.setText(editTextLettersRack.getText().toString() + toInclude);
-                    }
-                } else {
-                    int numKnownLetters = 0;
-
-                    for(String letter : editTextLettersBoard.getText().toString().split("")){
-                        if(!letter.equals("?") && !letter.equals("")){
-                            numKnownLetters++;
-                        }
-                    }
-
-                    if(numKnownLetters > 0){
-                        if(editTextLettersRack.getText().toString().length() > 0){
-                            String newString = editTextLettersRack.getText().toString();
-                            newString = newString.substring(0, newString.length() - (numKnownLetters));
-                            editTextLettersRack.setText(newString);
-                        }
-                    }
-                }
-            }
-        });
 
         // Dev Tools - inserting entries into database
 
@@ -431,7 +411,17 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
     }
 
     private void filterResults(String[] lettersOnBoard){
-        String[] lettersInRack = editTextLettersRack.getText().toString().split("");
+        ArrayList<String> lettersInRack = new ArrayList<>();
+        String[] lettersRack = editTextLettersRack.getText().toString().split("");
+
+        for(String letter : lettersRack){
+            lettersInRack.add(letter);
+        }
+
+        for(String letter : lettersOnBoard){
+            lettersInRack.add(letter);
+        }
+
         ArrayList<Word> filterMatches = new ArrayList<>();
         ArrayList<Word> letterFilterMatches = new ArrayList<>();
         String[] alphabet = new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
@@ -444,7 +434,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressDialog.setMessage("Filtering results...");
+                progressDialog.setMessage("Filtering results...0%");
             }
         });
 
@@ -452,6 +442,13 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         for (int i = 0; i < lettersOnBoard.length; i++) {
             final String letterBoard = lettersOnBoard[i];
             final int percentage = i * 100/lettersOnBoard.length;
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.setMessage("Filtering results..." + percentage + "%");
+                }
+            });
 
             if (letterBoard.equals("?")) {
                 for (String letterRack : lettersInRack) {
@@ -465,12 +462,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
                 }
             }
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progressDialog.setMessage("Filtering results..." + percentage + "%");
-                }
-            });
+
         }
 
         for (String letter : alphabet) {
@@ -493,15 +485,23 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
 
         }
 
+        String letterArrayString = "";
+
+        for(String letter : lettersInRack){
+            if(!letter.equals("")){
+                letterArrayString += letter;
+            }
+        }
+
         for (String letter : lettersInRack) {
-            int letterCount = this.countLetter(editTextLettersRack.getText().toString(), letter);
+            int letterCount = this.countLetter(letterArrayString, letter);
             letterCounts.put(letter, letterCount);
         }
 
-        for (String letter : lettersOnBoard) {
-            int letterCount = this.countLetter(editTextLettersRack.getText().toString(), letter);
-            letterCounts.put(letter, letterCount);
-        }
+//        for (String letter : lettersOnBoard) {
+//            int letterCount = this.countLetter(editTextLettersRack.getText().toString(), letter);
+//            letterCounts.put(letter, letterCount);
+//        }
 
         int counter;
         int progress = 0;

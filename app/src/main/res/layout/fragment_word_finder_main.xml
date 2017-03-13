@@ -144,21 +144,9 @@
         android:layout_height="wrap_content"
         android:text="Advanced Search"
         android:id="@+id/btnAdvancedSearch"
-        android:layout_below="@+id/checkBoxIncludeKnown"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        style="@style/Widget.AppCompat.Button.Colored" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Include Known Letters on Board"
-        android:id="@+id/checkBoxIncludeKnown"
-        android:checked="false"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_below="@+id/checkOnlyLettersRack"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
