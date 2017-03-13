@@ -498,11 +498,6 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             letterCounts.put(letter, letterCount);
         }
 
-//        for (String letter : lettersOnBoard) {
-//            int letterCount = this.countLetter(editTextLettersRack.getText().toString(), letter);
-//            letterCounts.put(letter, letterCount);
-//        }
-
         int counter;
         int progress = 0;
         int total = this.matches.size();
