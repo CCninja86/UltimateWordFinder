@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "54750786400",
+    "firebase_url": "https://ultimatescrabbleapp.firebaseio.com",
+    "project_id": "ultimatescrabbleapp",
+    "storage_bucket": "ultimatescrabbleapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54750786400:android:d131e3142cca1897",
+        "android_client_info": {
+          "package_name": "nz.ac.aut.ultimatescrabbleapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54750786400-i51hkumuv2q23is5c3vfibk076ho4mt7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuEDsKl-QIdh0dZ6QzWU_70tGQiRMnlWE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54750786400-i51hkumuv2q23is5c3vfibk076ho4mt7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

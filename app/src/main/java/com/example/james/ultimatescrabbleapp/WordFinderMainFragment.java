@@ -339,7 +339,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         // For each letter on the board...
         for(int i = 0; i < lettersInInput.length; i++){
 
-            // If it's not an empty string AND it's not "?", get corresponding words and set containsLetter to True
+            // If it's not "?", get corresponding words and set containsLetter to True
             if(!lettersInInput[i].equals("?")){
                 wordsInDictionary = dictionary.getWords(lettersInInput[i], i, lettersInInput.length);
                 containsLetter = true;
