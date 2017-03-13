@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class ScoringTableActivity extends AppCompatActivity implements ScoringFragment.OnFragmentInteractionListener, PlayerDetailsFragment.OnFragmentInteractionListener,
         AddWordsFragment.OnFragmentInteractionListener, WordHistoryFragment.OnFragmentInteractionListener,
-        ScoreDisplayFragment.OnFragmentInteractionListener, TileBreakdownFragment.OnFragmentInteractionListener, RemoveAdsFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener {
+        ScoreDisplayFragment.OnFragmentInteractionListener, TileBreakdownFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener {
 
     private ArrayList<String> players;
     private Scrabble scrabbleGame;
@@ -78,14 +78,6 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
                 transaction.addToBackStack(null);
                 transaction.commit();
                 return true;
-            case R.id.itemRemoveAds:
-                // WIP
-
-                /*RemoveAdsFragment removeAdsFragment = new RemoveAdsFragment();
-                transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, removeAdsFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();*/
             default:
                 return super.onOptionsItemSelected(item);
 

@@ -18,10 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -58,9 +54,6 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
     private int selection;
 
     private boolean hasActiveInternetConnection;
-
-    InterstitialAd interstitialAd;
-    String user = "me";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -107,24 +100,6 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scoring, container, false);
-
-        if(user == null || !user.equals("me")){
-            interstitialAd = new InterstitialAd(getContext());
-
-            interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-
-            interstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    setup();
-                    requestNewInterstitial();
-                }
-            });
-
-            requestNewInterstitial();
-        }
-
-
 
         g = Globals.getInstance();
         dictionary = g.getDictionary();
@@ -196,11 +171,6 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
         });
 
         return view;
-    }
-
-    private void requestNewInterstitial(){
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("72A09D092AFFDE0C64546FD216A276F4").build();
-        interstitialAd.loadAd(adRequest);
     }
 
 
@@ -317,15 +287,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 selection = DICTIONARY;
-
-                if(user == null || !user.equals("me")){
-                    if(interstitialAd.isLoaded()){
-                        interstitialAd.show();
-                    }
-                } else {
-                    setup();
-                }
-
+                setup();
             }
         });
 
@@ -333,14 +295,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 selection = WORD_FINDER;
-
-                if(user == null || !user.equals("me")){
-                    if(interstitialAd.isLoaded()){
-                        interstitialAd.show();
-                    }
-                } else {
-                    setup();
-                }
+                setup();
             }
         });
 

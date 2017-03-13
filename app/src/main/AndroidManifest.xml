@@ -16,17 +16,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".InterstitialAdActivity"
-            android:exported="true"
-            android:label="Ultimate Scrabble App"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ScoringTableActivity"
             android:label="@string/title_activity_scoring_table"
             android:screenOrientation="portrait"></activity>
@@ -35,7 +24,13 @@
             android:name=".WordFinderActivity"
             android:label="@string/title_activity_word_finder"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".GameSetupActivity"></activity>
+        <activity android:name=".GameSetupActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
+
 
 </manifest>
