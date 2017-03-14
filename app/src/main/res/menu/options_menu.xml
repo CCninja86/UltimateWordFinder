@@ -3,6 +3,4 @@
 
     <item android:title="Help &amp; Feedback"
         android:id="@+id/itemHelpFeedback" />
-    <item android:title="Remove Ads"
-        android:id="@+id/itemRemoveAds" />
 </menu>
