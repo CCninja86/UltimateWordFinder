@@ -80,9 +80,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
-
     }
 
     @Override

@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDefinitionFragment.OnFragmentInteractionListener, SynonymResultListFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener {
+public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDefinitionFragment.OnFragmentInteractionListener, SynonymResultListFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener {
 
 
     private com.example.james.ultimatescrabbleapp.Dictionary dictionary;
@@ -54,17 +54,17 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.itemHelpFeedback:
+                HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.containerWordFinder, helpFeedbackFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -197,5 +197,17 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(String option) {
+        switch (option){
+            case "Report Bug":
+                BugReportFragment bugReportFragment = new BugReportFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.containerWordFinder, bugReportFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+        }
     }
 }

@@ -1,31 +1,16 @@
 package com.example.james.ultimatescrabbleapp;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-
 /**
  * Created by James on 19/11/2015.
  */
-public class DatabaseHandler extends SQLiteAssetHelper {
+
+
+// *****PLEASE READ*****
+// THIS CLASS IS NOT CURRENTLY BEING USED.
+// I have since migrated all database data to a new .csv (Comma-Separated Value) file for faster load times. This is handled by the new CSVReader class.
+// I AM KEEPING THIS CLASS INCLUDED IN CASE THERE IS A FUTURE USE FOR IT.
+
+/*public class DatabaseHandler extends SQLiteAssetHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "wordDatabase.db";
@@ -314,4 +299,4 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             e.printStackTrace();
         }
     }
-}
+}*/
