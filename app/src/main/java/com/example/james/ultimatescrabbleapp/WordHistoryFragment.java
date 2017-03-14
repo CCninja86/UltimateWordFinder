@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -111,34 +112,40 @@ public class WordHistoryFragment extends android.support.v4.app.Fragment {
                             builder.setPositiveButton("Set Blanks", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    String text = input.getText().toString();
+                                    if(!input.getText().toString().isEmpty()){
+                                        String text = input.getText().toString();
 
-                                    String[] blankTiles = text.split(",");
+                                        String[] blankTiles = text.split(",");
 
-                                    int counter = 0;
+                                        int counter = 0;
 
-                                    String[] wordCharacters = word.split("");
-                                    ArrayList<String> newWordCharacters = new ArrayList<>();
+                                        String[] wordCharacters = word.split("");
+                                        ArrayList<String> newWordCharacters = new ArrayList<>();
 
-                                    for(int i = 0; i < wordCharacters.length; i++){
-                                        String character = wordCharacters[i];
+                                        for(int i = 0; i < wordCharacters.length; i++){
+                                            String character = wordCharacters[i];
 
-                                        if(character.equals("?")){
-                                            newWordCharacters.add(blankTiles[counter].toUpperCase());
-                                            counter++;
-                                        } else {
-                                            newWordCharacters.add(character);
+                                            if(character.equals("?")){
+                                                newWordCharacters.add(blankTiles[counter].toUpperCase());
+                                                counter++;
+                                            } else {
+                                                newWordCharacters.add(character);
+                                            }
                                         }
+
+                                        String newWord = "";
+
+                                        for(String character : newWordCharacters){
+                                            newWord += character;
+                                        }
+
+                                        player.updatePlayerWordHistory(word, newWord);
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(getContext(), "Entry updated!", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getContext(), "Please enter at least one letter", Toast.LENGTH_LONG).show();
                                     }
 
-                                    String newWord = "";
-
-                                    for(String character : newWordCharacters){
-                                        newWord += character;
-                                    }
-
-                                    player.updatePlayerWordHistory(word, newWord);
-                                    adapter.notifyDataSetChanged();
                                 }
                             });
 
