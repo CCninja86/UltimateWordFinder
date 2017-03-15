@@ -8,7 +8,7 @@ android {
         applicationId "nz.ac.aut.ultimatewordfinder"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 2
+        versionCode 3
         versionName "1.01"
     }
     buildTypes {
