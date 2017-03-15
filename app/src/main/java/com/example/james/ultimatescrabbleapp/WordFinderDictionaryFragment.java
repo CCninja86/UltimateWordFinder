@@ -160,6 +160,21 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
             g.setWordOptionsHintShown(true);
         }
 
+        if(!wordOptionsHintShown){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("You can view the definitions and synonyms for the majority of words by long-pressing any word in the list, which will pop-up a list of options for that word");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.show();
+
+            g.setWordOptionsHintShown(true);
+        }
+
         return view;
     }
 

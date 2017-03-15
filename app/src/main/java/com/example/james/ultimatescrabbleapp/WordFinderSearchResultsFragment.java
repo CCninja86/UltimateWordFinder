@@ -96,9 +96,9 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         final TextView textViewNumResults = (TextView) view.findViewById(R.id.textViewNumResults);
 
         Bundle bundle = getArguments();
-        Globals g = Globals.getInstance();
+        final Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();
-        boolean wordOptionsHintShown = g.isWordOptionsHintShown();
+        final boolean wordOptionsHintShown = g.isWordOptionsHintShown();
         this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
         this.searchResults = bundle.getStringArrayList("Search Results");
         this.adapter = new ListViewAdapter(getActivity(), this.searchResults, R.layout.row);
@@ -184,7 +184,6 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
                 adapter.toggleSelected(new Integer(position));
                 adapter.notifyDataSetChanged();
             }
@@ -516,8 +515,11 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                 }
             });
 
+            builder.show();
+
             g.setWordOptionsHintShown(true);
         }
+
 
         return view;
     }
