@@ -7,6 +7,7 @@ public class Globals {
     private static Globals instance;
     private Dictionary dictionary;
     private Scrabble game;
+    private boolean wordOptionsHintShown = false;
 
     private Globals(){
 
@@ -34,5 +35,13 @@ public class Globals {
         }
 
         return instance;
+    }
+
+    public boolean isWordOptionsHintShown() {
+        return wordOptionsHintShown;
+    }
+
+    public void setWordOptionsHintShown(boolean wordOptionsHintShown) {
+        this.wordOptionsHintShown = wordOptionsHintShown;
     }
 }

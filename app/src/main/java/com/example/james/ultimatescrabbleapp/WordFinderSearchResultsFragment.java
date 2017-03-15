@@ -98,6 +98,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         Bundle bundle = getArguments();
         Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();
+        boolean wordOptionsHintShown = g.isWordOptionsHintShown();
         this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
         this.searchResults = bundle.getStringArrayList("Search Results");
         this.adapter = new ListViewAdapter(getActivity(), this.searchResults, R.layout.row);
@@ -504,6 +505,19 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         btnCompareScores.setOnClickListener(onClickListener);
         btnSelectAll.setOnClickListener(onClickListener);
         btnDeselectAll.setOnClickListener(onClickListener);
+
+        if(!wordOptionsHintShown){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("You can view the definitions and synonyms for the majority of words by long-pressing any word in the list, which will pop-up a list of options for that word");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            g.setWordOptionsHintShown(true);
+        }
 
         return view;
     }
