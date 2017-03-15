@@ -250,7 +250,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             File data = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
-                String currentDBPath = "//data//data//" + "nz.ac.aut.ultimatewordfinder"
+                String currentDBPath = "//data//data//" + "nz.ac.aut.ultimatescrabbleapp"
                         + "//databases//" + "databases/wordDatabase";
                 String backupDBPath = "databases/wordDatabase";
                 File currentDB = new File(data, currentDBPath);
