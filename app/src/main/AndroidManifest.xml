@@ -12,7 +12,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Ultimate Word Finder"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
             android:windowSoftInputMode="adjustPan"
@@ -25,7 +25,7 @@
             android:label="@string/title_activity_word_finder"
             android:screenOrientation="portrait"></activity>
         <activity android:name="com.example.james.ultimatewordfinder.GameSetupActivity"
-            android:label="Ultimate Word Finder">
+            android:label="@string/title_activity_game_setup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

@@ -18,7 +18,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scores"
+        android:text="@string/scoring_table_button_scores"
         android:id="@+id/btnShowScores"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -32,7 +32,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Word Finder"
+        android:text="@string/scoring_table_button_word_finder"
         android:id="@+id/btnWordFinder"
         android:gravity="center_vertical|center"
         android:layout_alignParentRight="true"
@@ -43,7 +43,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tile Breakdown"
+        android:text="@string/scoring_table_button_tile_breakdown"
         android:id="@+id/btnTileBreakdown"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/btnShowScores"

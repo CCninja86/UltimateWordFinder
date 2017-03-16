@@ -8,21 +8,21 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Example"
+        android:text="@string/word_finder_button_example"
         android:id="@+id/btnExample"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
 
     <TextView
+        android:id="@+id/textViewLettersBoard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Letters on Board (? for gaps)"
-        android:id="@+id/textViewLettersBoard"
-        android:layout_below="@+id/btnExample"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btnExample"
+        android:text="@string/word_finder_text_letters_on_board"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contains Only The Letters In Your Rack"
+        android:text="@string/word_finder_checkbox_only_letters_in_rack"
         android:id="@+id/checkOnlyLettersRack"
         android:checked="false"
         android:layout_below="@+id/editTextLettersRack"
@@ -68,7 +68,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"
+        android:text="@string/word_finder_button_search"
         android:id="@+id/btnSearch"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -142,7 +142,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Advanced Search"
+        android:text="@string/word_finder_button_advanced_search"
         android:id="@+id/btnAdvancedSearch"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_below="@+id/checkOnlyLettersRack"

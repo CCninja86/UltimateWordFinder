@@ -23,7 +23,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Official?"
+        android:text="@string/word_finder_results_button_is_official"
         android:id="@+id/btnOfficial"
         android:layout_gravity="right|top"
         android:layout_alignParentTop="true"
@@ -37,7 +37,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select All"
+        android:text="@string/word_finder_results_button_select_all"
         android:id="@+id/btnSelectAll"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -48,7 +48,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Deselect All"
+        android:text="@string/word_finder_results_button_deselect_all"
         android:id="@+id/btnDeselectAll"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/btnSelectAll"
@@ -59,7 +59,7 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Smart Selection"
+        android:text="@string/word_finder_results_switch_smart_selection"
         android:id="@+id/switchSmartSelection"
         android:layout_below="@+id/btnCompareScores"
         android:layout_toRightOf="@+id/btnDeselectAll"
@@ -92,7 +92,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Min. Word Score"
+        android:text="@string/word_finder_results_button_minimum_word_score"
         android:id="@+id/btnMinWordScore"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_below="@+id/switchOfficialSelection"
@@ -103,7 +103,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Compare Scores"
+        android:text="@string/word_finder_results_button_compare_scores"
         android:id="@+id/btnCompareScores"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_below="@+id/btnMinWordScore"

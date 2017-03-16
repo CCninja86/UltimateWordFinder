@@ -11,7 +11,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:text="@string/game_setup_text_button_add_player"
         android:id="@+id/btnAddPlayer"
         android:onClick="onClick"
         android:layout_alignParentTop="true"
@@ -44,7 +44,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remove"
+        android:text="@string/game_setup_button_remove_player"
         android:id="@+id/btnRemovePlayer"
         android:onClick="onClick"
         android:layout_above="@+id/listPlayer"
@@ -55,7 +55,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear"
+        android:text="@string/game_setup_button_clear_list"
         android:id="@+id/btnClear"
         android:onClick="onClick"
         android:layout_alignTop="@+id/listPlayer"
@@ -66,7 +66,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Game"
+        android:text="@string/game_setup_button_start_game"
         android:id="@+id/btnStartGame"
         android:layout_below="@+id/btnClear"
         android:layout_alignLeft="@+id/btnClear"

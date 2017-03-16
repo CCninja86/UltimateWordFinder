@@ -1,9 +1,39 @@
 <resources>
-    <string name="app_name">UltimateScrabbleApp</string>
+    <string name="app_name">Ultimate Word Finder</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_activity_game_setup">Ultimate Word Finder</string>
     <string name="title_activity_scoring_table">Players and Scoring</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_word_finder">Word Finder</string>
+
+    <string name="game_setup_text_button_add_player">Add</string>
+    <string name="game_setup_button_remove_player">Remove</string>
+    <string name="game_setup_button_clear_list">Clear</string>
+    <string name="game_setup_button_start_game">Start Game</string>
+
+    <string name="scoring_table_button_scores">Scores</string>
+    <string name="scoring_table_button_tile_breakdown">Tile Breakdown</string>
+    <string name="scoring_table_button_word_finder">Word Finder</string>
+
+    <string name="word_finder_button_example">Example</string>
+    <string name="word_finder_button_advanced_search">Advanced Search</string>
+    <string name="word_finder_button_search">Search</string>
+    <string name="word_finder_text_letters_on_board">Letters on Board (? for gaps)</string>
+    <string name="word_finder_text_letters_in_rack">Letters in Rack (Leave blank to search for all possible words)</string>
+    <string name="word_finder_checkbox_only_letters_in_rack">Contains Only The Letters In Your Rack</string>
+
+    <string name="advanced_search_text_search_term">Search Term</string>
+    <string name="advanced_search_text_starts_with">Starts With</string>
+    <string name="advanced_search_text_ends_with">Ends With</string>
+    <string name="advanced_search_word_length">Number of Letters (0 for any number)</string>
+    <string name="advanced_search_button_search">Search</string>
+
+    <string name="word_finder_results_button_select_all">Select All</string>
+    <string name="word_finder_results_button_deselect_all">Deselect All</string>
+    <string name="word_finder_results_button_is_official">Official?</string>
+    <string name="word_finder_results_button_minimum_word_score">Min. Word Score</string>
+    <string name="word_finder_results_button_compare_scores">Compare Scores</string>
+    <string name="word_finder_results_switch_smart_selection">Smart Selection</string>
+    
+    <string name="word_finder_score_comparison_button_compare">Compare</string>
 </resources>

@@ -24,7 +24,7 @@
     <Button
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="Compare"
+        android:text="@string/word_finder_score_comparison_button_compare"
         android:id="@+id/btnCompareWords"
         android:layout_gravity="right|top"
         android:layout_centerVertical="true"
