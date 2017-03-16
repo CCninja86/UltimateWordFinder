@@ -25,7 +25,7 @@
             android:label="@string/title_activity_word_finder"
             android:screenOrientation="portrait"></activity>
         <activity android:name="com.example.james.ultimatewordfinder.GameSetupActivity"
-            android:label="Game Setup">
+            android:label="Ultimate Word Finder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
