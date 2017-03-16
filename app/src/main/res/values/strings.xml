@@ -34,6 +34,6 @@
     <string name="word_finder_results_button_minimum_word_score">Min. Word Score</string>
     <string name="word_finder_results_button_compare_scores">Compare Scores</string>
     <string name="word_finder_results_switch_smart_selection">Smart Selection</string>
-    
+
     <string name="word_finder_score_comparison_button_compare">Compare</string>
 </resources>
