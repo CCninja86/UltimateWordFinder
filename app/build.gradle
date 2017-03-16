@@ -5,7 +5,8 @@ android {
     buildToolsVersion '25.0.0'
 
     defaultConfig {
-        applicationId "nz.ac.aut.ultimatescrabbleapp"
+        applicationId "nz.ac.aut.ultimatewordfinder"
+        multiDexEnabled true
         minSdkVersion 17
         targetSdkVersion 23
         versionCode 3
