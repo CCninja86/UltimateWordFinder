@@ -88,13 +88,13 @@ public class WordOptionsHandler {
 
             while (numAttempts < MAX_ATTEMPTS){
                 try {
-                    searchUrl = "http://dictionary.com/browse/" + word;
+                    searchUrl = "http://www.dictionary.com/browse/" + word;
                     Document document = Jsoup.connect(searchUrl).userAgent("Mozilla/5.0 (Linux; Android 5.1.1; Vodafone Smart ultra 6"
                             + " Build/LMY47V) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91"
                             + " Mobile Safari/537.36").referrer("http://www.google.com").get();
 
 
-                    Elements definitionElements = document.getElementsByClass("def-content");
+                    Elements definitionElements = document.getElementsByClass("_3GXwa");
 
 
                     for(Element element : definitionElements){

@@ -93,7 +93,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> results = dictionary.getStringWordsStartingWith(editTextSearch.getText().toString());
+                ArrayList<String> results = dictionary.getStringWordsStartingWith(editTextSearch.getText().toString().toLowerCase());
                 adapter = new ListViewAdapter(getActivity(), results, R.layout.row);
                 listViewResults.setAdapter(adapter);
             }
