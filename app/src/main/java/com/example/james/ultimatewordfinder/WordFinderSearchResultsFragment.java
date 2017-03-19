@@ -431,7 +431,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                             adapter.notifyDataSetChanged();
 
-                            mListener.onResultsFragmentInteraction("compare", wordsToCompare);
+                            mListener.onResultsFragmentButtonInteraction("compare", wordsToCompare);
                         } else if(wordsToCompare.size() == 1) {
                             Toast.makeText(getContext(), "Please select at least one word to use this feature", Toast.LENGTH_LONG).show();
                         } else {
@@ -567,9 +567,9 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onResultsFragmentInteraction(String action, ArrayList<String> selectedWords);
-        public void onResultsFragmentInteraction(DefinitionList definitionList);
-        public void onResultsFragmentInteraction(ArrayList<String> synonyms);
+        public void onResultsFragmentButtonInteraction(String action, ArrayList<String> selectedWords);
+        public void onResultsFragmentInteraction(String word, DefinitionList definitionList);
+        public void onResultsFragmentInteraction(String word, ArrayList<String> synonyms);
     }
 
 }

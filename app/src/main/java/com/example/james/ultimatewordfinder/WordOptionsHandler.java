@@ -218,9 +218,9 @@ public class WordOptionsHandler {
             if(definitionList != null){
                 if(definitionList.getDefinitions().size() > 0){
                     if(dictionaryListener != null){
-                        dictionaryListener.onDictionaryFragmentInteraction(definitionList);
+                        dictionaryListener.onDictionaryFragmentInteraction(word, definitionList);
                     } else {
-                        wordFinderListener.onResultsFragmentInteraction(definitionList);
+                        wordFinderListener.onResultsFragmentInteraction(word, definitionList);
                     }
                 } else {
                     Toast.makeText(context, "No definitions found", Toast.LENGTH_SHORT).show();
@@ -317,9 +317,9 @@ public class WordOptionsHandler {
 
             if(!synonyms.isEmpty() && synonyms != null){
                 if(dictionaryListener != null){
-                    dictionaryListener.onDictionaryFragmentInteraction(synonyms);
+                    dictionaryListener.onDictionaryFragmentInteraction(word, synonyms);
                 } else {
-                    wordFinderListener.onResultsFragmentInteraction(synonyms);
+                    wordFinderListener.onResultsFragmentInteraction(word, synonyms);
                 }
             } else {
                 Toast.makeText(context, "No synonyms found", Toast.LENGTH_SHORT).show();

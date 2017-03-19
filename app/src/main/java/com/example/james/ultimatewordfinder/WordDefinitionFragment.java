@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -77,6 +78,11 @@ public class WordDefinitionFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_definition, container, false);
 
+        Bundle bundle = getArguments();
+        String word = bundle.getString("Word");
+        TextView textViewWord = (TextView) view.findViewById(R.id.textViewWord);
+        textViewWord.setText(word);
+
         listView = (ExpandableListView) view.findViewById(R.id.expandableListView);
         prepareListData();
 
@@ -92,6 +98,8 @@ public class WordDefinitionFragment extends android.support.v4.app.Fragment {
         Bundle bundle = getArguments();
         String json = bundle.getString("Definition List");
         DefinitionList definitionList = new Gson().fromJson(json, DefinitionList.class);
+
+
 
 
         int i = 0;

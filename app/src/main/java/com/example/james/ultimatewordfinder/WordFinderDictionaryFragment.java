@@ -179,9 +179,9 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(DefinitionList definitionList) {
+    public void onButtonPressed(String word, DefinitionList definitionList) {
         if (mListener != null) {
-            mListener.onDictionaryFragmentInteraction(definitionList);
+            mListener.onDictionaryFragmentInteraction(word, definitionList);
         }
     }
 
@@ -214,8 +214,8 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onDictionaryFragmentInteraction(DefinitionList definitionList);
-        public void onDictionaryFragmentInteraction(ArrayList<String> synonyms);
+        public void onDictionaryFragmentInteraction(String word, DefinitionList definitionList);
+        public void onDictionaryFragmentInteraction(String word, ArrayList<String> synonyms);
     }
 
 }
