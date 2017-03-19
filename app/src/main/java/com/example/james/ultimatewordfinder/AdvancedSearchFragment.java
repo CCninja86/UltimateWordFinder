@@ -75,10 +75,14 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advanced_search, container, false);
 
-        final SeekBar seekBarNumLetters = (SeekBar) view.findViewById(R.id.seekBarNumLetters);
-        final TextView txtSeekBarProgress = (TextView) view.findViewById(R.id.txtSeekBarProgress);
-        int numLetters = seekBarNumLetters.getProgress();
-        txtSeekBarProgress.setText(String.valueOf(numLetters));
+        final SeekBar seekBarNumLettersMin = (SeekBar) view.findViewById(R.id.seekBarNumLettersMin);
+        final SeekBar seekBarNumLettersMax = (SeekBar) view.findViewById(R.id.seekBarNumLettersMax);
+        final TextView txtSeekBarMinProgress = (TextView) view.findViewById(R.id.txtSeekBarMinProgress);
+        final TextView txtSeekBarMaxProgress = (TextView) view.findViewById(R.id.txtSeekBarMaxProgress);
+        int numMinLetters = seekBarNumLettersMin.getProgress();
+        int numMaxLetters = seekBarNumLettersMax.getProgress();
+        txtSeekBarMinProgress.setText(String.valueOf(numMinLetters));
+        txtSeekBarMaxProgress.setText(String.valueOf(numMaxLetters));
         Button btnAdvancedSearch = (Button) view.findViewById(R.id.btnAdvancedSearch);
         final TextView editTextSearchTerm = (TextView) view.findViewById(R.id.editTextSearchTerm);
         final TextView editTextStartsWith = (TextView) view.findViewById(R.id.editTextStartsWith);
@@ -88,12 +92,29 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
         Globals g = Globals.getInstance();
         dictionary = g.getDictionary();
 
-        seekBarNumLetters.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBarNumLettersMin.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                final int numLetters = seekBarNumLetters.getProgress();
-                txtSeekBarProgress.setText(String.valueOf(numLetters));
+                final int numMinLetters = seekBarNumLettersMin.getProgress();
+                txtSeekBarMinProgress.setText(String.valueOf(numMinLetters));
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekBarNumLettersMax.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                final int numMaxLetters = seekBarNumLettersMax.getProgress();
+                txtSeekBarMaxProgress.setText(String.valueOf(numMaxLetters));
             }
 
             @Override
@@ -113,9 +134,20 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
                 String searchTerm = editTextSearchTerm.getText().toString();
                 String prefix = editTextStartsWith.getText().toString();
                 String suffix = editTextEndsWith.getText().toString();
-                int length = seekBarNumLetters.getProgress();
+                int minLength = seekBarNumLettersMin.getProgress();
+                int maxLength = seekBarNumLettersMax.getProgress();
+                SearchWordsTask searchWordsTask = null;
 
-                SearchWordsTask searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, length);
+                if(minLength == 0 && maxLength == 0){
+                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, 30);
+                } else if(minLength == 0 && maxLength != 0){
+                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, maxLength);
+                } else if(minLength != 0 && maxLength == 0){
+                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, 30);
+                } else {
+                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, maxLength);
+                }
+
                 searchWordsTask.execute();
             }
         });
@@ -129,14 +161,16 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
         private String searchTerm;
         private String prefix;
         private String suffix;
-        private int length;
+        private int minLength;
+        private int maxLength;
         private View view;
 
-        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int length){
+        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int minLength, int maxLength){
             this.searchTerm = searchTerm;
             this.prefix = prefix;
             this.suffix = suffix;
-            this.length = length;
+            this.minLength = minLength;
+            this.maxLength = maxLength;
             this.view = view;
         }
 
@@ -154,14 +188,9 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
         protected Void doInBackground(Void... params) {
             for (Word word : dictionary.getWordList()) {
                 if (word.getWord().contains(searchTerm) && word.getWord().startsWith(prefix) && word.getWord().endsWith(suffix)) {
-                    if (length != 0) {
-                        if (word.getWord().length() == length) {
-                            matches.add(word);
-                        }
-                    } else {
+                    if(word.getWord().length() >= minLength && word.getWord().length() <= maxLength){
                         matches.add(word);
                     }
-
                 }
             }
 

@@ -25,7 +25,8 @@
     <string name="advanced_search_text_search_term">Search Term</string>
     <string name="advanced_search_text_starts_with">Starts With</string>
     <string name="advanced_search_text_ends_with">Ends With</string>
-    <string name="advanced_search_word_length">Number of Letters (0 for any number)</string>
+    <string name="advanced_search_word_length_minimum">Number of Letters (minimum, 0 for any)</string>
+    <string name="advanced_search_word_length_maximum">Number of Letters(maximum, 0 for any)</string>
     <string name="advanced_search_button_search">Search</string>
 
     <string name="word_finder_results_button_select_all">Select All</string>
