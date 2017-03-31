@@ -212,4 +212,14 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
                 fragmentTransaction.commit();
         }
     }
+
+    @Override
+    public void onFragmentInteraction(String word, ArrayList<String> synonyms) {
+        loadSynonymsFragment(word, synonyms);
+    }
+
+    @Override
+    public void onFragmentInteraction(String word, DefinitionList definitionList) {
+        loadDefinitionsFragment(word, definitionList);
+    }
 }

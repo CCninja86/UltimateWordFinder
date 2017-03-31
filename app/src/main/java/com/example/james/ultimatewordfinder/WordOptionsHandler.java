@@ -29,6 +29,7 @@ public class WordOptionsHandler {
 
     private WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener;
     private WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener;
+    private SynonymResultListFragment.OnFragmentInteractionListener synonymListener;
     private Context context;
     private String word;
     private DefinitionList definitionList;
@@ -36,9 +37,10 @@ public class WordOptionsHandler {
     private ProgressDialog progressDialog;
     private static final int MAX_ATTEMPTS = 5;
 
-    public WordOptionsHandler(WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener, WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener, Context context, String word){
+    public WordOptionsHandler(SynonymResultListFragment.OnFragmentInteractionListener synonymListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener, WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener, Context context, String word){
         this.word = word;
         this.context = context;
+        this.synonymListener = synonymListener;
         this.wordFinderListener = wordFinderListener;
         this.dictionaryListener = dictionaryListener;
         this.definitionList = new DefinitionList();
@@ -219,8 +221,10 @@ public class WordOptionsHandler {
                 if(definitionList.getDefinitions().size() > 0){
                     if(dictionaryListener != null){
                         dictionaryListener.onDictionaryFragmentInteraction(word, definitionList);
-                    } else {
+                    } else if(wordFinderListener != null){
                         wordFinderListener.onResultsFragmentInteraction(word, definitionList);
+                    } else {
+                        synonymListener.onFragmentInteraction(word, definitionList);
                     }
                 } else {
                     Toast.makeText(context, "No definitions found", Toast.LENGTH_SHORT).show();
@@ -318,8 +322,10 @@ public class WordOptionsHandler {
             if(!synonyms.isEmpty() && synonyms != null){
                 if(dictionaryListener != null){
                     dictionaryListener.onDictionaryFragmentInteraction(word, synonyms);
-                } else {
+                } else if(wordFinderListener != null) {
                     wordFinderListener.onResultsFragmentInteraction(word, synonyms);
+                } else {
+                    synonymListener.onFragmentInteraction(word, synonyms);
                 }
             } else {
                 Toast.makeText(context, "No synonyms found", Toast.LENGTH_SHORT).show();

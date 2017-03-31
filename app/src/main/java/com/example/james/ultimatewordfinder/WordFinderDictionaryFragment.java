@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
@@ -124,7 +125,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
                         definitionList.clearList();
                         synonyms.clear();
                         String word = listViewResults.getItemAtPosition(position).toString();
-                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, mListener, getContext(), word);
+                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, null, mListener, getContext(), word);
 
                         switch(which){
                             case 0:
@@ -147,32 +148,25 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
             }
         });
 
-        if(!wordOptionsHintShown){
+        Context context = getActivity();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("hint", Context.MODE_PRIVATE);
+        boolean shown = sharedPreferences.getBoolean("shown", false);
+
+        if(!shown){
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage("You can view the definitions and synonyms for the majority of words by long-pressing any word in the list, which will pop-up a list of options for that word");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            g.setWordOptionsHintShown(true);
-        }
-
-        if(!wordOptionsHintShown){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setMessage("You can view the definitions and synonyms for the majority of words by long-pressing any word in the list, which will pop-up a list of options for that word");
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                dialog.dismiss();
                 }
             });
 
             builder.show();
 
-            g.setWordOptionsHintShown(true);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("shown", true);
+            editor.commit();
         }
 
         return view;
