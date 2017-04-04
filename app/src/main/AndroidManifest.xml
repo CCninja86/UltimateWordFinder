@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.james.ultimatewordfinder">
+    package="com.example.james.ultimatewordfinderr">
 
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,15 +16,15 @@
         android:theme="@style/AppTheme">
         <activity
             android:windowSoftInputMode="adjustPan"
-            android:name="com.example.james.ultimatewordfinder.ScoringTableActivity"
+            android:name="com.example.james.ultimatewordfinderr.ScoringTableActivity"
             android:label="@string/title_activity_scoring_table"
             android:screenOrientation="portrait"></activity>
         <activity
             android:windowSoftInputMode="adjustPan"
-            android:name="com.example.james.ultimatewordfinder.WordFinderActivity"
+            android:name="com.example.james.ultimatewordfinderr.WordFinderActivity"
             android:label="@string/title_activity_word_finder"
             android:screenOrientation="portrait"></activity>
-        <activity android:name="com.example.james.ultimatewordfinder.GameSetupActivity"
+        <activity android:name="com.example.james.ultimatewordfinderr.GameSetupActivity"
             android:label="@string/title_activity_game_setup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
