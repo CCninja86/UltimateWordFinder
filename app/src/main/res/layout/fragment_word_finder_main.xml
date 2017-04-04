@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.example.james.ultimatewordfindernew.WordFinderMainFragment">
+             tools:context="com.example.james.ultimatewordfinderr.WordFinderMainFragment">
 
     <Button
         style="@style/Widget.AppCompat.Button.Colored"
