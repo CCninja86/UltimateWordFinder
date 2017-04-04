@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -204,7 +205,12 @@ public class AdvancedSearchFragment extends android.support.v4.app.Fragment {
                 progressDialog = null;
             }
 
-            mListener.onAdvancedSearchFragmentInteraction(view, matches);
+            if(matches.size() > 0){
+                mListener.onAdvancedSearchFragmentInteraction(view, matches);
+            } else {
+                Toast.makeText(getContext(), "No results found", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 

@@ -203,13 +203,26 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onFragmentInteraction(String option) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (option){
             case "Report Bug":
                 BugReportFragment bugReportFragment = new BugReportFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.containerWordFinder, bugReportFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+                break;
+            case "return":
+//                if(wasDictionaryFragment){
+//                    WordFinderDictionaryFragment dictionaryFragment = new WordFinderDictionaryFragment();
+//                    fragmentTransaction.replace(R.id.containerWordFinder, dictionaryFragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+//                } else {
+//                    WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
+//                    fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+//                }
         }
     }
 

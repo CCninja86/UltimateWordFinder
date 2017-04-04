@@ -71,6 +71,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -82,7 +83,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_finder_dictionary, container, false);
-
+        setRetainInstance(true);
         Globals g = Globals.getInstance();
         boolean wordOptionsHintShown = g.isWordOptionsHintShown();
         this.dictionary = g.getDictionary();

@@ -82,6 +82,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -93,6 +94,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_finder_search_results, container, false);
+        setRetainInstance(true);
 
         final TextView textViewNumResults = (TextView) view.findViewById(R.id.textViewNumResults);
 

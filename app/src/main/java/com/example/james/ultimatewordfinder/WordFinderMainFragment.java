@@ -66,6 +66,9 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
     private TextView textViewWordProgress;
     private ProgressDialog progressDialog;
 
+    private Stopwatch stopwatch;
+
+
     private boolean textFlag;
 
 
@@ -294,6 +297,8 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setCancelable(false);
             progressDialog.show();
+
+            stopwatch = new Stopwatch();
         }
 
         @Override
@@ -365,6 +370,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             }
         }
 
+
         // For each word in the dictionary
         for (Word word : wordsInDictionary) {
             int numLettersMatch = 0;
@@ -401,12 +407,14 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             progress++;
             final int percentage = progress * 100/total;
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            if(stopwatch.getElapsedTime().getElapsedRealtimeMillis() >= 2000){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                     progressDialog.setMessage("Searching Dictionary..." + percentage + "%");
-                }
-            });
+                    }
+                });
+            }
         }
     }
 
@@ -431,10 +439,11 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         lettersOnBoard = trimStringArray(lettersOnBoard);
         final int lettersOnBoardLength = lettersOnBoard.length;
 
+        stopwatch.reset();
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressDialog.setMessage("Filtering results...0%");
+                progressDialog.setMessage("Filtering results...");
             }
         });
 
@@ -443,12 +452,15 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
             final String letterBoard = lettersOnBoard[i];
             final int percentage = i * 100/lettersOnBoard.length;
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            if(stopwatch.getElapsedTime().getElapsedRealtimeMillis() >= 2000){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                     progressDialog.setMessage("Filtering results..." + percentage + "%");
-                }
-            });
+                    }
+                });
+            }
+
 
             if (letterBoard.equals("?")) {
                 for (String letterRack : lettersInRack) {
