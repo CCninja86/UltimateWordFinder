@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Use the {@link WordFinderDictionaryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WordFinderDictionaryFragment extends android.support.v4.app.Fragment {
+public class WordFinderDictionaryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -104,7 +104,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
         listViewResults.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
                 if(vibrator.hasVibrator()){
                     vibrator.vibrate(125);
@@ -118,7 +118,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
 
                 final CharSequence options[] = new CharSequence[]{"Definitions", "Synonyms"};
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -126,7 +126,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
                         definitionList.clearList();
                         synonyms.clear();
                         String word = listViewResults.getItemAtPosition(position).toString();
-                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, null, mListener, getContext(), word);
+                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, null, mListener, getActivity(), word);
 
                         switch(which){
                             case 0:
@@ -154,7 +154,7 @@ public class WordFinderDictionaryFragment extends android.support.v4.app.Fragmen
         boolean shown = sharedPreferences.getBoolean("shown", false);
 
         if(!shown){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("You can view the definitions and synonyms for the majority of words by long-pressing any word in the list, which will pop-up a list of options for that word");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override

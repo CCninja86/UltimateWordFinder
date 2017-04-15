@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "nz.ac.aut.ultimatewordfinderr"
         multiDexEnabled true
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 6
         versionName "1.05"

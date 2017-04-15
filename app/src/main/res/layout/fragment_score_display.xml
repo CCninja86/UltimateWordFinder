@@ -7,9 +7,10 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ListView
+        android:id="@+id/listPlayerScores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listPlayerScores"
         android:layout_gravity="left|top"
-        tools:listitem="@android:layout/simple_list_item_1"/>
+        android:layout_marginLeft="15dp"
+        tools:listitem="@android:layout/simple_list_item_1" />
 </FrameLayout>

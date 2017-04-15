@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * Use the {@link ScoreDisplayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScoreDisplayFragment extends android.support.v4.app.Fragment {
+public class ScoreDisplayFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -105,7 +105,7 @@ public class ScoreDisplayFragment extends android.support.v4.app.Fragment {
         }
 
         ListView playerScores = (ListView) view.findViewById(R.id.listPlayerScores);
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, playerOverallScores);
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, playerOverallScores);
         playerScores.setAdapter(adapter);
 
         return view;

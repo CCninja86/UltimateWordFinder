@@ -27,11 +27,12 @@
         android:choiceMode="singleChoice"/>
 
     <Button
+        android:id="@+id/btnSearch"
+        style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"
-        android:id="@+id/btnSearch"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:background="@color/colorAccent"
+        android:text="Search" />
 </RelativeLayout>

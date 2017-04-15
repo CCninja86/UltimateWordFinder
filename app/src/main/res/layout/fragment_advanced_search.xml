@@ -82,12 +82,13 @@
 
     <Button
         android:id="@+id/btnAdvancedSearch"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:background="@color/colorAccent"
         android:text="@string/advanced_search_button_search" />
 
     <SeekBar

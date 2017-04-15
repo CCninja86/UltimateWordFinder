@@ -41,7 +41,7 @@ import java.util.Set;
  * Use the {@link WordFinderMainFragment#newInstance} factory method toJa
  * create an instance of this fragment.
  */
-public class WordFinderMainFragment extends android.support.v4.app.Fragment {
+public class WordFinderMainFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -115,7 +115,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_word_finder_main, container, false);
         Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();
-        final DatabaseHandler database = new DatabaseHandler(getContext());
+        final DatabaseHandler database = new DatabaseHandler(getActivity());
 
 
         this.matches = new ArrayList<Word>();
@@ -155,7 +155,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
         btnExample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Word Finder Example");
                 builder.setMessage("Letters on Board: f????t\n" +
                                    "Letters in Rack: orebstu\n" +
@@ -230,7 +230,7 @@ public class WordFinderMainFragment extends android.support.v4.app.Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        AssetManager assetManager = getContext().getAssets();
+                        AssetManager assetManager = getActivity().getAssets();
                         database.insertAllWords(assetManager, dictionary, progressBar);
                     }
                 }).start();

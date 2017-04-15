@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="drawer_items">
+        <item name="players">Players</item>
+        <item name="sores">Scores</item>
+        <item name="tile_breakdown">Tile Breakdown</item>
+        <item name="word_finder">Word Finder</item>
+        <item name="dictionary">Dictionary</item>
+    </string-array>
 </resources>

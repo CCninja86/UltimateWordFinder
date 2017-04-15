@@ -21,63 +21,73 @@
         android:layout_alignTop="@+id/btnMinWordScore" />
 
     <Button
+        android:id="@+id/btnOfficial"
+        style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/word_finder_results_button_is_official"
-        android:id="@+id/btnOfficial"
-        android:layout_gravity="right|top"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="right|top"
         android:layout_toEndOf="@+id/listSearchResults"
         android:layout_toRightOf="@+id/listSearchResults"
-        style="@style/Widget.AppCompat.Button.Colored" />
+        android:background="@color/colorAccent"
+        android:text="@string/word_finder_results_button_is_official" />
 
     <Button
-        style="@style/Widget.AppCompat.Button.Colored"
+        android:id="@+id/btnSelectAll"
+        style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/word_finder_results_button_select_all"
-        android:id="@+id/btnSelectAll"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="12dp"/>
+        android:layout_alignParentTop="true"
+        android:background="@color/colorAccent"
+        android:text="@string/word_finder_results_button_select_all"
+        android:textSize="12dp" />
 
     <Button
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/word_finder_results_button_deselect_all"
         android:id="@+id/btnDeselectAll"
+        style="@android:style/Widget.Material.Light.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/btnSelectAll"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/btnOfficial"
+        android:layout_toRightOf="@+id/btnSelectAll"
         android:layout_toStartOf="@+id/btnOfficial"
-        android:textSize="12dp"/>
+        android:background="@color/colorAccent"
+        android:text="@string/word_finder_results_button_deselect_all"
+        android:textSize="12dp" />
 
     <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/word_finder_results_switch_smart_selection"
         android:id="@+id/switchSmartSelection"
-        android:layout_below="@+id/btnCompareScores"
-        android:layout_toRightOf="@+id/btnDeselectAll"
-        android:layout_toEndOf="@+id/btnDeselectAll"
-        android:layout_marginTop="39dp"
-        android:checked="false" />
-
-    <Switch
-        android:text="Use your selection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/btnCompareScores"
+        android:layout_marginTop="39dp"
+        android:layout_toEndOf="@+id/btnDeselectAll"
+        android:layout_toRightOf="@+id/btnDeselectAll"
+        android:checked="false"
+        android:text="@string/word_finder_results_switch_smart_selection"
+        android:thumbTint="@color/colorAccent"
+        android:trackTint="@color/colorAccent" />
+
+    <Switch
         android:id="@+id/switchOfficialSelection"
-        android:checked="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/btnOfficial"
-        android:layout_toRightOf="@+id/listSearchResults"
-        android:layout_toEndOf="@+id/listSearchResults"
         android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp" />
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/listSearchResults"
+        android:layout_toRightOf="@+id/listSearchResults"
+        android:checked="true"
+        android:text="Use your selection"
+        android:thumbTint="@color/colorAccent"
+        android:trackTint="@color/colorAccent" />
 
     <TextView
         android:text="[numResults]"
@@ -90,25 +100,30 @@
         android:textStyle="normal|bold" />
 
     <Button
+        android:id="@+id/btnMinWordScore"
+        style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/word_finder_results_button_minimum_word_score"
-        android:id="@+id/btnMinWordScore"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_below="@+id/switchOfficialSelection"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="42dp" />
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/switchOfficialSelection"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="42dp"
+        android:background="@color/colorAccent"
+        android:text="@string/word_finder_results_button_minimum_word_score" />
 
     <Button
+        android:id="@+id/btnCompareScores"
+        style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/word_finder_results_button_compare_scores"
-        android:id="@+id/btnCompareScores"
-        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/btnMinWordScore"
-        android:layout_toRightOf="@+id/listSearchResults"
-        android:layout_toEndOf="@+id/listSearchResults" />
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/listSearchResults"
+        android:background="@color/colorAccent"
+        android:text="@string/word_finder_results_button_compare_scores" />
 
     <EditText
         android:layout_width="wrap_content"

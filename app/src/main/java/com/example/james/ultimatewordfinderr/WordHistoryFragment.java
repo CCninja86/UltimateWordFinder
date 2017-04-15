@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Use the {@link WordHistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WordHistoryFragment extends android.support.v4.app.Fragment {
+public class WordHistoryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,7 +90,7 @@ public class WordHistoryFragment extends android.support.v4.app.Fragment {
                 final String word = listWordHistory.getItemAtPosition(position).toString();
 
                 if(word.contains("?")){
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                     builder.setTitle("Set Blank Tile");
                     builder.setMessage("Would you like to set the blank tiles for this word to make it easier to remember the full word?");
@@ -99,7 +99,7 @@ public class WordHistoryFragment extends android.support.v4.app.Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 
                             builder.setMessage("Enter the blank tiles in order, separated by a comma (no spaces).");
@@ -141,9 +141,9 @@ public class WordHistoryFragment extends android.support.v4.app.Fragment {
 
                                         player.updatePlayerWordHistory(word, newWord);
                                         adapter.notifyDataSetChanged();
-                                        Toast.makeText(getContext(), "Entry updated!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Entry updated!", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(getContext(), "Please enter at least one letter", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), "Please enter at least one letter", Toast.LENGTH_LONG).show();
                                     }
 
                                 }

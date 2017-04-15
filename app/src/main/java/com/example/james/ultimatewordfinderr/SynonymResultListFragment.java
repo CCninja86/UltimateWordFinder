@@ -1,5 +1,6 @@
 package com.example.james.ultimatewordfinderr;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * Created by james on 2/02/2017.
  */
 
-public class SynonymResultListFragment extends android.support.v4.app.Fragment {
+public class SynonymResultListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";

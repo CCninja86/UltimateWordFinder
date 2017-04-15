@@ -37,4 +37,7 @@
     <string name="word_finder_results_switch_smart_selection">Smart Selection</string>
 
     <string name="word_finder_score_comparison_button_compare">Compare</string>
+
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
 </resources>

@@ -36,7 +36,7 @@ import java.util.ArrayList;
  * Use the {@link WordFinderSearchResultsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WordFinderSearchResultsFragment extends android.support.v4.app.Fragment {
+public class WordFinderSearchResultsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -157,7 +157,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(!isChecked) {
-                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                     alertDialog.setTitle("Are you sure?");
                     alertDialog.setMessage("Disabling Smart Selection will allow you to select the entire list when clicking 'Select All'." +
                             "WARNING: Trying to 'Select All' with a large list could cause the app to hang/crash. Are you sure you want to do this?");
@@ -196,7 +196,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
 
-                Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
                 if(vibrator.hasVibrator()){
                     vibrator.vibrate(125);
@@ -210,14 +210,14 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                 final CharSequence options[] = new CharSequence[]{"Definitions", "Synonyms"};
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         synonyms.clear();
                         String word = listResults.getItemAtPosition(position).toString();
-                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, mListener, null, getContext(), word);
+                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, mListener, null, getActivity(), word);
 
                         switch(which){
                             case 0:
@@ -252,7 +252,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                 switch (view.getId()){
                     case R.id.btnOfficial:
-                        progressDialog = new ProgressDialog(getContext());
+                        progressDialog = new ProgressDialog(getActivity());
                         progressDialog.setIndeterminate(true);
                         progressDialog.setMessage("Checking Official Words...");
                         progressDialog.show();
@@ -287,7 +287,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(getContext(), "Please select at least one word", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getActivity(), "Please select at least one word", Toast.LENGTH_LONG).show();
                                         }
                                     });
                                 } else {
@@ -327,7 +327,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Toast.makeText(getContext(), "Some of these words are official Scrabble words! The list will now change to display just the official words from your selection.", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(getActivity(), "Some of these words are official Scrabble words! The list will now change to display just the official words from your selection.", Toast.LENGTH_LONG).show();
                                                 }
                                             });
 
@@ -345,7 +345,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Toast.makeText(getContext(), "All of these words are official Scrabble words! The list will now change to display just the official words from your selection.", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(getActivity(), "All of these words are official Scrabble words! The list will now change to display just the official words from your selection.", Toast.LENGTH_LONG).show();
                                                     textViewNumResults.setText("Found " + listResults.getCount() + " results");
                                                 }
                                             });
@@ -364,7 +364,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Toast.makeText(getContext(), "None of these words are official Scrabble Words.", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(getActivity(), "None of these words are official Scrabble Words.", Toast.LENGTH_LONG).show();
                                                     textViewNumResults.setText("Found " + listResults.getCount() + " results");
                                                 }
                                             });
@@ -405,11 +405,11 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                         }
 
                         if(selectedResults.size() > 1){
-                            Toast.makeText(getContext(), "Please only select one word at a time for this feature.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Please only select one word at a time for this feature.", Toast.LENGTH_LONG).show();
                         } else if(selectedResults.size() == 1){
-                            Toast.makeText(getContext(), String.valueOf(dictionary.getBaseWordScore(selectedResults.get(0))), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), String.valueOf(dictionary.getBaseWordScore(selectedResults.get(0))), Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), "Please select at least one word", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Please select at least one word", Toast.LENGTH_LONG).show();
                         }
 
                         break;
@@ -435,9 +435,9 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
 
                             mListener.onResultsFragmentButtonInteraction("compare", wordsToCompare);
                         } else if(wordsToCompare.size() == 1) {
-                            Toast.makeText(getContext(), "Please select at least one word to use this feature", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Please select at least one word to use this feature", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), "Please select at least one word", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Please select at least one word", Toast.LENGTH_LONG).show();
                         }
 
                         break;
@@ -457,7 +457,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                     }
                                 }
 
-                                Toast.makeText(getContext(), "More than 100 items in list, selecting all currently visible items...", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "More than 100 items in list, selecting all currently visible items...", Toast.LENGTH_LONG).show();
                             } else {
                                 for(int i = 0; i < listSize; i++){
                                     if(listResults.isItemChecked(i) == false){
@@ -466,7 +466,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
                                     }
                                 }
 
-                                Toast.makeText(getContext(), "100 or less items in list, selecting all items in list...", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "100 or less items in list, selecting all items in list...", Toast.LENGTH_LONG).show();
                             }
 
                         } else {
@@ -512,7 +512,7 @@ public class WordFinderSearchResultsFragment extends android.support.v4.app.Frag
         boolean shown = sharedPreferences.getBoolean("shown", false);
 
         if(!shown){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("You can view the definitions and synonyms for the majority of words by long-pressing any word in the list, which will pop-up a list of options for that word");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override

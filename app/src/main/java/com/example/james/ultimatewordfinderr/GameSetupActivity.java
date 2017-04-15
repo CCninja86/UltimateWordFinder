@@ -1,8 +1,8 @@
 package com.example.james.ultimatewordfinderr;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class GameSetupActivity extends AppCompatActivity {
+public class GameSetupActivity extends Activity {
 
     private ArrayList<String> playerNames;
     private ArrayAdapter<String> adapter;
@@ -26,6 +26,8 @@ public class GameSetupActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_setup);
+
+
 
         playerNames = new ArrayList<>();
 

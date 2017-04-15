@@ -32,7 +32,7 @@ import java.util.logging.Handler;
  * Use the {@link ScoringFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScoringFragment extends android.support.v4.app.Fragment {
+public class ScoringFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -116,7 +116,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             public void onClick(View view) {
                 if(view.getId() == R.id.btnWordFinder){
                     if(dictionary == null) {
-                        final AlertDialog.Builder builderConfirm = new AlertDialog.Builder(getContext());
+                        final AlertDialog.Builder builderConfirm = new AlertDialog.Builder(getActivity());
                         builderConfirm.setTitle("First-time Setup");
                         builderConfirm.setMessage("Both the Dictionary and Word Finder features utilise a large database of words. " +
                                 "Due to this, a first-time setup is required to use these features. This setup may take a while, " +
@@ -216,10 +216,6 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
 
     private class LoadFragmentTask extends AsyncTask<Void, Void, Void> {
 
-
-
-
-
         public LoadFragmentTask(){
 
         }
@@ -279,7 +275,7 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
             alertMessage += "\n\nNote: You are not connected to the Internet. You will not be able to view the definitions or synonyms of words. All other features will be available.";
         }
 
-        AlertDialog.Builder builderSelection = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builderSelection = new AlertDialog.Builder(getActivity());
         builderSelection.setTitle("Word Finder or Dictionary?");
         builderSelection.setMessage(alertMessage);
 
@@ -303,8 +299,6 @@ public class ScoringFragment extends android.support.v4.app.Fragment {
     }
 
     private void setup(){
-
-
         Bundle bundle = new Bundle();
         bundle.putInt("selection", selection);
         Intent intent = new Intent(context, WordFinderActivity.class);

@@ -32,7 +32,7 @@ import java.util.Map;
  * Use the {@link AddWordsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddWordsFragment extends android.support.v4.app.Fragment {
+public class AddWordsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -143,10 +143,10 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
         addManualScoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Add Manual Score");
                 builder.setMessage("Enter the custom number");
-                final EditText input = new EditText(getContext());
+                final EditText input = new EditText(getActivity());
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
                 builder.setView(input);
 
@@ -154,7 +154,7 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         player.addCustomScore(Integer.valueOf(input.getText().toString()));
-                        Toast.makeText(getContext(), "Added score to total!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Added score to total!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -239,7 +239,7 @@ public class AddWordsFragment extends android.support.v4.app.Fragment {
                     }
 
 
-                    Toast.makeText(getContext(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
                     mListener.onAddWordsFragmentInteraction(view);
                 }
         });
