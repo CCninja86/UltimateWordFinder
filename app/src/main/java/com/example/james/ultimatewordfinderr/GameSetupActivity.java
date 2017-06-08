@@ -1,25 +1,17 @@
 package com.example.james.ultimatewordfinderr;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class GameSetupActivity extends Activity {
+public class GameSetupActivity extends Activity implements GameSetupFragment.OnFragmentInteractionListener, AddPlayerFragment.OnFragmentInteractionListener {
 
-    private ArrayList<String> playerNames;
-    private ArrayAdapter<String> adapter;
-    private ListView playerList;
-    private EditText txtPlayerName;
+
 
 
     @Override
@@ -27,26 +19,11 @@ public class GameSetupActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_setup);
 
+        GameSetupFragment gameSetupFragment = new GameSetupFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.containerGameSetup, gameSetupFragment);
+        fragmentTransaction.commit();
 
-
-        playerNames = new ArrayList<>();
-
-        if(savedInstanceState != null){
-            playerNames = savedInstanceState.getStringArrayList("Players");
-        }
-
-        playerList = (ListView) findViewById(R.id.listPlayer);
-        txtPlayerName = (EditText) findViewById(R.id.txtPlayerName);
-        playerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String name = playerList.getItemAtPosition(position).toString();
-                txtPlayerName.setText(name);
-            }
-        });
-
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playerNames);
-        playerList.setAdapter(adapter);
     }
 
 
@@ -76,40 +53,22 @@ public class GameSetupActivity extends Activity {
     @Override
     public void onSaveInstanceState(Bundle savedState){
        super.onSaveInstanceState(savedState);
-
-        savedState.putStringArrayList("Players", playerNames);
     }
 
-    public void onClick(View v){
-        switch(v.getId()){
-            case R.id.btnAddPlayer:
-                if(!txtPlayerName.getText().toString().equals("") && txtPlayerName.getText().toString() != null){
-                    playerNames.add(txtPlayerName.getText().toString());
-                    playerList.invalidateViews();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please enter a valid name", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.btnRemovePlayer:
-                if(!txtPlayerName.getText().toString().equals("") && txtPlayerName.getText().toString() != null){
-                    playerNames.remove(txtPlayerName.getText().toString());
-                    playerList.invalidateViews();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please enter a valid name", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.btnClear:
-                playerNames.clear();
-                playerList.invalidateViews();
-                break;
-            case R.id.btnStartGame:
 
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList("Player List", playerNames);
-                Intent intent = new Intent(this, ScoringTableActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
-        }
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onFragmentInteractionAddPlayer(ArrayList<String> playerNames) {
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("playerNames", playerNames);
+        GameSetupFragment gameSetupFragment = new GameSetupFragment();
+        gameSetupFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.containerGameSetup, gameSetupFragment);
+        fragmentTransaction.commit();
     }
 }

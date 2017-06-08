@@ -92,7 +92,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         drawerToggle.setDrawerIndicatorEnabled(true);
 
         g = Globals.getInstance();
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getBundleExtra("Player Bundle");
         this.players = bundle.getStringArrayList("Player List");
 
 

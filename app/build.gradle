@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "nz.ac.aut.ultimatewordfinderr"
         multiDexEnabled true
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 23
         versionCode 6
         versionName "1.05"
@@ -28,9 +28,11 @@ dependencies {
     compile files('libs/gson-2.4.jar')
     compile files('libs/sqliteassethelper-2.0.1.jar')
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:support-v4:25.3.1'
     compile 'com.google.firebase:firebase-ads:10.0.1'
     compile 'org.jsoup:jsoup:1.10.2'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.github.QuadFlask:colorpicker:0.0.13'
 }
 
 apply plugin: 'com.google.gms.google-services'

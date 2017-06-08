@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -8,74 +9,10 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.example.james.ultimatewordfinderr.GameSetupActivity">
 
-    <Button
-        android:id="@+id/btnAddPlayer"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_toStartOf="@+id/btnRemovePlayer"
-        android:background="@color/colorAccent"
-        android:onClick="onClick"
-        android:text="@string/game_setup_text_button_add_player" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/containerGameSetup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></LinearLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtPlayerName"
-        android:layout_alignTop="@+id/btnAddPlayer"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/btnAddPlayer"
-        android:layout_toStartOf="@+id/btnAddPlayer"/>
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listPlayer"
-        android:layout_below="@+id/btnAddPlayer"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="24dp"
-        tools:listitem="@android:layout/simple_list_item_1"
-        android:layout_alignRight="@+id/txtPlayerName"
-        android:layout_alignEnd="@+id/txtPlayerName"/>
-
-    <Button
-        android:id="@+id/btnRemovePlayer"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:background="@color/colorAccent"
-        android:onClick="onClick"
-        android:text="@string/game_setup_button_remove_player" />
-
-    <Button
-        android:id="@+id/btnClear"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/listPlayer"
-        android:layout_marginLeft="5dp"
-        android:layout_toEndOf="@+id/listPlayer"
-        android:background="@color/colorAccent"
-        android:onClick="onClick"
-        android:text="@string/game_setup_button_clear_list" />
-
-    <Button
-        android:id="@+id/btnStartGame"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnClear"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/listPlayer"
-        android:background="@color/colorAccent"
-        android:onClick="onClick"
-        android:text="@string/game_setup_button_start_game" />
 </RelativeLayout>

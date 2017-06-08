@@ -6,11 +6,10 @@
 
     <Button
         android:id="@+id/btnExample"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="@color/colorAccent"
         android:text="@string/word_finder_button_example"
@@ -67,7 +66,7 @@
 
     <Button
         android:id="@+id/btnSearch"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -78,7 +77,7 @@
 
     <Button
         android:id="@+id/btnPopulateDatabase"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/progressDatabase"
@@ -143,7 +142,7 @@
 
     <Button
         android:id="@+id/btnAdvancedSearch"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

@@ -96,7 +96,7 @@ public class WordOptionsHandler {
                             + " Mobile Safari/537.36").referrer("http://www.google.com").get();
 
 
-                    Elements definitionElements = document.getElementsByClass("_3GXwa");
+                    Elements definitionElements = document.getElementsByClass("_14Msm");
 
 
                     for(Element element : definitionElements){
