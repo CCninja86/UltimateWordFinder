@@ -224,7 +224,7 @@ public class ScoringFragment extends Fragment {
         protected void onPreExecute(){
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-            progressDialog = new ProgressDialog(getContext());
+            progressDialog = new ProgressDialog(getActivity());
             progressDialog.setTitle("Performing first-time setup...");
             progressDialog.setMessage("Loading Dictionary...");
             progressDialog.setProgress(0);

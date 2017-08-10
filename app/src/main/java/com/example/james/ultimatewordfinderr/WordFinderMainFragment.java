@@ -292,7 +292,7 @@ public class WordFinderMainFragment extends Fragment {
 
         @Override
         protected void onPreExecute(){
-            progressDialog = new ProgressDialog(getContext());
+            progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Searching Dictionary...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setCancelable(false);
@@ -322,7 +322,7 @@ public class WordFinderMainFragment extends Fragment {
             // If there are no words in the match list, tell user it could not find any words matching those letter positions,
             // Otherwise display the matching words in the list
             if (matches.size() < 1) {
-                Toast.makeText(getContext(), "No Matches Found", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "No Matches Found", Toast.LENGTH_LONG).show();
             } else {
                 mListener.onSearchFragmentInteraction(view, matches);
             }

@@ -120,19 +120,31 @@ public class AddPlayerFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(ArrayList<String> playerNames) {
-        if (mListener != null) {
-            mListener.onFragmentInteractionAddPlayer(playerNames);
-        }
-    }
+//    public void onButtonPressed(ArrayList<String> playerNames) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteractionAddPlayer(playerNames);
+//        }
+//    }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            mListener = (OnFragmentInteractionListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
