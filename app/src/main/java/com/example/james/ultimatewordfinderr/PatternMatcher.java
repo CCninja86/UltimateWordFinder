@@ -164,6 +164,12 @@ public class PatternMatcher {
                                         }
                                     }
                                 }
+                            } else {
+                                if(playerLetterMap.containsKey("?")){
+                                    if(playerLetterMap.get("?") > 0){
+                                        playerLetterMap.put("?", playerLetterMap.get("?") - 1);
+                                    }
+                                }
                             }
                         }
                     }
