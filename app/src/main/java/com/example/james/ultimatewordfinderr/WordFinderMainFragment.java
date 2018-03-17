@@ -219,40 +219,40 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
 
         // Dev Tools - inserting entries into database
 
-//        Button btnPopulateDatabase = (Button) view.findViewById(R.id.btnPopulateDatabase);
-//        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressDatabase);
-//        final TextView textViewWordProgress = (TextView) view.findViewById(R.id.textViewWordProgress);
-//        final TextView textViewReconnect = (TextView) view.findViewById(R.id.textViewReconnect);
-//        final TextView textViewRestart = (TextView) view.findViewById(R.id.textViewRestartTimer);
-//        final TextView webpageProgress = (TextView) view.findViewById(R.id.textViewWebpage);
-//        progressBar.setMax(354937);
-//
-//        btnPopulateDatabase.setVisibility(View.INVISIBLE);
-//        progressBar.setVisibility(View.INVISIBLE);
-//        textViewWordProgress.setVisibility(View.INVISIBLE);
-//        textViewReconnect.setVisibility(View.INVISIBLE);
-//        textViewRestart.setVisibility(View.INVISIBLE);
-//        webpageProgress.setVisibility(View.INVISIBLE);
-//
-//        btnPopulateDatabase.setEnabled(false);
-//        progressBar.setEnabled(false);
-//        textViewWordProgress.setEnabled(false);
-//        textViewReconnect.setEnabled(false);
-//        textViewRestart.setEnabled(false);
-//        webpageProgress.setEnabled(false);
-//
-//        btnPopulateDatabase.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        AssetManager assetManager = getActivity().getAssets();
-//                        database.insertAllWords(assetManager, dictionary, progressBar);
-//                    }
-//                }).start();
-//            }
-//        });
+        Button btnPopulateDatabase = (Button) view.findViewById(R.id.btnPopulateDatabase);
+        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressDatabase);
+        final TextView textViewWordProgress = (TextView) view.findViewById(R.id.textViewWordProgress);
+        final TextView textViewReconnect = (TextView) view.findViewById(R.id.textViewReconnect);
+        final TextView textViewRestart = (TextView) view.findViewById(R.id.textViewRestartTimer);
+        final TextView webpageProgress = (TextView) view.findViewById(R.id.textViewWebpage);
+        progressBar.setMax(354937);
+
+        btnPopulateDatabase.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        textViewWordProgress.setVisibility(View.INVISIBLE);
+        textViewReconnect.setVisibility(View.INVISIBLE);
+        textViewRestart.setVisibility(View.INVISIBLE);
+        webpageProgress.setVisibility(View.INVISIBLE);
+
+        btnPopulateDatabase.setEnabled(false);
+        progressBar.setEnabled(false);
+        textViewWordProgress.setEnabled(false);
+        textViewReconnect.setEnabled(false);
+        textViewRestart.setEnabled(false);
+        webpageProgress.setEnabled(false);
+
+        btnPopulateDatabase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AssetManager assetManager = getActivity().getAssets();
+                        database.insertAllWords(assetManager, dictionary, progressBar);
+                    }
+                }).start();
+            }
+        });
 
         // Dev Tools - inserting entries into database
 
