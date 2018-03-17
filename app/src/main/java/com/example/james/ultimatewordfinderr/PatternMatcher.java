@@ -143,7 +143,7 @@ public class PatternMatcher {
                     int playerLetterCount = 0;
 
                     if(playerLetterMap.containsKey(wordLetter)){
-                        playerLetterCount += playerLetterMap.get(wordLetter);
+                        playerLetterCount = playerLetterMap.get(wordLetter);
                     }
 
                     if(playerLetterMap.containsKey("?")){
@@ -153,10 +153,18 @@ public class PatternMatcher {
                     if(playerLetterCount >= wordLetterCount){
                         numCountMatches += wordLetterCount;
 
-                        if(playerLetterMap.containsKey(wordLetter)){
-                            playerLetterMap.put(wordLetter, playerLetterMap.get(wordLetter) - wordLetterCount);
-                        } else {
-                            playerLetterMap.put("?", playerLetterMap.get("?") - wordLetterCount);
+                        for(int i = wordLetterCount; i > 0; i--){
+                            if(playerLetterMap.containsKey(wordLetter)){
+                                if(playerLetterMap.get(wordLetter) > 0){
+                                    playerLetterMap.put(wordLetter, playerLetterMap.get(wordLetter) - 1);
+                                } else {
+                                    if(playerLetterMap.containsKey("?")){
+                                        if(playerLetterMap.get("?") > 0){
+                                            playerLetterMap.put("?", playerLetterMap.get("?") - 1);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
