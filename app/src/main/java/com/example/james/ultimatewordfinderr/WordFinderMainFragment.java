@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
@@ -41,7 +42,7 @@ import java.util.Set;
  * Use the {@link WordFinderMainFragment#newInstance} factory method toJa
  * create an instance of this fragment.
  */
-public class WordFinderMainFragment extends Fragment {
+public class WordFinderMainFragment extends Fragment implements PatternMatcherResultsListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,6 +71,10 @@ public class WordFinderMainFragment extends Fragment {
 
 
     private boolean textFlag;
+
+    private PatternMatcher patternMatcher;
+
+    private View callingView;
 
 
     /**
@@ -117,6 +122,7 @@ public class WordFinderMainFragment extends Fragment {
         this.dictionary = g.getDictionary();
         final DatabaseHandler database = new DatabaseHandler(getActivity());
 
+        this.patternMatcher = new PatternMatcher(this);
 
         this.matches = new ArrayList<Word>();
         this.selectedWords = new ArrayList<String>();
@@ -183,11 +189,22 @@ public class WordFinderMainFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                String[] lettersInInput = editTextLettersBoard.getText().toString().split("");
-                boolean filterTextEmpty = editTextLettersRack.getText().toString().isEmpty();
-                SearchDictionaryTask task = new SearchDictionaryTask(lettersInInput, view, filterTextEmpty);
-                task.execute();
+                // TODO: Remove this code if changes pass regression testing
+//                String[] lettersInInput = editTextLettersBoard.getText().toString().split("");
+//                boolean filterTextEmpty = editTextLettersRack.getText().toString().isEmpty();
+//                SearchDictionaryTask task = new SearchDictionaryTask(lettersInInput, view, filterTextEmpty);
+//                task.execute();
 
+                callingView = view;
+
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage("Searching Dictionary...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                String boardRegex = patternMatcher.generateBoardRegex(editTextLettersBoard.getText().toString());
+                patternMatcher.getAllWordsMatchingRegex(boardRegex);
             }
         });
 
@@ -202,51 +219,47 @@ public class WordFinderMainFragment extends Fragment {
 
         // Dev Tools - inserting entries into database
 
-        Button btnPopulateDatabase = (Button) view.findViewById(R.id.btnPopulateDatabase);
-        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressDatabase);
-        final TextView textViewWordProgress = (TextView) view.findViewById(R.id.textViewWordProgress);
-        final TextView textViewReconnect = (TextView) view.findViewById(R.id.textViewReconnect);
-        final TextView textViewRestart = (TextView) view.findViewById(R.id.textViewRestartTimer);
-        final TextView webpageProgress = (TextView) view.findViewById(R.id.textViewWebpage);
-        progressBar.setMax(354937);
-
-        btnPopulateDatabase.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.INVISIBLE);
-        textViewWordProgress.setVisibility(View.INVISIBLE);
-        textViewReconnect.setVisibility(View.INVISIBLE);
-        textViewRestart.setVisibility(View.INVISIBLE);
-        webpageProgress.setVisibility(View.INVISIBLE);
-
-        btnPopulateDatabase.setEnabled(false);
-        progressBar.setEnabled(false);
-        textViewWordProgress.setEnabled(false);
-        textViewReconnect.setEnabled(false);
-        textViewRestart.setEnabled(false);
-        webpageProgress.setEnabled(false);
-
-        btnPopulateDatabase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AssetManager assetManager = getActivity().getAssets();
-                        database.insertAllWords(assetManager, dictionary, progressBar);
-                    }
-                }).start();
-            }
-        });
+//        Button btnPopulateDatabase = (Button) view.findViewById(R.id.btnPopulateDatabase);
+//        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressDatabase);
+//        final TextView textViewWordProgress = (TextView) view.findViewById(R.id.textViewWordProgress);
+//        final TextView textViewReconnect = (TextView) view.findViewById(R.id.textViewReconnect);
+//        final TextView textViewRestart = (TextView) view.findViewById(R.id.textViewRestartTimer);
+//        final TextView webpageProgress = (TextView) view.findViewById(R.id.textViewWebpage);
+//        progressBar.setMax(354937);
+//
+//        btnPopulateDatabase.setVisibility(View.INVISIBLE);
+//        progressBar.setVisibility(View.INVISIBLE);
+//        textViewWordProgress.setVisibility(View.INVISIBLE);
+//        textViewReconnect.setVisibility(View.INVISIBLE);
+//        textViewRestart.setVisibility(View.INVISIBLE);
+//        webpageProgress.setVisibility(View.INVISIBLE);
+//
+//        btnPopulateDatabase.setEnabled(false);
+//        progressBar.setEnabled(false);
+//        textViewWordProgress.setEnabled(false);
+//        textViewReconnect.setEnabled(false);
+//        textViewRestart.setEnabled(false);
+//        webpageProgress.setEnabled(false);
+//
+//        btnPopulateDatabase.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        AssetManager assetManager = getActivity().getAssets();
+//                        database.insertAllWords(assetManager, dictionary, progressBar);
+//                    }
+//                }).start();
+//            }
+//        });
 
         // Dev Tools - inserting entries into database
-
-
-
-
-
 
         return view;
     }
 
+    // This is just for potential future debugging purposes, i.e. if I need to view the version of the database in the app
     public void exportDB() {
         try {
             File sd = Environment.getExternalStorageDirectory();
@@ -277,328 +290,368 @@ public class WordFinderMainFragment extends Fragment {
 
     }
 
-    private class SearchDictionaryTask extends AsyncTask<Void, Void, Void> {
-
-        private String[] lettersInInput;
-        private View view;
-        private boolean filterTextEmpty;
-
-
-        public SearchDictionaryTask(String[] lettersInInput, View view, boolean filterTextEmpty){
-            this.lettersInInput = lettersInInput;
-            this.view = view;
-            this.filterTextEmpty = filterTextEmpty;
-        }
-
-        @Override
-        protected void onPreExecute(){
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Searching Dictionary...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
-            stopwatch = new Stopwatch();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            searchDictionary(lettersInInput);
-
-            if(!filterTextEmpty){
-                filterResults(lettersInInput);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result){
+    @Override
+    public void onPatternMatcherGetAllWordsMatchingRegexTaskComplete(ArrayList<Word> matches) {
+        if(editTextLettersRack.getText().toString().isEmpty()){
             if(progressDialog != null && progressDialog.isShowing()){
                 progressDialog.dismiss();
                 progressDialog = null;
             }
 
-            // If there are no words in the match list, tell user it could not find any words matching those letter positions,
-            // Otherwise display the matching words in the list
-            if (matches.size() < 1) {
-                Toast.makeText(getActivity(), "No Matches Found", Toast.LENGTH_LONG).show();
-            } else {
-                mListener.onSearchFragmentInteraction(view, matches);
-            }
-        }
-    }
-
-    private void searchDictionary(String[] lettersInInput){
-        // Clear the array of matching words, get the entered letters and words in the dictionary
-        matches.clear();
-        ArrayList<Word> wordsInDictionary = null;
-
-        // Remove empty string from beginning of array
-        lettersInInput = trimStringArray(lettersInInput);
-
-
-        boolean containsLetter = false;
-
-
-        // For each letter on the board...
-        for(int i = 0; i < lettersInInput.length; i++){
-
-            // If it's not "?", get corresponding words and set containsLetter to True
-            if(!lettersInInput[i].equals("?")){
-                wordsInDictionary = dictionary.getWords(lettersInInput[i], i, lettersInInput.length);
-                containsLetter = true;
-                break;
-            }
-        }
-
-        // If it does not contain any letters, i.e. it's all "?", just get all of the words with the same length
-        if(!containsLetter){
-            wordsInDictionary = dictionary.getWordsOfLength(lettersInInput.length);
-        }
-
-        int total = wordsInDictionary.size();
-        int progress = 0;
-
-        int numNonQuestionMarks = 0;
-
-        // For each letter in the input letters, if it's not a '?', increment the number of non-question-mark letters
-        // These non-question-mark letters are the equivalent of a tile on the Scrabble board
-        for (String letter : lettersInInput) {
-            if (!letter.equals("?")) {
-                numNonQuestionMarks++;
-            }
-        }
-
-
-        // For each word in the dictionary
-        for (Word word : wordsInDictionary) {
-            int numLettersMatch = 0;
-            // Split the word into its individual letters
-            String[] lettersInWord = word.getWord().split("");
-
-
-            // If the length of the word is equal to the length of letters in the input
-            if (word.getWord().length() == lettersInInput.length) {
-                // For each letter
-                for (int i = 0; i < lettersInWord.length; i++) {
-                    String letter = lettersInWord[i];
-
-                    // If it's not equal to an empty string
-                    if (!letter.equals("")) {
-                        // Get the position of that letter
-                        int index = i;
-
-                        // If the position matches the position of the letter in the input
-                        if (lettersInInput[index - 1].equals(letter)) {
-                            // Increment the number of matching letters
-                            numLettersMatch++;
-                        }
-                    }
-                }
-            }
-
-            // If the number of letters with matching positions is equal to the number of non-question-mark letters
-            if ((numLettersMatch == numNonQuestionMarks) && (word.getWord().length() == lettersInInput.length)) {
-                // Add this word to the match list
-                matches.add(word);
-            }
-
-            progress++;
-            final int percentage = progress * 100/total;
-
-            if(stopwatch.getElapsedTime().getElapsedRealtimeMillis() >= 2000){
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                    progressDialog.setMessage("Searching Dictionary..." + percentage + "%");
-                    }
-                });
-            }
-        }
-    }
-
-    private void filterResults(String[] lettersOnBoard){
-        ArrayList<String> lettersInRack = new ArrayList<>();
-        String[] lettersRack = editTextLettersRack.getText().toString().split("");
-
-        for(String letter : lettersRack){
-            lettersInRack.add(letter);
-        }
-
-        for(String letter : lettersOnBoard){
-            lettersInRack.add(letter);
-        }
-
-        ArrayList<Word> filterMatches = new ArrayList<>();
-        ArrayList<Word> letterFilterMatches = new ArrayList<>();
-        String[] alphabet = new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
-        Set<String> lettersNotInRack = new HashSet<String>();
-        Map<String, Integer> letterCounts = new HashMap<>();
-
-        lettersOnBoard = trimStringArray(lettersOnBoard);
-        final int lettersOnBoardLength = lettersOnBoard.length;
-
-        stopwatch.reset();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.setMessage("Filtering results...");
-            }
-        });
-
-
-        for (int i = 0; i < lettersOnBoard.length; i++) {
-            final String letterBoard = lettersOnBoard[i];
-            final int percentage = i * 100/lettersOnBoard.length;
-
-            if(stopwatch.getElapsedTime().getElapsedRealtimeMillis() >= 2000){
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                    progressDialog.setMessage("Filtering results..." + percentage + "%");
-                    }
-                });
-            }
-
-
-            if (letterBoard.equals("?")) {
-                for (String letterRack : lettersInRack) {
-                    for (Word word : this.matches) {
-                        if (word.getWord().length() == lettersOnBoard.length) {
-                            if (word.getWord().indexOf(letterRack) == i) {
-                                filterMatches.add(word);
-                            }
-                        }
-                    }
-                }
-            }
-
-
-        }
-
-        for (String letter : alphabet) {
-            int numMatches = 0;
-            for (String letterInRack : lettersInRack) {
-                if (letter.equals(letterInRack)) {
-                    numMatches++;
-                }
-            }
-
-            for (String letterOnBoard : lettersOnBoard) {
-                if (letter.equals(letterOnBoard)) {
-                    numMatches++;
-                }
-            }
-
-            if (numMatches == 0) {
-                lettersNotInRack.add(letter);
-            }
-
-        }
-
-        String letterArrayString = "";
-
-        for(String letter : lettersInRack){
-            if(!letter.equals("")){
-                letterArrayString += letter;
-            }
-        }
-
-        for (String letter : lettersInRack) {
-            int letterCount = this.countLetter(letterArrayString, letter);
-            letterCounts.put(letter, letterCount);
-        }
-
-        int counter;
-        int progress = 0;
-        int total = this.matches.size();
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.setMessage("Processing...");
-            }
-        });
-
-        for (Word word : this.matches) {
-            counter = 0;
-            for (String letter : lettersNotInRack) {
-                if (word.getWord().contains(letter)) {
-                    counter++;
-                }
-            }
-
-            if (counter == 0) {
-                letterFilterMatches.add(word);
-            }
-
-        }
-
-        Iterator iterator = letterFilterMatches.iterator();
-        String[] lettersInWord = null;
-
-        while (iterator.hasNext()) {
-            Word nextWord = (Word) iterator.next();
-            lettersInWord = nextWord.getWord().split("");
-
-            for (String letter : lettersInWord) {
-                if(!letter.equals("")) {
-                    int letterCountInWord = this.countLetter(nextWord.getWord(), letter);
-                    int letterCountInRack = 0;
-
-                    if (letterCounts.containsKey(letter)) {
-                        letterCountInRack = letterCounts.get(letter);
-                    }
-
-                    if (letterCountInWord > letterCountInRack) {
-                        if (letterFilterMatches.contains(nextWord)) {
-                            iterator.remove();
-                        }
-                    }
-                }
-            }
-        }
-
-        if (checkOnlyLettersRack.isChecked()) {
-            matches = letterFilterMatches;
+            mListener.onSearchFragmentInteraction(callingView, matches);
         } else {
-            matches = filterMatches;
+            patternMatcher.matchWithPlayerPattern(matches, editTextLettersRack.getText().toString(), editTextLettersBoard.getText().toString());
         }
+
     }
 
-    private int countLetter(String word, String letter) {
-        String[] letters = word.split("");
-        int counter = 0;
-
-        for (String letterInWord : letters) {
-            if (letterInWord.equals(letter)) {
-                counter++;
-            }
+    @Override
+    public void onPatternMatcherMatchWithPlayerPatternTaskComplete(ArrayList<Word> matches) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
         }
 
-        return counter;
+        mListener.onSearchFragmentInteraction(callingView, matches);
     }
 
-    private String[] trimStringArray(String[] array){
-        ArrayList<String> temp = new ArrayList<>();
+    // Commenting out SearchDictionaryTask while performing regression testing
+    // TODO: Remove this class if changes pass regression testing
 
-        for(String letter : array){
-            if(!letter.equals("")){
-                temp.add(letter);
-            }
-        }
+//    private class SearchDictionaryTask extends AsyncTask<Void, Void, Void> {
+//
+//        private String[] lettersInInput;
+//        private View view;
+//        private boolean filterTextEmpty;
+//
+//
+//        public SearchDictionaryTask(String[] lettersInInput, View view, boolean filterTextEmpty){
+//            this.lettersInInput = lettersInInput;
+//            this.view = view;
+//            this.filterTextEmpty = filterTextEmpty;
+//        }
+//
+//        @Override
+//        protected void onPreExecute(){
+//            progressDialog = new ProgressDialog(getActivity());
+//            progressDialog.setMessage("Searching Dictionary...");
+//            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
+//
+//            stopwatch = new Stopwatch();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            searchDictionary(lettersInInput);
+//
+//            if(!filterTextEmpty){
+//                filterResults(lettersInInput);
+//            }
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result){
+//            if(progressDialog != null && progressDialog.isShowing()){
+//                progressDialog.dismiss();
+//                progressDialog = null;
+//            }
+//
+//            // If there are no words in the match list, tell user it could not find any words matching those letter positions,
+//            // Otherwise display the matching words in the list
+//            if (matches.size() < 1) {
+//                Toast.makeText(getActivity(), "No Matches Found", Toast.LENGTH_LONG).show();
+//            } else {
+//                mListener.onSearchFragmentInteraction(view, matches);
+//            }
+//        }
+//    }
 
-        array = new String[temp.size()];
+    // Commenting out searchDictionary() while performing regression testing
+    // TODO: Remove this method if changes pass regression testing
 
-        for(int i = 0; i < temp.size(); i++){
-            array[i] = temp.get(i);
-        }
+//    private void searchDictionary(String[] lettersInInput){
+//        // Clear the array of matching words, get the entered letters and words in the dictionary
+//        matches.clear();
+//        ArrayList<Word> wordsInDictionary = null;
+//
+//        // Remove empty string from beginning of array
+//        lettersInInput = trimStringArray(lettersInInput);
+//
+//
+//        boolean containsLetter = false;
+//
+//
+//        // For each letter on the board...
+//        for(int i = 0; i < lettersInInput.length; i++){
+//
+//            // If it's not "?", get corresponding words and set containsLetter to True
+//            if(!lettersInInput[i].equals("?")){
+//                wordsInDictionary = dictionary.getWords(lettersInInput[i], i, lettersInInput.length);
+//                containsLetter = true;
+//                break;
+//            }
+//        }
+//
+//        // If it does not contain any letters, i.e. it's all "?", just get all of the words with the same length
+//        if(!containsLetter){
+//            wordsInDictionary = dictionary.getWordsOfLength(lettersInInput.length);
+//        }
+//
+//        int total = wordsInDictionary.size();
+//        int progress = 0;
+//
+//        int numNonQuestionMarks = 0;
+//
+//        // For each letter in the input letters, if it's not a '?', increment the number of non-question-mark letters
+//        // These non-question-mark letters are the equivalent of a tile on the Scrabble board
+//        for (String letter : lettersInInput) {
+//            if (!letter.equals("?")) {
+//                numNonQuestionMarks++;
+//            }
+//        }
+//
+//
+//        // For each word in the dictionary
+//        for (Word word : wordsInDictionary) {
+//            int numLettersMatch = 0;
+//            // Split the word into its individual letters
+//            String[] lettersInWord = word.getWord().split("");
+//
+//
+//            // If the length of the word is equal to the length of letters in the input
+//            if (word.getWord().length() == lettersInInput.length) {
+//                // For each letter
+//                for (int i = 0; i < lettersInWord.length; i++) {
+//                    String letter = lettersInWord[i];
+//
+//                    // If it's not equal to an empty string
+//                    if (!letter.equals("")) {
+//                        // Get the position of that letter
+//                        int index = i;
+//
+//                        // If the position matches the position of the letter in the input
+//                        if (lettersInInput[index - 1].equals(letter)) {
+//                            // Increment the number of matching letters
+//                            numLettersMatch++;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            // If the number of letters with matching positions is equal to the number of non-question-mark letters
+//            if ((numLettersMatch == numNonQuestionMarks) && (word.getWord().length() == lettersInInput.length)) {
+//                // Add this word to the match list
+//                matches.add(word);
+//            }
+//
+//            progress++;
+//            final int percentage = progress * 100/total;
+//
+//            if(stopwatch.getElapsedTime().getElapsedRealtimeMillis() >= 2000){
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                    progressDialog.setMessage("Searching Dictionary..." + percentage + "%");
+//                    }
+//                });
+//            }
+//        }
+//    }
 
-        temp = null;
+    // Commenting out filterResults() while performing regression testing
+    // TODO: Remove this method if changes pass regression testing
 
-        return array;
-    }
+//    private void filterResults(String[] lettersOnBoard){
+//        ArrayList<String> lettersInRack = new ArrayList<>();
+//        String[] lettersRack = editTextLettersRack.getText().toString().split("");
+//
+//        for(String letter : lettersRack){
+//            lettersInRack.add(letter);
+//        }
+//
+//        for(String letter : lettersOnBoard){
+//            lettersInRack.add(letter);
+//        }
+//
+//        ArrayList<Word> filterMatches = new ArrayList<>();
+//        ArrayList<Word> letterFilterMatches = new ArrayList<>();
+//        String[] alphabet = new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+//        Set<String> lettersNotInRack = new HashSet<String>();
+//        Map<String, Integer> letterCounts = new HashMap<>();
+//
+//        lettersOnBoard = trimStringArray(lettersOnBoard);
+//        final int lettersOnBoardLength = lettersOnBoard.length;
+//
+//        stopwatch.reset();
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                progressDialog.setMessage("Filtering results...");
+//            }
+//        });
+//
+//
+//        for (int i = 0; i < lettersOnBoard.length; i++) {
+//            final String letterBoard = lettersOnBoard[i];
+//            final int percentage = i * 100/lettersOnBoard.length;
+//
+//            if(stopwatch.getElapsedTime().getElapsedRealtimeMillis() >= 2000){
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                    progressDialog.setMessage("Filtering results..." + percentage + "%");
+//                    }
+//                });
+//            }
+//
+//
+//            if (letterBoard.equals("?")) {
+//                for (String letterRack : lettersInRack) {
+//                    for (Word word : this.matches) {
+//                        if (word.getWord().length() == lettersOnBoard.length) {
+//                            if (word.getWord().indexOf(letterRack) == i) {
+//                                filterMatches.add(word);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//
+//        }
+//
+//        for (String letter : alphabet) {
+//            int numMatches = 0;
+//            for (String letterInRack : lettersInRack) {
+//                if (letter.equals(letterInRack)) {
+//                    numMatches++;
+//                }
+//            }
+//
+//            for (String letterOnBoard : lettersOnBoard) {
+//                if (letter.equals(letterOnBoard)) {
+//                    numMatches++;
+//                }
+//            }
+//
+//            if (numMatches == 0) {
+//                lettersNotInRack.add(letter);
+//            }
+//
+//        }
+//
+//        String letterArrayString = "";
+//
+//        for(String letter : lettersInRack){
+//            if(!letter.equals("")){
+//                letterArrayString += letter;
+//            }
+//        }
+//
+//        for (String letter : lettersInRack) {
+//            int letterCount = this.countLetter(letterArrayString, letter);
+//            letterCounts.put(letter, letterCount);
+//        }
+//
+//        int counter;
+//        int progress = 0;
+//        int total = this.matches.size();
+//
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                progressDialog.setMessage("Processing...");
+//            }
+//        });
+//
+//        for (Word word : this.matches) {
+//            counter = 0;
+//            for (String letter : lettersNotInRack) {
+//                if (word.getWord().contains(letter)) {
+//                    counter++;
+//                }
+//            }
+//
+//            if (counter == 0) {
+//                letterFilterMatches.add(word);
+//            }
+//
+//        }
+//
+//        Iterator iterator = letterFilterMatches.iterator();
+//        String[] lettersInWord = null;
+//
+//        while (iterator.hasNext()) {
+//            Word nextWord = (Word) iterator.next();
+//            lettersInWord = nextWord.getWord().split("");
+//
+//            for (String letter : lettersInWord) {
+//                if(!letter.equals("")) {
+//                    int letterCountInWord = this.countLetter(nextWord.getWord(), letter);
+//                    int letterCountInRack = 0;
+//
+//                    if (letterCounts.containsKey(letter)) {
+//                        letterCountInRack = letterCounts.get(letter);
+//                    }
+//
+//                    if (letterCountInWord > letterCountInRack) {
+//                        if (letterFilterMatches.contains(nextWord)) {
+//                            iterator.remove();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (checkOnlyLettersRack.isChecked()) {
+//            matches = letterFilterMatches;
+//        } else {
+//            matches = filterMatches;
+//        }
+//    }
+
+    // Commenting out countLetter() while performing regression testing
+    // TODO: Remove this method if changes pass regression testing
+
+//    private int countLetter(String word, String letter) {
+//        String[] letters = word.split("");
+//        int counter = 0;
+//
+//        for (String letterInWord : letters) {
+//            if (letterInWord.equals(letter)) {
+//                counter++;
+//            }
+//        }
+//
+//        return counter;
+//    }
+
+    // Commenting out trimStringArray() while performing regression testing
+    // TODO: Remove this method if changes pass regression testing
+
+//    private String[] trimStringArray(String[] array){
+//        ArrayList<String> temp = new ArrayList<>();
+//
+//        for(String letter : array){
+//            if(!letter.equals("")){
+//                temp.add(letter);
+//            }
+//        }
+//
+//        array = new String[temp.size()];
+//
+//        for(int i = 0; i < temp.size(); i++){
+//            array[i] = temp.get(i);
+//        }
+//
+//        temp = null;
+//
+//        return array;
+//    }
 
 
 
@@ -626,23 +679,7 @@ public class WordFinderMainFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onSearchFragmentInteraction(View view, ArrayList<Word> searchMatches);
     }
-
-    public void updateWordProgressLabel(String text){
-
-    }
-
 }
