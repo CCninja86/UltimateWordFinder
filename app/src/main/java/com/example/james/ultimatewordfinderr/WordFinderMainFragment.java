@@ -298,7 +298,11 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
                 progressDialog = null;
             }
 
-            mListener.onSearchFragmentInteraction(callingView, matches);
+            if(matches.size() > 0){
+                mListener.onSearchFragmentInteraction(callingView, matches);
+            } else {
+                Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
+            }
         } else {
             patternMatcher.matchWithPlayerPattern(matches, editTextLettersRack.getText().toString(), editTextLettersBoard.getText().toString());
         }
@@ -312,7 +316,11 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
             progressDialog = null;
         }
 
-        mListener.onSearchFragmentInteraction(callingView, matches);
+        if(matches.size() > 0){
+            mListener.onSearchFragmentInteraction(callingView, matches);
+        } else {
+            Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Commenting out SearchDictionaryTask while performing regression testing
