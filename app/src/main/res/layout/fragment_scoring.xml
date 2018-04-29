@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.example.james.ultimatewordfinderr.ScoringFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.james.ultimatewordfinderr.ScoringFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ListView
@@ -12,48 +13,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         tools:listitem="@android:layout/simple_list_item_1"
-        android:choiceMode="singleChoice"
-        android:layout_below="@+id/btnShowScores"/>
-
-    <Button
-        android:id="@+id/btnShowScores"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorAccent"
-        android:gravity="center_vertical|center"
-        android:text="@string/scoring_table_button_scores"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/btnWordFinder"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="@color/colorAccent"
-        android:gravity="center_vertical|center"
-        android:text="@string/scoring_table_button_word_finder"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/btnTileBreakdown"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnWordFinder"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/btnWordFinder"
-        android:layout_toRightOf="@+id/btnShowScores"
-        android:layout_toStartOf="@+id/btnWordFinder"
-        android:background="@color/colorAccent"
-        android:gravity="center_vertical|center"
-        android:text="@string/scoring_table_button_tile_breakdown"
-        android:textSize="12sp" />
+        android:choiceMode="singleChoice"/>
 
 </RelativeLayout>

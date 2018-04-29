@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.InputType;
@@ -54,6 +56,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
 
     private Context context;
 
+    private BottomNavigationView bottomNavigationView;
 
 
     private FragmentTransaction transaction;
@@ -66,12 +69,56 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         context = this;
         mTitle = mDrawerTitle = getTitle();
 
-        drawerItems = getResources().getStringArray(R.array.drawer_items);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
-        drawerList.setAdapter(new NavDrawerListAdapter(this, drawerItems, R.layout.drawer_list_item));
-        drawerList.setOnItemClickListener(new DrawerItemClickListener());
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+                switch(item.getItemId()){
+                    case R.id.action_players:
+                        ScoringFragment scoringFragment = new ScoringFragment();
+                        fragmentTransaction.replace(R.id.container, scoringFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                        break;
+                    case R.id.action_scores:
+                        ScoreDisplayFragment scoreDisplayFragment = new ScoreDisplayFragment();
+                        Bundle scoreDisplayBundle = new Bundle();
+                        scoreDisplayBundle.putSerializable("Scrabble Game", scrabbleGame);
+                        scoreDisplayFragment.setArguments(scoreDisplayBundle);
+                        fragmentTransaction.replace(R.id.container, scoreDisplayFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                        break;
+                    case R.id.action_tile_breakdown:
+                        TileBreakdownFragment tileBreakdownFragment = new TileBreakdownFragment();
+                        Bundle tileBreakdownBundle = new Bundle();
+                        tileBreakdownBundle.putSerializable("Scrabble Game", scrabbleGame);
+                        tileBreakdownFragment.setArguments(tileBreakdownBundle);
+                        fragmentTransaction.replace(R.id.container, tileBreakdownFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                        break;
+                    case R.id.action_word_finder:
+                        loadWordFinderActivity("Word Finder");
+
+                        break;
+                    case R.id.action_dictionary:
+                        loadWordFinderActivity("Dictionary");
+
+                        break;
+                }
+
+
+                return true;
+            }
+        });
+
 
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close){
 
@@ -87,9 +134,6 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
                 invalidateOptionsMenu();
             }
         };
-
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.setDrawerIndicatorEnabled(true);
 
         g = Globals.getInstance();
         Bundle bundle = getIntent().getBundleExtra("Player Bundle");
@@ -150,32 +194,6 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, playerDetailsFragment);
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void onScoringFragmentButtonInteraction(View view){
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-
-        switch (view.getId()){
-            case R.id.btnShowScores:
-                Fragment scoreDisplayFragment = new ScoreDisplayFragment();
-                Bundle scoreDisplayBundle = new Bundle();
-                scoreDisplayBundle.putSerializable("Scrabble Game", scrabbleGame);
-                scoreDisplayFragment.setArguments(scoreDisplayBundle);
-                fragmentTransaction.replace(R.id.container, scoreDisplayFragment);
-                fragmentTransaction.addToBackStack(null);
-                break;
-            case R.id.btnTileBreakdown:
-                Fragment tileBreakdownFragment = new TileBreakdownFragment();
-                Bundle tileBreakdownBundle = new Bundle();
-                tileBreakdownBundle.putSerializable("Scrabble Game", scrabbleGame);
-                tileBreakdownFragment.setArguments(tileBreakdownBundle);
-                fragmentTransaction.replace(R.id.container, tileBreakdownFragment);
-                fragmentTransaction.addToBackStack(null);
-                break;
-        }
-
         fragmentTransaction.commit();
     }
 
@@ -301,70 +319,6 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         }
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
-    private void selectItem(int position){
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        switch (position){
-            case 0:
-                ScoringFragment scoringFragment = new ScoringFragment();
-                fragmentTransaction.replace(R.id.container, scoringFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-                drawerList.setItemChecked(position, true);
-                drawerLayout.closeDrawer(drawerList);
-
-                break;
-            case 1:
-                ScoreDisplayFragment scoreDisplayFragment = new ScoreDisplayFragment();
-                Bundle scoreDisplayBundle = new Bundle();
-                scoreDisplayBundle.putSerializable("Scrabble Game", scrabbleGame);
-                scoreDisplayFragment.setArguments(scoreDisplayBundle);
-                fragmentTransaction.replace(R.id.container, scoreDisplayFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-                drawerList.setItemChecked(position, true);
-                drawerLayout.closeDrawer(drawerList);
-
-                break;
-            case 2:
-                TileBreakdownFragment tileBreakdownFragment = new TileBreakdownFragment();
-                Bundle tileBreakdownBundle = new Bundle();
-                tileBreakdownBundle.putSerializable("Scrabble Game", scrabbleGame);
-                tileBreakdownFragment.setArguments(tileBreakdownBundle);
-                fragmentTransaction.replace(R.id.container, tileBreakdownFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-                drawerList.setItemChecked(position, true);
-                drawerLayout.closeDrawer(drawerList);
-
-                break;
-            case 3:
-                loadWordFinderActivity("Word Finder");
-                drawerList.setItemChecked(position, true);
-                drawerLayout.closeDrawer(drawerList);
-
-                break;
-            case 4:
-                loadWordFinderActivity("Dictionary");
-                drawerList.setItemChecked(position, true);
-                drawerLayout.closeDrawer(drawerList);
-
-                break;
-
-
-        }
-    }
-
     private void loadWordFinderActivity(final String fragment){
         if(dictionary == null) {
             final AlertDialog.Builder builderConfirm = new AlertDialog.Builder(this);
@@ -478,12 +432,5 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         }
 
         return success;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
-        boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
-
-        return super.onPrepareOptionsMenu(menu);
     }
 }

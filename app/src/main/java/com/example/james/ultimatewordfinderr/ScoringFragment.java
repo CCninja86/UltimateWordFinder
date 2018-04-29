@@ -9,7 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -107,11 +110,7 @@ public class ScoringFragment extends Fragment {
         //Bundle bundle = getArguments();
         this.scrabbleGame = g.getGame();
 
-        Button showScoresButton = (Button) view.findViewById(R.id.btnShowScores);
-        Button tileBreakdownButton = (Button) view.findViewById(R.id.btnTileBreakdown);
-        final Button wordFinderButton = (Button) view.findViewById(R.id.btnWordFinder);
-
-        clickListener = new View.OnClickListener() {
+        /*clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(view.getId() == R.id.btnWordFinder){
@@ -150,13 +149,7 @@ public class ScoringFragment extends Fragment {
 
 
             }
-        };
-
-
-
-        showScoresButton.setOnClickListener(clickListener);
-        tileBreakdownButton.setOnClickListener(clickListener);
-        wordFinderButton.setOnClickListener(clickListener);
+        };*/
 
         players = (ListView) view.findViewById(android.R.id.list);
         adapter = new ListViewAdapter(getActivity(), scrabbleGame.getPlayerNamesAsArrayList(), R.layout.row);
@@ -211,7 +204,6 @@ public class ScoringFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onScoringFragmentListInteraction(Player player, Scrabble scrabbleGame);
-        public void onScoringFragmentButtonInteraction(View view);
     }
 
     private class LoadFragmentTask extends AsyncTask<Void, Void, Void> {

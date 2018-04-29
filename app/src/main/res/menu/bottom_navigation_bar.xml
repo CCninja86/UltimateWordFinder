@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_players"
+        android:enabled="true"
+        android:icon="@drawable/player"
+        android:title="@string/bottom_nav_bar_text_player"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_scores"
+        android:enabled="true"
+        android:icon="@drawable/numbered_list"
+        android:title="@string/bottom_nav_bar_text_scores"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_tile_breakdown"
+        android:enabled="true"
+        android:icon="@drawable/scrabble_letter"
+        android:title="@string/bottom_nav_bar_text_tile_breakdown"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_word_finder"
+        android:enabled="true"
+        android:icon="@drawable/magnifier_tool"
+        android:title="@string/bottom_nav_bar_text_word_finder"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_dictionary"
+        android:enabled="true"
+        android:icon="@drawable/dictionary"
+        android:title="@string/bottom_nav_bar_text_dictionary"
+        app:showAsAction="ifRoom"/>
+</menu>
