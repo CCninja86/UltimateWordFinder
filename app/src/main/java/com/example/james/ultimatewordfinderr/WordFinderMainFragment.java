@@ -43,12 +43,10 @@ import java.util.Set;
  * create an instance of this fragment.
  */
 public class WordFinderMainFragment extends Fragment implements PatternMatcherResultsListener {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -85,7 +83,7 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
      * @param param2 Parameter 2.
      * @return A new instance of fragment WordFinderMainFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static WordFinderMainFragment newInstance(String param1, String param2) {
         WordFinderMainFragment fragment = new WordFinderMainFragment();
         Bundle args = new Bundle();
@@ -131,7 +129,6 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
 
         editTextLettersBoard = (EditText) view.findViewById(R.id.editTextLettersBoard);
         editTextLettersRack = (EditText) view.findViewById(R.id.editTextLettersRack);
-        checkOnlyLettersRack = (CheckBox) view.findViewById(R.id.checkOnlyLettersRack);
         Button btnSearch = (Button) view.findViewById(R.id.btnSearch);
         Button btnAdvancedSearch = (Button) view.findViewById(R.id.btnAdvancedSearch);
         Button btnExample = (Button) view.findViewById(R.id.btnExample);
@@ -164,8 +161,7 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Word Finder Example");
                 builder.setMessage("Letters on Board: f????t\n" +
-                                   "Letters in Rack: orebstu\n" +
-                                   "Contains only letters in your rack: yes\n" +
+                                   "Letters in Rack: orebstu\n\n" +
                                    "Results:\n\n" +
                                    "forest\n" +
                                    "forset\n" +
@@ -660,15 +656,6 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
 //
 //        return array;
 //    }
-
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
 
     @Override
     public void onAttach(Activity activity) {

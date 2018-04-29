@@ -28,12 +28,10 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class WordFinderDictionaryFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -54,7 +52,7 @@ public class WordFinderDictionaryFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment WordFinderDictionaryFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static WordFinderDictionaryFragment newInstance(String param1, String param2) {
         WordFinderDictionaryFragment fragment = new WordFinderDictionaryFragment();
         Bundle args = new Bundle();
@@ -173,7 +171,7 @@ public class WordFinderDictionaryFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(String word, DefinitionList definitionList) {
         if (mListener != null) {
             mListener.onDictionaryFragmentInteraction(word, definitionList);
@@ -208,7 +206,6 @@ public class WordFinderDictionaryFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onDictionaryFragmentInteraction(String word, DefinitionList definitionList);
         public void onDictionaryFragmentInteraction(String word, ArrayList<String> synonyms);
     }

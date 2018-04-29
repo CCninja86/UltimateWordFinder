@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.james.ultimatewordfinderr.WordDefinitionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <ExpandableListView
         android:id="@+id/expandableListView"
         android:layout_width="wrap_content"

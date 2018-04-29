@@ -4,8 +4,6 @@
              android:layout_height="match_parent"
              tools:context="com.example.james.ultimatewordfinderr.TileBreakdownFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <ListView
         android:id="@+id/listTileBreakdown"
         android:layout_width="wrap_content"

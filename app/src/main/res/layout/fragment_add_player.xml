@@ -5,8 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.james.ultimatewordfinderr.AddPlayerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <EditText
         android:id="@+id/editTextPlayerName"
         android:layout_width="wrap_content"

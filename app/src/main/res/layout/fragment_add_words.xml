@@ -4,8 +4,6 @@
              android:layout_height="match_parent"
              tools:context="com.example.james.ultimatewordfinderr.AddWordsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <EditText
         android:id="@+id/editTextWords"
         android:layout_width="wrap_content"

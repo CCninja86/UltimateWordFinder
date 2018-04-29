@@ -20,12 +20,10 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class AddPlayerFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -45,7 +43,7 @@ public class AddPlayerFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment AddPlayerFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static AddPlayerFragment newInstance(String param1, String param2) {
         AddPlayerFragment fragment = new AddPlayerFragment();
         Bundle args = new Bundle();
@@ -76,6 +74,7 @@ public class AddPlayerFragment extends Fragment {
         //final Button btnChooseColour = (Button) view.findViewById(R.id.btnChooseColour);
         final EditText editTextPlayerName = (EditText) view.findViewById(R.id.editTextPlayerName);
 
+          // TODO: Implement player colours
 //        btnChooseColour.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -119,23 +118,10 @@ public class AddPlayerFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(ArrayList<String> playerNames) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteractionAddPlayer(playerNames);
-//        }
-//    }
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
@@ -166,7 +152,6 @@ public class AddPlayerFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteractionAddPlayer(ArrayList<String> playerNames);
     }
 }
