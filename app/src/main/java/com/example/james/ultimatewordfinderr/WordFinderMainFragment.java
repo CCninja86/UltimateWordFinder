@@ -141,12 +141,7 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().contains("?")){
-                    checkOnlyLettersRack.setChecked(false);
-                    checkOnlyLettersRack.setEnabled(false);
-                } else {
-                    checkOnlyLettersRack.setEnabled(true);
-                }
+
             }
 
             @Override
