@@ -40,15 +40,10 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
     private Scrabble scrabbleGame;
     private Globals g;
 
-    private String[] drawerItems;
-    private DrawerLayout drawerLayout;
-    private ListView drawerList;
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
-    private ActionBarDrawerToggle drawerToggle;
 
     private Dictionary dictionary;
-    private boolean hasActiveInternetConnection;
 
     private static final int DICTIONARY = 1;
     private static final int WORD_FINDER = 2;
@@ -118,22 +113,6 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
                 return true;
             }
         });
-
-
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close){
-
-            public void onDrawerClosed(View view){
-                super.onDrawerClosed(view);
-                getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView){
-                super.onDrawerOpened(drawerView);
-                getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu();
-            }
-        };
 
         g = Globals.getInstance();
         Bundle bundle = getIntent().getBundleExtra("Player Bundle");
