@@ -2,12 +2,15 @@ package com.example.james.ultimatewordfinderr;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.savvisingh.colorpickerdialog.ColorPickerDialog;
 
 import java.util.ArrayList;
 
@@ -29,7 +32,8 @@ public class AddPlayerFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<String> playerNames;
+    private ArrayList<Player> players;
+    private ArrayList<Integer> coloursList;
 
     public AddPlayerFragment() {
         // Required empty public constructor
@@ -69,49 +73,49 @@ public class AddPlayerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_player, container, false);
 
         Bundle bundle = getArguments();
-        playerNames = bundle.getStringArrayList("playerNames");
+        players = (ArrayList<Player>) bundle.getSerializable("players");
 
-        //final Button btnChooseColour = (Button) view.findViewById(R.id.btnChooseColour);
+        int[] colourCodes = getResources().getIntArray(R.array.materialColours);
+        coloursList = new ArrayList<>();
+
+        for(int code : colourCodes){
+            coloursList.add(code);
+        }
+
+        final Button btnChooseColour = (Button) view.findViewById(R.id.btnChooseColour);
         final EditText editTextPlayerName = (EditText) view.findViewById(R.id.editTextPlayerName);
 
           // TODO: Implement player colours
-//        btnChooseColour.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ColorPickerDialogBuilder
-//                        .with(getActivity())
-//                        .setTitle("Choose color")
-//                        .initialColor(Color.BLUE)
-//                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-//                        .density(12)
-//                        .setOnColorSelectedListener(new OnColorSelectedListener() {
-//                            @Override
-//                            public void onColorSelected(int selectedColor) {
-//                                Toast.makeText(getActivity(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_LONG).show();
-//                            }
-//                        })
-//                        .setPositiveButton("ok", new ColorPickerClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-//                                btnChooseColour.setBackgroundColor(selectedColor);
-//                            }
-//                        })
-//                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        })
-//                        .build()
-//                        .show();
-//            }
-//        });
+        btnChooseColour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ColorPickerDialog dialog = ColorPickerDialog.newInstance(ColorPickerDialog.SELECTION_SINGLE, coloursList, 4, ColorPickerDialog.SIZE_SMALL);
+                dialog.setOnDialodButtonListener(new ColorPickerDialog.OnDialogButtonListener() {
+                    @Override
+                    public void onDonePressed(ArrayList<Integer> mSelectedColors) {
+                        int selectedColour = dialog.getSelectedColors().get(0);
+                        btnChooseColour.setBackgroundColor(selectedColour);
+                    }
 
-        Button btnAddPlayer = (Button) view.findViewById(R.id.btnAddPlayer);
+                    @Override
+                    public void onDismiss() {
+
+                    }
+                });
+
+                dialog.show(getFragmentManager(), "colour_picker");
+            }
+        });
+
+        final Button btnAddPlayer = (Button) view.findViewById(R.id.btnAddPlayer);
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playerNames.add(editTextPlayerName.getText().toString().trim());
-                mListener.onFragmentInteractionAddPlayer(playerNames);
+                ColorDrawable buttonColour = (ColorDrawable) btnChooseColour.getBackground();
+
+                Player player = new Player(editTextPlayerName.getText().toString().trim(), buttonColour.getColor());
+                players.add(player);
+                mListener.onFragmentInteractionAddPlayer(players);
             }
         });
 
@@ -152,6 +156,6 @@ public class AddPlayerFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onFragmentInteractionAddPlayer(ArrayList<String> playerNames);
+        void onFragmentInteractionAddPlayer(ArrayList<Player> players);
     }
 }

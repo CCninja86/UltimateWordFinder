@@ -9,17 +9,18 @@ import java.util.Map;
  */
 public class Player implements Serializable {
     private String name;
+    private int colour;
     private int score;
     private PlayerStatus status;
     private Scrabble scrabbleGame;
     private ArrayList<String> playerWordHistory;
 
-    public Player(String name, Scrabble scrabbleGame){
+    public Player(String name, int colour){
         this.setName(name);
         this.score = 0;
         this.status = PlayerStatus.TIED;
-        this.scrabbleGame = scrabbleGame;
         this.playerWordHistory = new ArrayList<>();
+        this.colour = colour;
     }
 
     public String getName(){
@@ -37,7 +38,7 @@ public class Player implements Serializable {
 
     public void addWordScore(String word, Map<String, Integer> wordsWithWordBonuses, boolean doubleLetter, boolean tripleLetter, boolean doubleWord, boolean tripleWord, ArrayList<String> doubleLetters, ArrayList<String> tripleLetters){
         String[] letters = word.split("");
-        ArrayList<Tile> tiles = this.scrabbleGame.getTiles();
+        ArrayList<Tile> tiles = this.getScrabbleGame().getTiles();
         ArrayList<String> doubleLetterBonuses = new ArrayList<>();
         ArrayList<String> tripleLetterBonuses = new ArrayList<>();
         int totalPoints = 0;
@@ -124,5 +125,21 @@ public class Player implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getColour() {
+        return colour;
+    }
+
+    public void setColour(int colour) {
+        this.colour = colour;
+    }
+
+    public Scrabble getScrabbleGame() {
+        return scrabbleGame;
+    }
+
+    public void setScrabbleGame(Scrabble scrabbleGame) {
+        this.scrabbleGame = scrabbleGame;
     }
 }

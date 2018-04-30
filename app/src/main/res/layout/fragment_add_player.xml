@@ -13,20 +13,29 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:ems="10"
-        android:hint="Player Name"
+        android:hint="@string/add_player_edit_text_hint"
         android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/btnAddPlayer"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
+        android:layout_width="383dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/editTextPlayerName"
-        android:layout_marginTop="24dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="138dp"
         android:background="@color/colorAccent"
-        android:text="Add Player" />
+        android:text="@string/add_player_add_text" />
 
+    <Button
+        android:id="@+id/btnChooseColour"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:background="@color/colorAccent"
+        android:text="@string/add_player_choose_colour_text" />
 
 </RelativeLayout>

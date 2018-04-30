@@ -62,9 +62,9 @@ public class GameSetupActivity extends Activity implements GameSetupFragment.OnF
     }
 
     @Override
-    public void onFragmentInteractionAddPlayer(ArrayList<String> playerNames) {
+    public void onFragmentInteractionAddPlayer(ArrayList<Player> players) {
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList("playerNames", playerNames);
+        bundle.putSerializable("players", players);
         GameSetupFragment gameSetupFragment = new GameSetupFragment();
         gameSetupFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

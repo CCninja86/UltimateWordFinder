@@ -36,7 +36,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         AddWordsFragment.OnFragmentInteractionListener, WordHistoryFragment.OnFragmentInteractionListener,
         ScoreDisplayFragment.OnFragmentInteractionListener, TileBreakdownFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener {
 
-    private ArrayList<String> players;
+    private ArrayList<Player> players;
     private Scrabble scrabbleGame;
     private Globals g;
 
@@ -116,14 +116,14 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
 
         g = Globals.getInstance();
         Bundle bundle = getIntent().getBundleExtra("Player Bundle");
-        this.players = bundle.getStringArrayList("Player List");
+        this.players = (ArrayList<Player>) bundle.getSerializable("Player List");
 
 
         scrabbleGame = new Scrabble();
         scrabbleGame.initialiseTiles();
 
-        for (String playerName : players) {
-            Player player = new Player(playerName, scrabbleGame);
+        for (Player player : players) {
+            player.setScrabbleGame(scrabbleGame);
             scrabbleGame.addPlayer(player);
         }
 

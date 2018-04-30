@@ -35,7 +35,7 @@ public class GameSetupFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<String> playerNames;
+    private ArrayList<Player> players;
     private ArrayAdapter<String> adapter;
     private ListView playerList;
     private EditText txtPlayerName;
@@ -83,7 +83,7 @@ public class GameSetupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList("playerNames", playerNames);
+                bundle.putSerializable("players", players);
                 AddPlayerFragment addPlayerFragment = new AddPlayerFragment();
                 addPlayerFragment.setArguments(bundle);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -98,7 +98,7 @@ public class GameSetupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList("Player List", playerNames);
+                bundle.putSerializable("Player List", players);
                 Intent intent = new Intent(getActivity(), ScoringTableActivity.class);
                 intent.putExtra("Player Bundle", bundle);
                 startActivity(intent);
@@ -106,9 +106,9 @@ public class GameSetupFragment extends Fragment {
         });
 
         if(getArguments() != null){
-            playerNames = getArguments().getStringArrayList("playerNames");
+            players = (ArrayList<Player>) getArguments().getSerializable("players");
         } else {
-            playerNames = new ArrayList<>();
+            players = new ArrayList<>();
         }
 
         playerList = (ListView) view.findViewById(R.id.listPlayer);
@@ -121,12 +121,21 @@ public class GameSetupFragment extends Fragment {
             }
         });
 
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, playerNames);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, getPlayerNames(players));
         playerList.setAdapter(adapter);
 
         return view;
     }
 
+    private ArrayList<String> getPlayerNames(ArrayList<Player> players){
+        ArrayList<String> playerNames = new ArrayList<>();
+
+        for(Player player : players){
+            playerNames.add(player.getName());
+        }
+
+        return playerNames;
+    }
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

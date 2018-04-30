@@ -41,7 +41,7 @@ public class ScoringFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private Scrabble scrabbleGame;
-    private ArrayAdapter<String> adapter;
+    private PlayerListViewAdapter adapter;
     private ListView players;
     private Player player;
     private ProgressDialog progressDialog;
@@ -150,7 +150,7 @@ public class ScoringFragment extends Fragment {
         };*/
 
         players = (ListView) view.findViewById(android.R.id.list);
-        adapter = new ListViewAdapter(getActivity(), scrabbleGame.getPlayerNamesAsArrayList(), R.layout.row);
+        adapter = new PlayerListViewAdapter(getActivity(), scrabbleGame.getPlayers(), R.layout.row);
         players.setAdapter(adapter);
         players.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

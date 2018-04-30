@@ -303,7 +303,7 @@ public class Scrabble implements Serializable{
         return true;
     }
 
-    public void loadGame() {
+    /*public void loadGame() {
         BufferedReader bufferedReader = null;
         InputStream is = null;
 
@@ -359,5 +359,5 @@ public class Scrabble implements Serializable{
                 Logger.getLogger(Scrabble.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
+    }*/
 }
