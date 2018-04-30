@@ -101,7 +101,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
         this.dictionary = g.getDictionary();
         this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
         this.searchResults = bundle.getStringArrayList("Search Results");
-        this.adapter = new ListViewAdapter(getActivity(), this.searchResults, R.layout.row);
+        this.adapter = new ListViewAdapter(getActivity(), this.searchResults, R.layout.row_result_list);
         listResults.setAdapter(adapter);
         textViewNumResults.setText("Found " + listResults.getCount() + " results");
 
@@ -128,7 +128,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                     }
                 }
 
-                adapter = new ListViewAdapter(getActivity(), results, R.layout.row);
+                adapter = new ListViewAdapter(getActivity(), results, R.layout.row_result_list);
                 listResults.setAdapter(adapter);
                 textViewNumResults.setText("Found " + listResults.getCount() + " results");
             }
@@ -330,7 +330,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
+                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row_result_list);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
@@ -349,7 +349,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
+                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row_result_list);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
@@ -368,7 +368,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                                             });
 
                                             searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row);
+                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row_result_list);
 
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override

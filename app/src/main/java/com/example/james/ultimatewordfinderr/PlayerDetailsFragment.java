@@ -76,7 +76,7 @@ public class PlayerDetailsFragment extends Fragment {
         options.add("Word History");
         options.add("Amend Score");
         options.add("Change Player Name");
-        ListViewAdapter adapter = new ListViewAdapter(getActivity(), options, R.layout.row);
+        ListViewAdapter adapter = new ListViewAdapter(getActivity(), options, R.layout.row_player);
         listActions.setAdapter(adapter);
         listActions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

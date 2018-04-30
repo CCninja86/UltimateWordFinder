@@ -94,7 +94,7 @@ public class WordFinderDictionaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ArrayList<String> results = dictionary.getStringWordsStartingWith(editTextSearch.getText().toString().toLowerCase());
-                adapter = new ListViewAdapter(getActivity(), results, R.layout.row);
+                adapter = new ListViewAdapter(getActivity(), results, R.layout.row_player);
                 listViewResults.setAdapter(adapter);
             }
         });

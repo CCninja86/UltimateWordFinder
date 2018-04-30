@@ -81,7 +81,7 @@ public class WordFinderScoreComparisonFragment extends Fragment {
         Bundle bundle = getArguments();
         final ArrayList<String> wordsToCompare = bundle.getStringArrayList("wordsToCompare");
 
-        this.adapter = new ListViewAdapter(getActivity(), wordsToCompare, R.layout.row);
+        this.adapter = new ListViewAdapter(getActivity(), wordsToCompare, R.layout.row_player);
         listWords.setAdapter(adapter);
 
         listWords.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,7 +119,7 @@ public class WordFinderScoreComparisonFragment extends Fragment {
                     wordScoreComparisons.add(comparisonString);
                 }
 
-                ListViewAdapter resultAdapter = new ListViewAdapter(getActivity(), wordScoreComparisons, R.layout.row);
+                ListViewAdapter resultAdapter = new ListViewAdapter(getActivity(), wordScoreComparisons, R.layout.row_player);
                 listScoreComparison.setAdapter(resultAdapter);
             }
         });

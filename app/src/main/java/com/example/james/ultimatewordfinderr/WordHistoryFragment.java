@@ -79,7 +79,7 @@ public class WordHistoryFragment extends Fragment {
         Bundle bundle = getArguments();
         this.player = (Player) bundle.getSerializable("Player");
         final ListView listWordHistory = (ListView) view.findViewById(R.id.listWordHistory);
-        this.adapter = new ListViewAdapter(getActivity(),this.player.getPlayerWordHistory(), R.layout.row);
+        this.adapter = new ListViewAdapter(getActivity(),this.player.getPlayerWordHistory(), R.layout.row_player);
         listWordHistory.setAdapter(this.adapter);
 
         listWordHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {

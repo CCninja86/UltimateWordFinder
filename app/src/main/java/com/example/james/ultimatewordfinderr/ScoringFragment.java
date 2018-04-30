@@ -9,16 +9,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -150,7 +145,7 @@ public class ScoringFragment extends Fragment {
         };*/
 
         players = (ListView) view.findViewById(android.R.id.list);
-        adapter = new PlayerListViewAdapter(getActivity(), scrabbleGame.getPlayers(), R.layout.row);
+        adapter = new PlayerListViewAdapter(getActivity(), scrabbleGame.getPlayers(), R.layout.row_player);
         players.setAdapter(adapter);
         players.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
