@@ -148,6 +148,8 @@ public class WordFinderSearchResultsFragment extends Fragment {
                 } else {
                     switchUseOfficialSelection.setText("Use your selection");
                 }
+
+
             }
         });
 

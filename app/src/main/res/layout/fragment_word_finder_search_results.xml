@@ -51,29 +51,13 @@
         style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/btnOfficial"
-        android:layout_toRightOf="@+id/btnSelectAll"
-        android:layout_toStartOf="@+id/btnOfficial"
+        android:layout_marginStart="98dp"
         android:background="@color/colorAccent"
         android:text="@string/word_finder_results_button_deselect_all"
         android:textSize="12dp"
-        android:theme="@android:style/Theme.Material"/>
-
-    <Switch
-        android:id="@+id/switchSmartSelection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnCompareScores"
-        android:layout_marginTop="39dp"
-        android:layout_toEndOf="@+id/btnDeselectAll"
-        android:layout_toRightOf="@+id/btnDeselectAll"
-        android:checked="false"
-        android:text="@string/word_finder_results_switch_smart_selection"
-        android:thumbTint="@color/colorAccent"
-        android:trackTint="@color/colorAccent" />
+        android:theme="@android:style/Theme.Material" />
 
     <Switch
         android:id="@+id/switchOfficialSelection"
@@ -86,9 +70,9 @@
         android:layout_toEndOf="@+id/listSearchResults"
         android:layout_toRightOf="@+id/listSearchResults"
         android:checked="true"
+        android:splitTrack="false"
         android:text="Use your selection"
-        android:thumbTint="@color/colorAccent"
-        android:trackTint="@color/colorAccent" />
+        tools:checked="false" />
 
     <TextView
         android:text="[numResults]"
@@ -137,5 +121,15 @@
         android:layout_alignParentStart="true"
         android:id="@+id/editTextSearch"
         android:layout_toStartOf="@+id/btnOfficial" />
+
+    <Switch
+        android:id="@+id/switchSmartSelection"
+        android:layout_width="117dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="218dp"
+        android:checked="false"
+        android:text="@string/word_finder_results_switch_smart_selection" />
 
 </RelativeLayout>

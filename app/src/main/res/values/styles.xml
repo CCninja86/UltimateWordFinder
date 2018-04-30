@@ -16,4 +16,15 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="CustomSwitch" parent="Theme.AppCompat">
+        <!-- active thumb -->
+        <item name="colorControlActivated">@color/active_switch_colour</item>
+
+        <!-- inactive thumb -->
+        <item name="colorSwitchThumbNormal">@color/inactive_switch_colour</item>
+
+        <!-- inactive track colour -->
+        <item name="android:colorForeground">@color/inactive_track_colour</item>
+    </style>
+
 </resources>

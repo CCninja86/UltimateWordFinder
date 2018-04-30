@@ -5,6 +5,10 @@
     <color name="colorAccent">#00c853</color>
     <color name="colorNavDrawer">#cfd8dc</color>
 
+    <color name="active_switch_colour">@color/colorAccent</color>
+    <color name="inactive_switch_colour">@color/light_grey</color>
+    <color name="inactive_track_colour">@color/grey</color>
+
     <color name="white">#FFFFFF</color>
     <color name="red">#F44336</color>
     <color name="deep_purple">#673AB7</color>
@@ -26,6 +30,7 @@
     <color name="orange">#FF9800</color>
     <color name="grey">#9E9E9E</color>
     <color name="black">#000000</color>
+    <color name="light_grey">#f2f2f2</color>
 
     <array name="materialColours">
         <item>@color/red</item>
