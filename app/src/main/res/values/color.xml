@@ -48,6 +48,5 @@
         <item>@color/orange</item>
         <item>@color/grey</item>
         <item>@color/black</item>
-        <item>@color/white</item>
     </array>
 </resources>
