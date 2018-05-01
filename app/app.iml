@@ -145,8 +145,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-ads-lite-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-10.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\gimbal-slf4j-impl.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\gson-2.4.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-clearcut-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-fragment-27.1.1" level="project" />
@@ -158,7 +156,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\slf4j-api.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\gimbal.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:livedata-core-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.leinardi:FloatingActionButtonSpeedDial-master-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.0@jar" level="project" />

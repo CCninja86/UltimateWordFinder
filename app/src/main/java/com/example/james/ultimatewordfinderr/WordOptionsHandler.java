@@ -5,6 +5,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,7 +29,7 @@ import java.util.Set;
  * Created by james on 23/02/2017.
  */
 
-public class WordOptionsHandler {
+public class WordOptionsHandler implements DatamuseAPIResultsListener {
 
     private WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener;
     private WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener;
@@ -37,6 +41,8 @@ public class WordOptionsHandler {
     private ProgressDialog progressDialog;
     private static final int MAX_ATTEMPTS = 5;
 
+    private DatamuseAPIResultsListener datamuseAPIResultsListener;
+
     public WordOptionsHandler(SynonymResultListFragment.OnFragmentInteractionListener synonymListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener, WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener, Context context, String word){
         this.word = word;
         this.context = context;
@@ -45,6 +51,7 @@ public class WordOptionsHandler {
         this.dictionaryListener = dictionaryListener;
         this.definitionList = new DefinitionList();
         this.synonyms = new ArrayList<>();
+        this.datamuseAPIResultsListener = this;
     }
 
     public String getWord() {
@@ -63,6 +70,26 @@ public class WordOptionsHandler {
     public void loadSynonyms(){
         GetSynonymsTask getSynonymsTask = new GetSynonymsTask();
         getSynonymsTask.execute();
+    }
+
+    @Override
+    public void onSynonymResults(ArrayList<String> synonyms) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        if(!synonyms.isEmpty() && synonyms != null){
+            if(dictionaryListener != null){
+                dictionaryListener.onDictionaryFragmentInteraction(word, synonyms);
+            } else if(wordFinderListener != null) {
+                wordFinderListener.onResultsFragmentInteraction(word, synonyms);
+            } else {
+                synonymListener.onFragmentInteraction(word, synonyms);
+            }
+        } else {
+            Toast.makeText(context, "No synonyms found", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private class GetDefinitionsTask extends AsyncTask<Void, Void, Void> {
@@ -255,81 +282,37 @@ public class WordOptionsHandler {
 
         @Override
         protected Void doInBackground(Object... params) {
-            try {
-                if(word.contains(" ")){
-                    word = word.toLowerCase().replaceAll(" ", "%20");
-                }
+            String searchUrl = "";
 
-                URL url = new URL("http://www.thesaurus.com/browse/" + word);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 5.1.1; Vodafone Smart ultra 6"
-                        + " Build/LMY47V) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91"
-                        + " Mobile Safari/537.36");
-
-                if(connection.getResponseCode() != 404){
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    String line;
-                    ArrayList<String> entries = new ArrayList<>();
-
-                    while((line = bufferedReader.readLine()) != null){
-                        System.out.println(line);
-                        if(line.contains("class=\"result synstart\"")){
-                            String[] list = line.split("<b>Synonyms:</b>");
-
-
-                            for(int i = 0; i < list.length; i++){
-                                if(i > 0){
-                                    String entry = list[i];
-                                    String newEntry = entry.trim().substring(0, entry.indexOf("</div>") - 1);
-                                    entries.add(newEntry);
-                                }
-                            }
-                        }
-                    }
-
-                    for(String entry : entries){
-                        String[] synonymList = entry.split(", ");
-
-                        for(String synonym : synonymList){
-                            synonyms.add(synonym);
-                        }
-                    }
-
-                    // Remove any potential duplicate entries from ArrayList
-                    Set<String> hashSet = new HashSet<>();
-                    hashSet.addAll(synonyms);
-                    synonyms.clear();
-                    synonyms.addAll(hashSet);
-                    hashSet = null;
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            //try {
+            if (word.contains(" ")) {
+                word = word.toLowerCase().replaceAll(" ", "%20");
             }
 
+            searchUrl = "https://api.datamuse.com/words?rel_syn=" + word;
+
+            Ion.with(context)
+                    .load(searchUrl)
+                    .as(new TypeToken<ArrayList<Synonym>>() {
+                    })
+                    .setCallback(new FutureCallback<ArrayList<Synonym>>() {
+                        @Override
+                        public void onCompleted(Exception e, ArrayList<Synonym> synonymList) {
+                            for (Synonym synonym : synonymList) {
+                                synonyms.add(synonym.getWord());
+                            }
+
+                            datamuseAPIResultsListener.onSynonymResults(synonyms);
+                        }
+                    });
 
             return null;
+
         }
 
         @Override
         protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
 
-            if(!synonyms.isEmpty() && synonyms != null){
-                if(dictionaryListener != null){
-                    dictionaryListener.onDictionaryFragmentInteraction(word, synonyms);
-                } else if(wordFinderListener != null) {
-                    wordFinderListener.onResultsFragmentInteraction(word, synonyms);
-                } else {
-                    synonymListener.onFragmentInteraction(word, synonyms);
-                }
-            } else {
-                Toast.makeText(context, "No synonyms found", Toast.LENGTH_SHORT).show();
-            }
 
         }
     }
