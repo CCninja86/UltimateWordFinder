@@ -85,7 +85,6 @@ public class AddPlayerFragment extends Fragment {
         final Button btnChooseColour = (Button) view.findViewById(R.id.btnChooseColour);
         final EditText editTextPlayerName = (EditText) view.findViewById(R.id.editTextPlayerName);
 
-          // TODO: Implement player colours
         btnChooseColour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
