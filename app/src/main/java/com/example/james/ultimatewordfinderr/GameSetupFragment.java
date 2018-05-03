@@ -141,7 +141,7 @@ public class GameSetupFragment extends Fragment {
             players = new ArrayList<>();
         }
 
-        playerList = (ListView) view.findViewById(R.id.listPlayer);
+        playerList = view.findViewById(R.id.listPlayer);
 
         playerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -189,39 +189,6 @@ public class GameSetupFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-    /*public void onClick(View v){
-        switch(v.getId()){
-            case R.id.btnAddPlayer:
-                if(!txtPlayerName.getText().toString().equals("") && txtPlayerName.getText().toString() != null){
-                    playerNames.add(txtPlayerName.getText().toString());
-                    playerList.invalidateViews();
-                } else {
-                    Toast.makeText(getContext(), "Please enter a valid name", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.btnRemovePlayer:
-                if(!txtPlayerName.getText().toString().equals("") && txtPlayerName.getText().toString() != null){
-                    playerNames.remove(txtPlayerName.getText().toString());
-                    playerList.invalidateViews();
-                } else {
-                    Toast.makeText(getContext(), "Please enter a valid name", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.btnClear:
-                playerNames.clear();
-                playerList.invalidateViews();
-                break;
-            case R.id.btnStartGame:
-
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList("Player List", playerNames);
-                Intent intent = new Intent(getActivity(), ScoringTableActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
-        }
-    }*/
 
     /**
      * This interface must be implemented by activities that contain this
