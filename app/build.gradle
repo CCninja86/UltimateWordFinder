@@ -1,3 +1,20 @@
+plugins {
+    id "org.sonarqube" version "2.6"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "UltimateWordFinder"
+        property "sonar.projectKey", "com.example.james.ultimatewordfinderr"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.language", "java"
+        property "sonar.sources", "src/main/"
+        property "sonar.login", "admin"
+        property "sonar.password", "admin"
+        property "sonar.java.test.binaries", "src/androidTest/"
+    }
+}
+
 apply plugin: 'com.android.application'
 
 android {
