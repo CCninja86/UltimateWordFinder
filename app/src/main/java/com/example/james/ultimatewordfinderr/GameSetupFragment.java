@@ -2,6 +2,9 @@ package com.example.james.ultimatewordfinderr;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -14,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialOverlayLayout;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.ArrayList;
@@ -37,7 +41,7 @@ public class GameSetupFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Player> players;
-    private ArrayAdapter<String> adapter;
+    private PlayerListViewAdapter adapter;
     private ListView playerList;
     private EditText txtPlayerName;
 
@@ -78,39 +82,18 @@ public class GameSetupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_setup, container, false);
 
-//        FloatingActionButton floatingActionButtonAddPlayer = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonAddPlayer);
-//
-//        floatingActionButtonAddPlayer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("players", players);
-//                AddPlayerFragment addPlayerFragment = new AddPlayerFragment();
-//                addPlayerFragment.setArguments(bundle);
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.containerGameSetup, addPlayerFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//            }
-//        });
-//
-//        FloatingActionButton floatingActionButtonStartGame = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonAddPlayer);
-//        floatingActionButtonStartGame.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("Player List", players);
-//                Intent intent = new Intent(getActivity(), ScoringTableActivity.class);
-//                intent.putExtra("Player Bundle", bundle);
-//                startActivity(intent);
-//            }
-//        });
-
-        SpeedDialView speedDialView = view.findViewById(R.id.speedDial);
+        final SpeedDialView speedDialView = view.findViewById(R.id.speedDial);
         speedDialView.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.fab_add_player, R.drawable.ic_add_black_24dp)
+                        .setLabel("Add Player")
+                        .setLabelColor(Color.WHITE)
+                        .setLabelBackgroundColor(Color.BLACK)
+                        .setTheme(R.style.AppTheme)
                         .create()
         );
+
+        SpeedDialOverlayLayout overlayLayout = view.findViewById(R.id.overlay);
+        speedDialView.setOverlayLayout(overlayLayout);
 
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
@@ -126,11 +109,29 @@ public class GameSetupFragment extends Fragment {
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
 
-                        return false;
+                        return true;
                     default:
                         return false;
 
                 }
+            }
+        });
+
+        speedDialView.setOnChangeListener(new SpeedDialView.OnChangeListener() {
+            @Override
+            public boolean onMainActionSelected() {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Player List", players);
+                Intent intent = new Intent(getActivity(), ScoringTableActivity.class);
+                intent.putExtra("Player Bundle", bundle);
+                startActivity(intent);
+
+                return false;
+            }
+
+            @Override
+            public void onToggleChanged(boolean isOpen) {
+
             }
         });
 
@@ -150,7 +151,7 @@ public class GameSetupFragment extends Fragment {
             }
         });
 
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, getPlayerNames(players));
+        adapter = new PlayerListViewAdapter(getActivity(), players, R.layout.row_player);
         playerList.setAdapter(adapter);
 
         return view;

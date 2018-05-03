@@ -103,55 +103,13 @@ public class ScoringFragment extends Fragment {
         //Bundle bundle = getArguments();
         this.scrabbleGame = g.getGame();
 
-        /*clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(view.getId() == R.id.btnWordFinder){
-                    if(dictionary == null) {
-                        final AlertDialog.Builder builderConfirm = new AlertDialog.Builder(getActivity());
-                        builderConfirm.setTitle("First-time Setup");
-                        builderConfirm.setMessage("Both the Dictionary and Word Finder features utilise a large database of words. " +
-                                "Due to this, a first-time setup is required to use these features. This setup may take a while, " +
-                                "depending on the speed of your device. Would you like to perform the first-time setup now?");
-
-                        builderConfirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-
-                        builderConfirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                context = getActivity().getApplicationContext();
-                                LoadFragmentTask task = new LoadFragmentTask();
-                                task.execute();
-                            }
-                        });
-
-                        builderConfirm.show();
-                    } else {
-                        context = getActivity().getApplicationContext();
-                        LoadFragmentTask task = new LoadFragmentTask();
-                        task.execute();
-                    }
-                } else {
-                    mListener.onScoringFragmentButtonInteraction(view);
-                }
-
-
-            }
-        };*/
-
-        players = (ListView) view.findViewById(android.R.id.list);
+        players = view.findViewById(android.R.id.list);
         adapter = new PlayerListViewAdapter(getActivity(), scrabbleGame.getPlayers(), R.layout.row_player);
         players.setAdapter(adapter);
         players.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                String playerName = players.getItemAtPosition(position).toString();
-                Player player = scrabbleGame.getPlayerByName(playerName);
+                Player player = adapter.getItem(position);
                 mListener.onScoringFragmentListInteraction(player, scrabbleGame);
             }
         });
