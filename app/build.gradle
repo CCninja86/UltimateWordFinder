@@ -1,3 +1,20 @@
+plugins {
+    id "org.sonarqube" version "2.6"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "UltimateWordFinder"
+        property "sonar.projectKey", "com.example.james.ultimatewordfinderr"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.language", "java"
+        property "sonar.sources", "src/main/"
+        property "sonar.login", "admin"
+        property "sonar.password", "admin"
+        property "sonar.java.test.binaries", "src/androidTest/"
+    }
+}
+
 apply plugin: 'com.android.application'
 
 android {
@@ -6,6 +23,7 @@ android {
 
     defaultConfig {
         applicationId "nz.ac.aut.ultimatewordfinderr"
+        multiDexEnabled true
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 6
@@ -24,15 +42,13 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.koushikdutta.ion:ion:2.0.1'
-    implementation 'com.google.code.gson:gson:2.8.3'
+    implementation files('libs/gson-2.4.jar')
     implementation files('libs/sqliteassethelper-2.0.1.jar')
     implementation 'com.android.support:support-v4:25.3.1'
     implementation 'com.google.firebase:firebase-ads:10.0.1'
     implementation 'org.jsoup:jsoup:1.10.2'
     implementation 'com.android.support:design:25.3.1'
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
-
 }
 
 apply plugin: 'com.google.gms.google-services'
