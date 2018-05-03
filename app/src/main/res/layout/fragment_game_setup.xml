@@ -12,36 +12,44 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         tools:listitem="@android:layout/simple_list_item_1"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/floatingActionButtonAddPlayer" />
+        android:layout_alignParentTop="true" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonAddPlayer"
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/floatingActionButtonAddPlayer"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:clickable="true"-->
+        <!--android:src="@drawable/add_plus_button"-->
+        <!--app:backgroundTint="@color/colorAccent"-->
+        <!--app:fabSize="normal"-->
+        <!--app:rippleColor="@color/colorAccent"-->
+        <!--app:srcCompat="@color/colorAccent"-->
+        <!--android:layout_above="@+id/floatingActionButtonStart"-->
+        <!--android:layout_alignStart="@+id/floatingActionButtonStart"-->
+        <!--android:layout_marginBottom="15dp" />-->
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/floatingActionButtonStart"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:clickable="true"-->
+        <!--android:src="@drawable/play_icon"-->
+        <!--app:backgroundTint="@color/colorAccent"-->
+        <!--app:fabSize="normal"-->
+        <!--app:rippleColor="@color/colorAccent"-->
+        <!--app:srcCompat="@color/colorAccent"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true" />-->
+
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/speedDial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:clickable="true"
-        android:src="@drawable/add_plus_button"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="normal"
-        app:rippleColor="@color/colorAccent"
-        app:srcCompat="@color/colorAccent"
-        android:layout_above="@+id/floatingActionButtonStart"
-        android:layout_alignStart="@+id/floatingActionButtonStart"
-        android:layout_marginBottom="15dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:clickable="true"
-        android:src="@drawable/play_icon"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="normal"
-        app:rippleColor="@color/colorAccent"
-        app:srcCompat="@color/colorAccent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        app:sdMainFabOpenSrc="@drawable/ic_add_black_24dp" />
 
 </RelativeLayout>

@@ -7,4 +7,6 @@
         <item name="word_finder">Word Finder</item>
         <item name="dictionary">Dictionary</item>
     </string-array>
+
+    <item name="fab_add_player" type="id"/>
 </resources>

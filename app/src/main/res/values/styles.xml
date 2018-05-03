@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:colorBackground">@android:color/background_light</item>
@@ -14,17 +14,6 @@
 
     <style name="ActionBar" parent="@android:style/Widget.Material.Light.ActionBar">
         <item name="android:background">@color/colorPrimary</item>
-    </style>
-
-    <style name="CustomSwitch" parent="Theme.AppCompat">
-        <!-- active thumb -->
-        <item name="colorControlActivated">@color/active_switch_colour</item>
-
-        <!-- inactive thumb -->
-        <item name="colorSwitchThumbNormal">@color/inactive_switch_colour</item>
-
-        <!-- inactive track colour -->
-        <item name="android:colorForeground">@color/inactive_track_colour</item>
     </style>
 
 </resources>
