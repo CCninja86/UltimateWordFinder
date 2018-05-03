@@ -91,6 +91,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/builds" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes-jar" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
@@ -99,8 +100,10 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-resources" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifest-checker" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/multi-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
@@ -110,8 +113,10 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/split-apk" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/splits-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/sonar" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 25 Platform" jdkType="Android SDK" />
@@ -125,28 +130,25 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-25.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-25.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:multidex-1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-compat-25.3.1" level="project" />
     <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.10.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-ads-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-base-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-ads-lite-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-10.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\gimbal-slf4j-impl.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:transition-25.3.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\gson-2.4.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-clearcut-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-v4-25.3.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.koushikdutta.ion:ion:2.0.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-gass-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.QuadFlask:colorpicker-0.0.13" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-ads-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-25.3.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support:multidex-instrumentation-1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\slf4j-api.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\gimbal.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.koushikdutta.async:androidasync:2.0.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-25.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:design-25.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-25.3.1" level="project" />

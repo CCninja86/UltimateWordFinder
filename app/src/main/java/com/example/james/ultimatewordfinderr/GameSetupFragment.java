@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+//import android.support.design.widget.FloatingActionButton;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -79,33 +79,33 @@ public class GameSetupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_setup, container, false);
 
-        FloatingActionButton floatingActionButtonAddPlayer = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonAddPlayer);
-
-        floatingActionButtonAddPlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList("playerNames", playerNames);
-                AddPlayerFragment addPlayerFragment = new AddPlayerFragment();
-                addPlayerFragment.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.containerGameSetup, addPlayerFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-
-        FloatingActionButton floatingActionButtonStartGame = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonStart);
-        floatingActionButtonStartGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList("Player List", playerNames);
-                Intent intent = new Intent(getActivity(), ScoringTableActivity.class);
-                intent.putExtra("Player Bundle", bundle);
-                startActivity(intent);
-            }
-        });
+//        FloatingActionButton floatingActionButtonAddPlayer = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonAddPlayer);
+//
+//        floatingActionButtonAddPlayer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Bundle bundle = new Bundle();
+//                bundle.putStringArrayList("playerNames", playerNames);
+//                AddPlayerFragment addPlayerFragment = new AddPlayerFragment();
+//                addPlayerFragment.setArguments(bundle);
+//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.containerGameSetup, addPlayerFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            }
+//        });
+//
+//        FloatingActionButton floatingActionButtonStartGame = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonStart);
+//        floatingActionButtonStartGame.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Bundle bundle = new Bundle();
+//                bundle.putStringArrayList("Player List", playerNames);
+//                Intent intent = new Intent(getActivity(), ScoringTableActivity.class);
+//                intent.putExtra("Player Bundle", bundle);
+//                startActivity(intent);
+//            }
+//        });
 
         if(getArguments() != null){
             playerNames = getArguments().getStringArrayList("playerNames");
