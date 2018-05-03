@@ -24,6 +24,8 @@ import java.util.List;
  * Use the {@link WordDefinitionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+// TODO: Change colour of Expandable ListView, as currently it does not conform to the App Theme
 public class WordDefinitionFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -78,10 +80,10 @@ public class WordDefinitionFragment extends Fragment {
 
         Bundle bundle = getArguments();
         String word = bundle.getString("Word");
-        TextView textViewWord = (TextView) view.findViewById(R.id.textViewWord);
+        TextView textViewWord = view.findViewById(R.id.textViewWord);
         textViewWord.setText(word);
 
-        listView = (ExpandableListView) view.findViewById(R.id.expandableListView);
+        listView = view.findViewById(R.id.expandableListView);
         prepareListData();
 
 
@@ -90,8 +92,8 @@ public class WordDefinitionFragment extends Fragment {
     }
 
     private void prepareListData(){
-        listHeader = new ArrayList<String>();
-        listChild = new HashMap<String, List<String>>();
+        listHeader = new ArrayList<>();
+        listChild = new HashMap<>();
 
         Bundle bundle = getArguments();
         String json = bundle.getString("Definition List");

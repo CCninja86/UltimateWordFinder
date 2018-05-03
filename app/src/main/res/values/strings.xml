@@ -43,7 +43,7 @@
 
     <string name="bottom_nav_bar_text_player">Players</string>
     <string name="bottom_nav_bar_text_scores">Scores</string>
-    <string name="bottom_nav_bar_text_tile_breakdown">Tile Breakdown</string>
+    <string name="bottom_nav_bar_text_tile_breakdown">Tiles</string>
     <string name="bottom_nav_bar_text_word_finder">Word Finder</string>
     <string name="bottom_nav_bar_text_dictionary">Dictionary</string>
 

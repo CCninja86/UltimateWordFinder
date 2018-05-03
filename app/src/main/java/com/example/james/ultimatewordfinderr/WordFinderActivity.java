@@ -210,18 +210,6 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
-            case "return":
-//                if(wasDictionaryFragment){
-//                    WordFinderDictionaryFragment dictionaryFragment = new WordFinderDictionaryFragment();
-//                    fragmentTransaction.replace(R.id.containerWordFinder, dictionaryFragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
-//                } else {
-//                    WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
-//                    fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
-//                }
         }
     }
 

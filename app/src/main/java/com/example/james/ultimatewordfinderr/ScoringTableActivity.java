@@ -1,6 +1,7 @@
 package com.example.james.ultimatewordfinderr;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -13,6 +14,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,6 +31,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -64,7 +68,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         context = this;
         mTitle = mDrawerTitle = getTitle();
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -114,6 +118,8 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
             }
         });
 
+        BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
+
         g = Globals.getInstance();
         Bundle bundle = getIntent().getBundleExtra("Player Bundle");
         this.players = (ArrayList<Player>) bundle.getSerializable("Player List");
@@ -140,7 +146,6 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
             fragmentTransaction.commit();
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
