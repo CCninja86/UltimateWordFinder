@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * Created by James on 19/11/2015.
@@ -191,6 +192,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
 
             initialisationCurrent++;
@@ -205,6 +207,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         try {
             final TextView textViewWebpageProgress = (TextView) ((Activity) context).findViewById(R.id.textViewWebpage);
@@ -316,6 +319,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         } catch (InterruptedException e) {
             Log.e("InterruptedException", "InterruptedException thrown, restarting...");
             this.insertAllWords(assetManager, dictionary, progressBar);
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
             Log.e("Other Error", "Other Exception thrown, printing stack trace...");
             e.printStackTrace();

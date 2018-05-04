@@ -205,6 +205,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                         Thread.sleep(125);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        Thread.currentThread().interrupt();
                     }
                 }
 

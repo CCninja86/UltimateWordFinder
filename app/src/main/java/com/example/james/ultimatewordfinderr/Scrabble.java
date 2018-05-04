@@ -212,41 +212,6 @@ public class Scrabble implements Serializable{
         return winningPlayer;
     }
 
-    // May not actually be practical due to there being no current way to check what letters are on the board/have already been played
-    /*public boolean wordIsPossible(String word) {
-        boolean wordIsPossible = false;
-        String[] words = word.split("-");
-        String wordsJoined = "";
-
-        for (String wordInArray : words) {
-            wordsJoined += wordInArray;
-        }
-
-        String[] letters = wordsJoined.split("");
-        int validTiles = 0;
-
-        for (String letter : letters) {
-            for (Tile tile : this.tiles) {
-                int tempQuantity = tile.getQuantity();
-
-                if (tile.getLetter().equals(letter)) {
-                    if (tile.enoughTiles()) {
-                        validTiles++;
-                        tile.setQuantity(tile.getQuantity() - 1);
-                    }
-                }
-
-                tile.setQuantity(tempQuantity);
-            }
-        }
-
-        if (validTiles == letters.length) {
-            wordIsPossible = true;
-        }
-
-        return wordIsPossible;
-    }*/
-
     public boolean saveGame() {
         Writer writer = null;
 
@@ -289,14 +254,14 @@ public class Scrabble implements Serializable{
             return false;
         } catch (IOException ex) {
             Logger.getLogger(Scrabble.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         } finally {
-            try {
-                writer.flush();
-                writer.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Scrabble.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+            if(writer != null){
+                try {
+                    writer.flush();
+                    writer.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Scrabble.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 

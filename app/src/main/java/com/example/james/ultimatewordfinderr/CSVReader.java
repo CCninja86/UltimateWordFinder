@@ -27,9 +27,10 @@ public class CSVReader {
         AssetManager assetManager = context.getAssets();
 
         int numRows = 0;
+        BufferedReader bufferedReader = null;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(assetManager.open(filename)));
+            bufferedReader = new BufferedReader(new InputStreamReader(assetManager.open(filename)));
 
             String line;
 
@@ -38,13 +39,21 @@ public class CSVReader {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if(bufferedReader != null){
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         progressDialog.setMax(numRows);
         int progress = 0;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(assetManager.open(filename)));
+            bufferedReader = new BufferedReader(new InputStreamReader(assetManager.open(filename)));
             String line;
 
             while((line = bufferedReader.readLine()) != null){
@@ -66,6 +75,14 @@ public class CSVReader {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if(bufferedReader != null){
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return wordList;
