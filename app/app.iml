@@ -148,6 +148,7 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-clearcut-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-fragment-27.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.koushikdutta.ion:ion:2.0.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-gass-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.QuadFlask:colorpicker-0.0.13" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-ads-10.0.1" level="project" />
@@ -158,6 +159,7 @@
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JamesFra\AndroidStudioProjects\UltimateWordFinder\app\libs\slf4j-api.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:livedata-core-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.leinardi:FloatingActionButtonSpeedDial-master-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.koushikdutta.async:androidasync:2.0.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.1.0" level="project" />
   </component>

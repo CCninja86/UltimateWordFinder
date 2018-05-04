@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
     implementation 'com.github.savvisingh:ColorPickerDialog:07a82afc4c'
     implementation 'com.github.leinardi:FloatingActionButtonSpeedDial:master-SNAPSHOT'
+    implementation 'com.koushikdutta.ion:ion:2.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
