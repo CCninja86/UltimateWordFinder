@@ -77,8 +77,6 @@ public class SynonymResultListFragment extends Fragment {
 
         TextView textViewWord = (TextView) view.findViewById(R.id.textViewWord);
         textViewWord.setText(word);
-        ImageButton imageButtonReturn = (ImageButton) view.findViewById(R.id.imageButtonReturn);
-        imageButtonReturn.setVisibility(View.INVISIBLE);
 
         adapter = new ListViewAdapter(getActivity(), synonyms, R.layout.row_result_list);
         listResults = (ListView) view.findViewById(R.id.listViewResults);
@@ -116,62 +114,6 @@ public class SynonymResultListFragment extends Fragment {
 
             }
         });
-
-//        imageButtonReturn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mListener.onFragmentInteraction("return");
-//            }
-//        });
-
-//        listResults.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-//                Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-//
-//                if(vibrator.hasVibrator()){
-//                    vibrator.vibrate(125);
-//
-//                    try {
-//                        Thread.sleep(125);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                final CharSequence options[] = new CharSequence[]{"Definitions", "Synonyms"};
-//
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//                builder.setItems(options, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        String word = listResults.getItemAtPosition(position).toString();
-//                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(mListener, null, null, getContext(), word);
-//
-//                        switch(which){
-//                            case 0:
-//                                wordOptionsHandler.loadDefinitions();
-//                                break;
-//                            case 1:
-//                                wordOptionsHandler.loadSynonyms();
-//                                break;
-//                        }
-//
-//
-//                    }
-//                });
-//
-//                builder.show();
-//
-//
-//
-//                return true;
-//            }
-//        });
-
-
-
 
         return view;
     }
