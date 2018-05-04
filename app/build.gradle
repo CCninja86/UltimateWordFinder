@@ -7,7 +7,6 @@ sonarqube {
         property "sonar.projectName", "UltimateWordFinder"
         property "sonar.projectKey", "com.example.james.ultimatewordfinderr"
         property "sonar.host.url", "http://localhost:9000"
-        property "sonar.language", "java"
         property "sonar.sources", "src/main/"
         property "sonar.login", "admin"
         property "sonar.password", "admin"
