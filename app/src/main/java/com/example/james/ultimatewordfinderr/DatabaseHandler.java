@@ -58,7 +58,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS" + TABLE_WORDS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDS);
         onCreate(sqLiteDatabase);
     }
 
@@ -191,7 +191,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e("InterruptedException", e.getMessage());
                 Thread.currentThread().interrupt();
             }
 
@@ -205,7 +205,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         try {
             inputStream = assetManager.open("words.txt");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("IOException", e.getMessage());
         }
 
 
@@ -321,8 +321,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             this.insertAllWords(assetManager, dictionary, progressBar);
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            Log.e("Other Error", "Other Exception thrown, printing stack trace...");
-            e.printStackTrace();
+            Log.e("Other Error", e.getMessage());
         }
     }
 }

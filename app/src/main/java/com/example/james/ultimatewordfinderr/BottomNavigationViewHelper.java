@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
+import android.util.Log;
 
 import java.lang.reflect.Field;
+import java.util.logging.Logger;
 
 public class BottomNavigationViewHelper {
     @SuppressLint("RestrictedApi")
@@ -27,9 +29,9 @@ public class BottomNavigationViewHelper {
                 item.setChecked(item.getItemData().isChecked());
             }
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            Log.e("NoSuchFieldException", e.getMessage());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Log.e("IllegalAccessException", e.getMessage());
         }
     }
 }

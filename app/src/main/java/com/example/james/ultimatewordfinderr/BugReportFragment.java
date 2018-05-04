@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,7 +151,7 @@ public class BugReportFragment extends Fragment {
 
         @Override
         protected void onPreExecute(){
-            progressDialog = new ProgressDialog(getContext());
+            progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Submitting...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setIndeterminate(true);
@@ -170,9 +171,9 @@ public class BugReportFragment extends Fragment {
                 connection.setRequestProperty("Content-Length", body);
                 connection.getOutputStream().write(body.getBytes("UTF8"));
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                Log.e("MalformedURLException", e.getMessage());
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("IOException", e.getMessage());
             }
 
             return null;

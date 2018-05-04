@@ -3,6 +3,7 @@ package com.example.james.ultimatewordfinderr;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,13 +39,13 @@ public class CSVReader {
                 numRows++;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("IOException", e.getMessage());
         } finally {
             if(bufferedReader != null){
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e("IOException", e.getMessage());
                 }
             }
         }
@@ -74,13 +75,13 @@ public class CSVReader {
                 wordList.add(word);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("IOException", e.getMessage());
         } finally {
             if(bufferedReader != null){
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e("IOException", e.getMessage());
                 }
             }
         }

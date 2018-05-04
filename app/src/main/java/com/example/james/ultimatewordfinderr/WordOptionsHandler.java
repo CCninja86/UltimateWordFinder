@@ -3,6 +3,7 @@ package com.example.james.ultimatewordfinderr;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -228,7 +229,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
                         break;
                     }
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    Log.e("MalformedURLException", e.getMessage());
                 } catch (IOException e) {
                     numAttempts++;
                 }
@@ -282,7 +283,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
 
         @Override
         protected Void doInBackground(Object... params) {
-            String searchUrl = "";
+            String searchUrl;
 
             //try {
             if (word.contains(" ")) {

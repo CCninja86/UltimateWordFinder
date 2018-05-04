@@ -20,6 +20,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -412,7 +413,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
             connection.connect();
             success = connection.getResponseCode() == 200;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("IOException", e.getMessage());
         }
 
         return success;

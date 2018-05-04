@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -204,7 +205,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                     try {
                         Thread.sleep(125);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.e("InterruptedException", e.getMessage());
                         Thread.currentThread().interrupt();
                     }
                 }

@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,7 +111,7 @@ public class WordFinderDictionaryFragment extends Fragment {
                     try {
                         Thread.sleep(125);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.e("InterruptedException", e.getMessage());
                         Thread.currentThread().interrupt();
                     }
                 }

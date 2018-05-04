@@ -15,7 +15,7 @@ public class Dictionary implements Serializable {
     private ArrayList<Word> wordList;
     private ArrayList<String> stringWordList;
     private Map<String, Word> wordMap;
-    public static DatabaseHandler database;
+    private DatabaseHandler database;
     CSVReader csvReader;
 
     /**'
