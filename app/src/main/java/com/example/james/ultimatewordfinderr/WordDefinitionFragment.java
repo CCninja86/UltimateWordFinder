@@ -81,7 +81,7 @@ public class WordDefinitionFragment extends Fragment {
         Bundle bundle = getArguments();
         String word = bundle.getString("Word");
         TextView textViewWord = view.findViewById(R.id.textViewWord);
-        textViewWord.setText(word);
+        textViewWord.setText(word.toUpperCase());
 
         listView = view.findViewById(R.id.expandableListView);
         prepareListData();
