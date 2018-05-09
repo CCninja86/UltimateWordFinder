@@ -25,7 +25,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 
-// TODO: Change colour of Expandable ListView, as currently it does not conform to the App Theme
 public class WordDefinitionFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
