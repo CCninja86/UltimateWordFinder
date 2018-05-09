@@ -31,6 +31,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="right|top"
         android:background="@color/colorAccent"
+        android:textColor="@color/white"
         android:text="@string/word_finder_score_comparison_button_compare" />
 
     <ListView

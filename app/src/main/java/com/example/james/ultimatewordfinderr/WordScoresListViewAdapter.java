@@ -49,18 +49,18 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
                         String newText = "";
 
                         switch (hexColor) {
-                            case "#C3BDA5":
-                                view.setBackgroundColor(Color.argb(255, 197, 222, 210));
+                            case "#00C853":
+                                view.setBackgroundColor(Color.argb(255, 0, 255, 106));
                                 newText = currentText + " x2";
                                 textView.setText(newText);
                                 break;
-                            case "#C5DED2":
-                                view.setBackgroundColor(Color.argb(255, 43, 140, 174));
+                            case "#00FF6A":
+                                view.setBackgroundColor(Color.argb(255, 0, 153, 64));
                                 newText = currentText.substring(0, currentText.indexOf("x") - 1) + " x3";
                                 textView.setText(newText);
                                 break;
-                            case "#2B8CAE":
-                                view.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                            case "#009940":
+                                view.setBackgroundColor(Color.argb(255, 0, 200, 83));
                                 textView.setText(currentText.substring(0, currentText.indexOf("x") - 1));
                                 break;
                         }
@@ -77,15 +77,15 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
 
                     switch (button.getText().toString()) {
                         case "No Word Bonus":
-                            button.setBackgroundColor(Color.argb(255, 249, 189, 178));
+                            button.setBackgroundColor(Color.argb(255, 0, 255, 106));
                             button.setText("Double Word");
                             break;
                         case "Double Word":
-                            button.setBackgroundColor(Color.argb(255, 236, 92, 79));
+                            button.setBackgroundColor(Color.argb(255, 0, 153, 64));
                             button.setText("Triple Word");
                             break;
                         case "Triple Word":
-                            button.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                            button.setBackgroundColor(Color.argb(255, 0, 200, 83));
                             button.setText("No Word Bonus");
                             break;
                     }
@@ -146,7 +146,8 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
                     if (!letter.equals("")) {
                         TextView letterTextView = new TextView(getContext());
                         letterTextView.setText(letter.toUpperCase());
-                        letterTextView.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                        letterTextView.setBackgroundColor(Color.argb(255, 0, 200, 83));
+                        letterTextView.setTextColor(Color.argb(255, 255, 255, 255));
                         letterTextView.setTextSize(24);
                         letterTextView.setWidth(200);
                         letterTextView.setHeight(100);
@@ -162,7 +163,9 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
 
                 Button wordBonusButton = new Button(getContext());
                 wordBonusButton.setText("No Word Bonus");
-                wordBonusButton.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                wordBonusButton.setBackgroundColor(Color.argb(255, 0, 200, 83));
+                wordBonusButton.setPadding(10, 10, 10, 10);
+                wordBonusButton.setTextColor(Color.argb(255, 255, 255, 255));
                 wordBonusButton.setOnClickListener(this.btnOnClickListener);
 
 

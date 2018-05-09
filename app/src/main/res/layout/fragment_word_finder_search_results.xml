@@ -55,6 +55,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="98dp"
         android:background="@color/colorAccent"
+        android:padding="3dp"
         android:text="@string/word_finder_results_button_deselect_all"
         android:textSize="12dp"
         android:theme="@android:style/Theme.Material" />
@@ -95,8 +96,9 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="42dp"
         android:background="@color/colorAccent"
+        android:padding="3dp"
         android:text="@string/word_finder_results_button_minimum_word_score"
-        android:theme="@android:style/Theme.Material"/>
+        android:theme="@android:style/Theme.Material" />
 
     <Button
         android:id="@+id/btnCompareScores"
@@ -109,8 +111,9 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/listSearchResults"
         android:background="@color/colorAccent"
+        android:padding="3dp"
         android:text="@string/word_finder_results_button_compare_scores"
-        android:theme="@android:style/Theme.Material"/>
+        android:theme="@android:style/Theme.Material" />
 
     <EditText
         android:layout_width="wrap_content"

@@ -275,15 +275,11 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
     @Override
     public void onAddWordsFragmentInteraction(View view) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        switch (view.getId()) {
-            case R.id.btnAddWordScore:
-                Fragment scoringFragment = new ScoringFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Scrabble Game", scrabbleGame);
-                scoringFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.container, scoringFragment);
-                break;
-        }
+        Fragment scoringFragment = new ScoringFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Scrabble Game", scrabbleGame);
+        scoringFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.container, scoringFragment);
 
         fragmentTransaction.commit();
     }

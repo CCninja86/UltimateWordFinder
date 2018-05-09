@@ -18,24 +18,26 @@
 
     <Button
         android:id="@+id/btnAddPlayer"
-        style="@style/Widget.AppCompat.Button"
+        style="@android:style/Widget.Material.Button.Borderless"
         android:layout_width="383dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="138dp"
         android:background="@color/colorAccent"
+        android:textColor="@color/white"
         android:text="@string/add_player_add_text" />
 
     <Button
         android:id="@+id/btnChooseColour"
-        style="@style/Widget.AppCompat.Button"
+        style="@android:style/Widget.Material.Button.Borderless"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="59dp"
         android:background="@color/colorAccent"
+        android:textColor="@color/white"
         android:text="@string/add_player_choose_colour_text" />
 
 </RelativeLayout>

@@ -140,6 +140,8 @@ public class AddWordsFragment extends Fragment {
         addManualScoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final View finalView = view;
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Add Manual Score");
                 builder.setMessage("Enter the custom number");
@@ -152,6 +154,8 @@ public class AddWordsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         player.addCustomScore(Integer.valueOf(input.getText().toString()));
                         Toast.makeText(getActivity(), "Added score to total!", Toast.LENGTH_SHORT).show();
+
+                        mListener.onAddWordsFragmentInteraction(finalView);
                     }
                 });
 
