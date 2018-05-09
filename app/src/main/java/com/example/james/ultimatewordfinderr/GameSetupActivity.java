@@ -12,8 +12,6 @@ import java.util.ArrayList;
 public class GameSetupActivity extends Activity implements GameSetupFragment.OnFragmentInteractionListener, AddPlayerFragment.OnFragmentInteractionListener {
 
 
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +23,6 @@ public class GameSetupActivity extends Activity implements GameSetupFragment.OnF
         fragmentTransaction.commit();
 
     }
-
 
 
     @Override
@@ -51,8 +48,8 @@ public class GameSetupActivity extends Activity implements GameSetupFragment.OnF
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState){
-       super.onSaveInstanceState(savedState);
+    public void onSaveInstanceState(Bundle savedState) {
+        super.onSaveInstanceState(savedState);
     }
 
 

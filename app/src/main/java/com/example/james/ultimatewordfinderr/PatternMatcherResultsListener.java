@@ -10,5 +10,6 @@ import java.util.ArrayList;
 
 public interface PatternMatcherResultsListener {
     public void onPatternMatcherGetAllWordsMatchingRegexTaskComplete(ArrayList<Word> matches);
+
     public void onPatternMatcherMatchWithPlayerPatternTaskComplete(ArrayList<Word> matches);
 }

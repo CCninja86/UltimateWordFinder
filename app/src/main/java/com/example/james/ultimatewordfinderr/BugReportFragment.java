@@ -86,7 +86,7 @@ public class BugReportFragment extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.radioButtonLow:
                         setPriority("LOW");
                         break;
@@ -129,8 +129,6 @@ public class BugReportFragment extends Fragment {
         });
 
 
-
-
         return view;
     }
 
@@ -142,7 +140,7 @@ public class BugReportFragment extends Fragment {
         String body;
         ProgressDialog progressDialog;
 
-        public TrelloAPITask(String url, String requestMethod, String contentType, String body){
+        public TrelloAPITask(String url, String requestMethod, String contentType, String body) {
             this.url = url;
             this.requestMethod = requestMethod;
             this.contentType = contentType;
@@ -150,7 +148,7 @@ public class BugReportFragment extends Fragment {
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Submitting...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -180,15 +178,15 @@ public class BugReportFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
         }
     }
 
-    private void setPriority(String priority){
+    private void setPriority(String priority) {
         this.priority = priority;
     }
 

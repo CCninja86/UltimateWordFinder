@@ -9,4 +9,5 @@
     </string-array>
 
     <item name="fab_add_player" type="id"/>
+    <item name="fab_remove_players" type="id"/>
 </resources>

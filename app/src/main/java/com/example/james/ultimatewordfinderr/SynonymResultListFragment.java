@@ -98,8 +98,8 @@ public class SynonymResultListFragment extends Fragment {
                 String search = editTextSearch.getText().toString();
                 ArrayList<String> results = new ArrayList<>();
 
-                for(String word : synonyms){
-                    if(word.startsWith(search)){
+                for (String word : synonyms) {
+                    if (word.startsWith(search)) {
                         results.add(word);
                     }
                 }
@@ -154,7 +154,9 @@ public class SynonymResultListFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String word, ArrayList<String> synonyms);
+
         void onFragmentInteraction(String word, DefinitionList definitionList);
+
         void onFragmentInteraction(String option);
     }
 }

@@ -12,11 +12,11 @@ public class Word implements Serializable {
     private int word_base_score;
     private boolean word_is_official;
 
-    public Word(){
+    public Word() {
 
     }
 
-    public Word(int id, String word, int word_base_score, boolean word_is_official){
+    public Word(int id, String word, int word_base_score, boolean word_is_official) {
         this.setId(id);
         this.setWord(word);
         this.setBaseScore(word_base_score);

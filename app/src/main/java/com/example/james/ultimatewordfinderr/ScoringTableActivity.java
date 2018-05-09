@@ -76,7 +76,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-                switch(item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.action_players:
                         ScoringFragment scoringFragment = new ScoringFragment();
                         fragmentTransaction.replace(R.id.container, scoringFragment);
@@ -139,7 +139,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         bundle = new Bundle();
         bundle.putSerializable("Scrabble Game", scrabbleGame);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             Fragment scoringFragment = new ScoringFragment();
             scoringFragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -147,6 +147,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
             fragmentTransaction.commit();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -157,7 +158,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.itemHelpFeedback:
                 HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
                 transaction = getFragmentManager().beginTransaction();
@@ -186,7 +187,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
     public void onPlayerDetailsFragmentInteraction(String action, final Player player) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-        switch (action){
+        switch (action) {
             case "Add Score":
                 AddWordsFragment addWordsFragment = new AddWordsFragment();
                 Bundle addWordsBundle = new Bundle();
@@ -215,7 +216,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String enteredInput = input.getText().toString();
 
-                        if(enteredInput != null && !enteredInput.equals("")){
+                        if (enteredInput != null && !enteredInput.equals("")) {
                             int newScore = Integer.parseInt(input.getText().toString());
                             player.setScore(newScore);
                             Toast.makeText(getBaseContext(), "Score Changed!", Toast.LENGTH_SHORT).show();
@@ -247,7 +248,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String newName = nameInput.getText().toString();
 
-                        if(newName != null && !newName.equals("")){
+                        if (newName != null && !newName.equals("")) {
                             player.setName(newName);
                             Toast.makeText(getBaseContext(), "Player Name Changed!", Toast.LENGTH_SHORT).show();
                         } else {
@@ -274,7 +275,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
     @Override
     public void onAddWordsFragmentInteraction(View view) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.btnAddWordScore:
                 Fragment scoringFragment = new ScoringFragment();
                 Bundle bundle = new Bundle();
@@ -294,7 +295,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
 
     @Override
     public void onFragmentInteraction(String option) {
-        switch (option){
+        switch (option) {
             case "Report Bug":
                 BugReportFragment bugReportFragment = new BugReportFragment();
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -304,8 +305,8 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         }
     }
 
-    private void loadWordFinderActivity(final String fragment){
-        if(dictionary == null) {
+    private void loadWordFinderActivity(final String fragment) {
+        if (dictionary == null) {
             final AlertDialog.Builder builderConfirm = new AlertDialog.Builder(this);
             builderConfirm.setTitle("First-time Setup");
             builderConfirm.setMessage("Both the Dictionary and Word Finder features utilise a large database of words. " +
@@ -335,7 +336,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
     }
 
     @Override
-    public void setTitle(CharSequence title){
+    public void setTitle(CharSequence title) {
         mTitle = title;
         getActionBar().setTitle(title);
     }
@@ -345,12 +346,12 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         private String fragmentToLoad;
         private ProgressDialog progressDialog;
 
-        public LoadFragmentTask(String fragmentToLoad){
+        public LoadFragmentTask(String fragmentToLoad) {
             this.fragmentToLoad = fragmentToLoad;
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
             progressDialog = new ProgressDialog(context);
@@ -364,7 +365,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if(dictionary == null){
+            if (dictionary == null) {
                 dictionary = new com.example.james.ultimatewordfinderr.Dictionary();
                 final CSVReader csvReader = new CSVReader(context);
                 dictionary.linkCSVReader(csvReader);
@@ -376,17 +377,17 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-            if(fragmentToLoad.equals("Word Finder")){
+            if (fragmentToLoad.equals("Word Finder")) {
                 selection = WORD_FINDER;
-            } else if(fragmentToLoad.equals("Dictionary")){
+            } else if (fragmentToLoad.equals("Dictionary")) {
                 selection = DICTIONARY;
             }
 
@@ -394,7 +395,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         }
     }
 
-    private void setup(){
+    private void setup() {
         Bundle bundle = new Bundle();
         bundle.putInt("selection", selection);
         Intent intent = new Intent(this, WordFinderActivity.class);
@@ -403,7 +404,7 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
         startActivity(intent);
     }
 
-    private boolean hasActiveInternetConnection(){
+    private boolean hasActiveInternetConnection() {
         boolean success = false;
 
         try {

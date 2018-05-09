@@ -19,11 +19,11 @@ public class CSVReader {
     Context context;
 
 
-    public CSVReader(Context context){
+    public CSVReader(Context context) {
         this.context = context;
     }
 
-    public ArrayList<Word> readFile(String filename, ProgressDialog progressDialog){
+    public ArrayList<Word> readFile(String filename, ProgressDialog progressDialog) {
         ArrayList<Word> wordList = new ArrayList<>();
         AssetManager assetManager = context.getAssets();
 
@@ -35,13 +35,13 @@ public class CSVReader {
 
             String line;
 
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 numRows++;
             }
         } catch (IOException e) {
             Log.e("IOException", e.getMessage());
         } finally {
-            if(bufferedReader != null){
+            if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
@@ -57,7 +57,7 @@ public class CSVReader {
             bufferedReader = new BufferedReader(new InputStreamReader(assetManager.open(filename)));
             String line;
 
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 progress++;
                 progressDialog.setProgress(progress);
                 Word word = new Word();
@@ -66,7 +66,7 @@ public class CSVReader {
                 word.setWord(values[1].substring(1, values[1].length() - 1));
                 word.setBaseScore(Integer.parseInt(values[2]));
 
-                if(Integer.parseInt(values[3]) == 0){
+                if (Integer.parseInt(values[3]) == 0) {
                     word.setWordIsOfficial(false);
                 } else {
                     word.setWordIsOfficial(true);
@@ -77,7 +77,7 @@ public class CSVReader {
         } catch (IOException e) {
             Log.e("IOException", e.getMessage());
         } finally {
-            if(bufferedReader != null){
+            if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {

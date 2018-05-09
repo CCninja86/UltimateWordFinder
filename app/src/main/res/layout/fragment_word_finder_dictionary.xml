@@ -32,5 +32,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:background="@color/colorAccent"
+        android:textColor="@color/white"
         android:text="Search" />
 </RelativeLayout>

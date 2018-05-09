@@ -123,8 +123,8 @@ public class WordFinderSearchResultsFragment extends Fragment {
                 String search = editTextSearch.getText().toString();
                 ArrayList<String> results = new ArrayList<>();
 
-                for(String word : searchResults){
-                    if(word.startsWith(search)){
+                for (String word : searchResults) {
+                    if (word.startsWith(search)) {
                         results.add(word);
                     }
                 }
@@ -144,7 +144,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
         switchUseOfficialSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isChecked){
+                if (!isChecked) {
                     switchUseOfficialSelection.setText("Use entire list");
                 } else {
                     switchUseOfficialSelection.setText("Use your selection");
@@ -157,7 +157,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
         switchSmartSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isChecked) {
+                if (!isChecked) {
                     final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                     alertDialog.setTitle("Are you sure?");
                     alertDialog.setMessage("Disabling Smart Selection will allow you to select the entire list when clicking 'Select All'." +
@@ -199,7 +199,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
 
                 Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
-                if(vibrator.hasVibrator()){
+                if (vibrator.hasVibrator()) {
                     vibrator.vibrate(125);
 
                     try {
@@ -221,7 +221,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                         String word = listResults.getItemAtPosition(position).toString();
                         WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, mListener, null, getActivity(), word);
 
-                        switch(which){
+                        switch (which) {
                             case 0:
                                 wordOptionsHandler.loadDefinitions();
                                 break;
@@ -237,14 +237,9 @@ public class WordFinderSearchResultsFragment extends Fragment {
                 builder.show();
 
 
-
-
-
                 return true;
             }
         });
-
-
 
 
         this.onClickListener = new View.OnClickListener() {
@@ -252,7 +247,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
             public void onClick(View view) {
                 String action = "";
 
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.btnOfficial:
                         progressDialog = new ProgressDialog(getActivity());
                         progressDialog.setIndeterminate(true);
@@ -267,7 +262,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                                 ArrayList<String> selectedResults = new ArrayList<>();
                                 ArrayList<String> officialWords = new ArrayList<>();
 
-                                if(switchUseOfficialSelection.isChecked()){
+                                if (switchUseOfficialSelection.isChecked()) {
                                     int len = listResults.getCount();
                                     SparseBooleanArray checked = listResults.getCheckedItemPositions();
 
@@ -278,7 +273,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                                         }
                                     }
                                 } else {
-                                    for(int i = 0; i < listResults.getCount(); i++){
+                                    for (int i = 0; i < listResults.getCount(); i++) {
                                         String item = listResults.getItemAtPosition(i).toString();
                                         selectedResults.add(item);
                                     }
@@ -302,7 +297,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                                     for (String result : selectedResults) {
                                         float current = (float) wordCount;
                                         float total = (float) selectedResults.size();
-                                        final float percentage = round((current*100)/total, 2);
+                                        final float percentage = round((current * 100) / total, 2);
 
 
                                         final String word = result;
@@ -385,7 +380,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
                                     }
                                 }
 
-                                if(progressDialog != null && progressDialog.isShowing()){
+                                if (progressDialog != null && progressDialog.isShowing()) {
                                     progressDialog.dismiss();
                                     progressDialog = null;
                                 }
@@ -406,9 +401,9 @@ public class WordFinderSearchResultsFragment extends Fragment {
                             }
                         }
 
-                        if(selectedResults.size() > 1){
+                        if (selectedResults.size() > 1) {
                             Toast.makeText(getActivity(), "Please only select one word at a time for this feature.", Toast.LENGTH_LONG).show();
-                        } else if(selectedResults.size() == 1){
+                        } else if (selectedResults.size() == 1) {
                             Toast.makeText(getActivity(), String.valueOf(dictionary.getBaseWordScore(selectedResults.get(0))), Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(getActivity(), "Please select at least one word", Toast.LENGTH_LONG).show();
@@ -421,22 +416,22 @@ public class WordFinderSearchResultsFragment extends Fragment {
                         int listLength = listResults.getCount();
                         SparseBooleanArray wordsChecked = listResults.getCheckedItemPositions();
 
-                        for(int i = 0; i < listLength; i++){
-                            if(wordsChecked.get(i)){
+                        for (int i = 0; i < listLength; i++) {
+                            if (wordsChecked.get(i)) {
                                 String word = listResults.getItemAtPosition(i).toString();
                                 wordsToCompare.add(word);
                             }
                         }
 
-                        if(wordsToCompare.size() >= 1){
-                            for(int i = 0; i < listResults.getAdapter().getCount(); i++){
+                        if (wordsToCompare.size() >= 1) {
+                            for (int i = 0; i < listResults.getAdapter().getCount(); i++) {
                                 listResults.setItemChecked(i, false);
                             }
 
                             adapter.notifyDataSetChanged();
 
                             mListener.onResultsFragmentButtonInteraction("compare", wordsToCompare);
-                        } else if(wordsToCompare.size() == 1) {
+                        } else if (wordsToCompare.size() == 1) {
                             Toast.makeText(getActivity(), "Please select at least one word to use this feature", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(getActivity(), "Please select at least one word", Toast.LENGTH_LONG).show();
@@ -447,13 +442,13 @@ public class WordFinderSearchResultsFragment extends Fragment {
                         int listSize = listResults.getAdapter().getCount();
 
 
-                        if(switchSmartSelection.isChecked()){
-                            if(listSize > 100){
+                        if (switchSmartSelection.isChecked()) {
+                            if (listSize > 100) {
                                 int firstVisible = listResults.getFirstVisiblePosition();
                                 int lastVisible = listResults.getLastVisiblePosition();
 
-                                for(int i = firstVisible; i < lastVisible; i++){
-                                    if(listResults.isItemChecked(i) == false){
+                                for (int i = firstVisible; i < lastVisible; i++) {
+                                    if (listResults.isItemChecked(i) == false) {
                                         listResults.setItemChecked(i, true);
                                         adapter.toggleSelected(new Integer(i));
                                     }
@@ -461,8 +456,8 @@ public class WordFinderSearchResultsFragment extends Fragment {
 
                                 Toast.makeText(getActivity(), "More than 100 items in list, selecting all currently visible items...", Toast.LENGTH_LONG).show();
                             } else {
-                                for(int i = 0; i < listSize; i++){
-                                    if(listResults.isItemChecked(i) == false){
+                                for (int i = 0; i < listSize; i++) {
+                                    if (listResults.isItemChecked(i) == false) {
                                         listResults.setItemChecked(i, true);
                                         adapter.toggleSelected(new Integer(i));
                                     }
@@ -472,8 +467,8 @@ public class WordFinderSearchResultsFragment extends Fragment {
                             }
 
                         } else {
-                            for(int i = 0; i < listSize; i++){
-                                if(listResults.isItemChecked(i) == false){
+                            for (int i = 0; i < listSize; i++) {
+                                if (listResults.isItemChecked(i) == false) {
                                     listResults.setItemChecked(i, true);
                                     adapter.toggleSelected(new Integer(i));
                                 }
@@ -481,12 +476,11 @@ public class WordFinderSearchResultsFragment extends Fragment {
                         }
 
 
-
                         adapter.notifyDataSetChanged();
                         break;
                     case R.id.btnDeselectAll:
-                        for(int i = 0; i < listResults.getAdapter().getCount(); i++){
-                            if(listResults.isItemChecked(i) == true){
+                        for (int i = 0; i < listResults.getAdapter().getCount(); i++) {
+                            if (listResults.isItemChecked(i) == true) {
                                 listResults.setItemChecked(i, false);
                                 adapter.toggleSelected(new Integer(i));
                             }
@@ -513,13 +507,13 @@ public class WordFinderSearchResultsFragment extends Fragment {
         SharedPreferences sharedPreferences = context.getSharedPreferences("hint", Context.MODE_PRIVATE);
         boolean shown = sharedPreferences.getBoolean("shown", false);
 
-        if(!shown){
+        if (!shown) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("You can view the definitions and synonyms for the majority of words by long-pressing any word in the list, which will pop-up a list of options for that word");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                    dialog.dismiss();
                 }
             });
 
@@ -570,7 +564,9 @@ public class WordFinderSearchResultsFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         public void onResultsFragmentButtonInteraction(String action, ArrayList<String> selectedWords);
+
         public void onResultsFragmentInteraction(String word, DefinitionList definitionList);
+
         public void onResultsFragmentInteraction(String word, ArrayList<String> synonyms);
     }
 

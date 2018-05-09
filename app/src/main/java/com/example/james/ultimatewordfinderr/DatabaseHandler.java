@@ -111,7 +111,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             int baseScore = Integer.parseInt(cursor.getString(2));
             boolean isOfficial = false;
 
-            if(Integer.parseInt(cursor.getString(3)) == 1){
+            if (Integer.parseInt(cursor.getString(3)) == 1) {
                 isOfficial = true;
             }
 
@@ -137,26 +137,26 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-                do {
-                    progress++;
-                    progressDialog.setProgress(progress);
-                    Word word = new Word();
-                    word.setId(Integer.parseInt(cursor.getString(0)));
-                    word.setWord(cursor.getString(1));
-                    word.setBaseScore(Integer.parseInt(cursor.getString(2)));
+            do {
+                progress++;
+                progressDialog.setProgress(progress);
+                Word word = new Word();
+                word.setId(Integer.parseInt(cursor.getString(0)));
+                word.setWord(cursor.getString(1));
+                word.setBaseScore(Integer.parseInt(cursor.getString(2)));
 
 
-                    boolean wordIsOfficial = false;
+                boolean wordIsOfficial = false;
 
-                    if (cursor.getString(3).equals("1")) {
-                        wordIsOfficial = true;
-                    }
+                if (cursor.getString(3).equals("1")) {
+                    wordIsOfficial = true;
+                }
 
-                    word.setWordIsOfficial(wordIsOfficial);
-                    wordList.add(word);
-                } while (cursor.moveToNext());
+                word.setWordIsOfficial(wordIsOfficial);
+                wordList.add(word);
+            } while (cursor.moveToNext());
 
-                cursor.close();
+            cursor.close();
 
         }
 
@@ -174,12 +174,11 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     }
 
 
-
     public void insertAllWords(AssetManager assetManager, Dictionary dictionary, final ProgressBar progressBar) {
         initialisationCurrent = 0;
         initialisationTimer = 30;
 
-        while(initialisationCurrent < initialisationTimer){
+        while (initialisationCurrent < initialisationTimer) {
             ((Activity) context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -197,7 +196,6 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
             initialisationCurrent++;
         }
-
 
 
         InputStream inputStream = null;
@@ -231,7 +229,6 @@ public class DatabaseHandler extends SQLiteAssetHelper {
                         int baseWordScore = dictionary.getBaseWordScore(currentWord);
                         boolean isWordOffical = false;
                         URL url = new URL("http://www.wordfind.com/word/" + currentWord + "/");
-
 
 
                         ((Activity) context).runOnUiThread(new Runnable() {

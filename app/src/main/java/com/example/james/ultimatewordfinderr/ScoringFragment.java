@@ -151,12 +151,12 @@ public class ScoringFragment extends Fragment {
 
     private class LoadFragmentTask extends AsyncTask<Void, Void, Void> {
 
-        public LoadFragmentTask(){
+        public LoadFragmentTask() {
 
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
             progressDialog = new ProgressDialog(getActivity());
@@ -170,7 +170,7 @@ public class ScoringFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if(dictionary == null){
+            if (dictionary == null) {
                 dictionary = new com.example.james.ultimatewordfinderr.Dictionary();
                 final CSVReader csvReader = new CSVReader(context);
                 dictionary.linkCSVReader(csvReader);
@@ -191,8 +191,8 @@ public class ScoringFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
@@ -203,10 +203,10 @@ public class ScoringFragment extends Fragment {
         }
     }
 
-    private void choose(){
+    private void choose() {
         String alertMessage = "Would you like to open the Word Finder or Basic Dictionary?";
 
-        if(!hasActiveInternetConnection){
+        if (!hasActiveInternetConnection) {
             alertMessage += "\n\nNote: You are not connected to the Internet. You will not be able to view the definitions or synonyms of words. All other features will be available.";
         }
 
@@ -233,7 +233,7 @@ public class ScoringFragment extends Fragment {
         builderSelection.show();
     }
 
-    private void setup(){
+    private void setup() {
         Bundle bundle = new Bundle();
         bundle.putInt("selection", selection);
         Intent intent = new Intent(context, WordFinderActivity.class);
@@ -242,7 +242,7 @@ public class ScoringFragment extends Fragment {
         context.startActivity(intent);
     }
 
-    private boolean hasActiveInternetConnection(){
+    private boolean hasActiveInternetConnection() {
         boolean success = false;
 
         try {

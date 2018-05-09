@@ -17,22 +17,22 @@ import java.util.ArrayList;
 public class ListViewAdapter extends ArrayAdapter<String> {
 
     private ArrayList<String> words;
-    private  ArrayList<Integer> selectedItems;
+    private ArrayList<Integer> selectedItems;
     private int layout;
 
-    public ListViewAdapter(Activity context, ArrayList<String> words, int layout){
+    public ListViewAdapter(Activity context, ArrayList<String> words, int layout) {
         super(context, layout, words);
         this.layout = layout;
         this.words = words;
         this.selectedItems = new ArrayList<>();
     }
 
-    public ArrayList<Integer> getSelectedItems(){
-        return  this.selectedItems;
+    public ArrayList<Integer> getSelectedItems() {
+        return this.selectedItems;
     }
 
-    public void toggleSelected(Integer position){
-        if(selectedItems.contains(position)){
+    public void toggleSelected(Integer position) {
+        if (selectedItems.contains(position)) {
             selectedItems.remove(position);
         } else {
             selectedItems.add(position);
@@ -40,39 +40,39 @@ public class ListViewAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public int getCount(){
+    public int getCount() {
         return words.size();
     }
 
     @Override
-    public String getItem(int position){
+    public String getItem(int position) {
         return words.get(position);
     }
 
     @Override
-    public long getItemId(int position){
+    public long getItemId(int position) {
         return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null){
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, null);
         }
 
         String word = words.get(position);
 
-        if(word != null){
+        if (word != null) {
             TextView textView = (TextView) convertView.findViewById(R.id.textViewItem);
 
-            if(textView != null){
+            if (textView != null) {
                 textView.setText(word);
             }
         }
 
-        if(selectedItems.contains(position)){
+        if (selectedItems.contains(position)) {
             convertView.setSelected(true);
             convertView.setPressed(true);
             convertView.setBackgroundColor(Color.LTGRAY);
@@ -82,7 +82,7 @@ public class ListViewAdapter extends ArrayAdapter<String> {
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 
-        return  convertView;
+        return convertView;
     }
 
 }

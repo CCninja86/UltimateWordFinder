@@ -11,6 +11,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:choiceMode="multipleChoice"
+        android:listSelector="#00000000"
         tools:listitem="@android:layout/simple_list_item_1" />
 
     <com.leinardi.android.speeddial.SpeedDialOverlayLayout
@@ -30,7 +32,7 @@
         app:sdExpansionMode="top"
         app:sdMainFabCloseRotateAngle="90"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
-        app:sdMainFabOpenSrc="@drawable/ic_add_black_24dp"
+        app:sdMainFabOpenSrc="@drawable/ic_add_white_24dp"
         app:sdMainFabCloseSrc="@drawable/play_icon"/>
 
 </RelativeLayout>

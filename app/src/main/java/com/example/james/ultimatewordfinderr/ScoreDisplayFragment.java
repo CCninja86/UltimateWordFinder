@@ -68,7 +68,7 @@ public class ScoreDisplayFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState){
+    public void onSaveInstanceState(Bundle savedState) {
         super.onSaveInstanceState(savedState);
 
 //        Gson gson = new Gson();
@@ -96,7 +96,7 @@ public class ScoreDisplayFragment extends Fragment {
 
         ArrayList<String> playerOverallScores = new ArrayList<String>();
 
-        for(Player player : this.scrabbleGame.getPlayers()){
+        for (Player player : this.scrabbleGame.getPlayers()) {
             String playerScoreSummary = "";
             playerScoreSummary += player.getName() + ": " + player.getScore() + "";
             playerOverallScores.add(playerScoreSummary);

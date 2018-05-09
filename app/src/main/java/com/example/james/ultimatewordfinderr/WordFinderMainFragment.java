@@ -106,7 +106,7 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
         }
     }
 
-    public void backButtonWasPressed(){
+    public void backButtonWasPressed() {
 
     }
 
@@ -156,13 +156,13 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Word Finder Example");
                 builder.setMessage("Letters on Board: f????t\n" +
-                                   "Letters in Rack: orebstu\n\n" +
-                                   "Results:\n\n" +
-                                   "forest\n" +
-                                   "forset\n" +
-                                   "fouett\n" +
-                                   "froust\n" +
-                                   "fustet");
+                        "Letters in Rack: orebstu\n\n" +
+                        "Results:\n\n" +
+                        "forest\n" +
+                        "forset\n" +
+                        "fouett\n" +
+                        "froust\n" +
+                        "fustet");
 
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -278,13 +278,13 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
 
     @Override
     public void onPatternMatcherGetAllWordsMatchingRegexTaskComplete(ArrayList<Word> matches) {
-        if(editTextLettersRack.getText().toString().isEmpty()){
-            if(progressDialog != null && progressDialog.isShowing()){
+        if (editTextLettersRack.getText().toString().isEmpty()) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
 
-            if(matches.size() > 0){
+            if (matches.size() > 0) {
                 mListener.onSearchFragmentInteraction(callingView, matches);
             } else {
                 Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
@@ -297,12 +297,12 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
 
     @Override
     public void onPatternMatcherMatchWithPlayerPatternTaskComplete(ArrayList<Word> matches) {
-        if(progressDialog != null && progressDialog.isShowing()){
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
             progressDialog = null;
         }
 
-        if(matches.size() > 0){
+        if (matches.size() > 0) {
             mListener.onSearchFragmentInteraction(callingView, matches);
         } else {
             Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();

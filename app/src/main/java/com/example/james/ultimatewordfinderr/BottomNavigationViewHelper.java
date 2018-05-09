@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class BottomNavigationViewHelper {
     @SuppressLint("RestrictedApi")
-    public static void removeShiftMode(BottomNavigationView view){
+    public static void removeShiftMode(BottomNavigationView view) {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
 
         try {
@@ -20,7 +20,7 @@ public class BottomNavigationViewHelper {
             shiftingMode.setBoolean(menuView, false);
             shiftingMode.setAccessible(false);
 
-            for(int i = 0; i < menuView.getChildCount(); i++){
+            for (int i = 0; i < menuView.getChildCount(); i++) {
                 BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
                 //noinspection RestrictedApi
                 item.setShiftingMode(false);

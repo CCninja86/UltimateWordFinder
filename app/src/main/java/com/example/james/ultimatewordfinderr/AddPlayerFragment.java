@@ -78,7 +78,7 @@ public class AddPlayerFragment extends Fragment {
         int[] colourCodes = getResources().getIntArray(R.array.materialColours);
         coloursList = new ArrayList<>();
 
-        for(int code : colourCodes){
+        for (int code : colourCodes) {
             coloursList.add(code);
         }
 

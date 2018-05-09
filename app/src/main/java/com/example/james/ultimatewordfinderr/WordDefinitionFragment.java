@@ -87,11 +87,10 @@ public class WordDefinitionFragment extends Fragment {
         prepareListData();
 
 
-
         return view;
     }
 
-    private void prepareListData(){
+    private void prepareListData() {
         listHeader = new ArrayList<>();
         listChild = new HashMap<>();
 
@@ -100,12 +99,10 @@ public class WordDefinitionFragment extends Fragment {
         DefinitionList definitionList = new Gson().fromJson(json, DefinitionList.class);
 
 
-
-
         int i = 0;
 
 
-        for(Definition definition : definitionList.getDefinitions()){
+        for (Definition definition : definitionList.getDefinitions()) {
             listHeader.add("Definition " + (i + 1));
 
             List<String> definitionParts = new ArrayList<>();

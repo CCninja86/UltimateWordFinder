@@ -34,7 +34,7 @@ public class Tile implements Serializable {
         return this.quantity;
     }
 
-    public void removeTile(){
+    public void removeTile() {
         this.quantity--;
     }
 

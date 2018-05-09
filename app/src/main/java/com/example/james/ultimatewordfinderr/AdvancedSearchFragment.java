@@ -126,7 +126,7 @@ public class AdvancedSearchFragment extends Fragment {
 
             }
         });
-        
+
         btnAdvancedSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,11 +137,11 @@ public class AdvancedSearchFragment extends Fragment {
                 int maxLength = seekBarNumLettersMax.getProgress();
                 SearchWordsTask searchWordsTask = null;
 
-                if(minLength == 0 && maxLength == 0){
+                if (minLength == 0 && maxLength == 0) {
                     searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, 30);
-                } else if(minLength == 0 && maxLength != 0){
+                } else if (minLength == 0 && maxLength != 0) {
                     searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, maxLength);
-                } else if(minLength != 0 && maxLength == 0){
+                } else if (minLength != 0 && maxLength == 0) {
                     searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, 30);
                 } else {
                     searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, maxLength);
@@ -164,7 +164,7 @@ public class AdvancedSearchFragment extends Fragment {
         private int maxLength;
         private View view;
 
-        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int minLength, int maxLength){
+        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int minLength, int maxLength) {
             this.searchTerm = searchTerm;
             this.prefix = prefix;
             this.suffix = suffix;
@@ -174,7 +174,7 @@ public class AdvancedSearchFragment extends Fragment {
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Searching...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -187,7 +187,7 @@ public class AdvancedSearchFragment extends Fragment {
         protected Void doInBackground(Void... params) {
             for (Word word : dictionary.getWordList()) {
                 if (word.getWord().contains(searchTerm) && word.getWord().startsWith(prefix) && word.getWord().endsWith(suffix)) {
-                    if(word.getWord().length() >= minLength && word.getWord().length() <= maxLength){
+                    if (word.getWord().length() >= minLength && word.getWord().length() <= maxLength) {
                         matches.add(word);
                     }
                 }
@@ -197,13 +197,13 @@ public class AdvancedSearchFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
 
-            if(matches.size() > 0){
+            if (matches.size() > 0) {
                 mListener.onAdvancedSearchFragmentInteraction(view, matches);
             } else {
                 Toast.makeText(getContext(), "No results found", Toast.LENGTH_SHORT).show();

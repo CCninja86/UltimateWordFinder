@@ -30,7 +30,7 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             if (selection == 1) {
                 wordFinderDictionaryFragment = new WordFinderDictionaryFragment();
                 fragmentTransaction.replace(R.id.containerWordFinder, wordFinderDictionaryFragment);
@@ -53,7 +53,7 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.itemHelpFeedback:
                 HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -70,12 +70,12 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
     public void onSearchFragmentInteraction(View view, ArrayList<Word> searchMatches) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btnSearch:
                 WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
                 ArrayList<String> words = new ArrayList<>();
 
-                for(Word word : searchMatches){
+                for (Word word : searchMatches) {
                     words.add(word.getWord());
                 }
 
@@ -98,7 +98,7 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
 
     @Override
     public void onResultsFragmentButtonInteraction(String action, ArrayList<String> selectedWords) {
-        if(action.equals("definition")){
+        if (action.equals("definition")) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             WordDefinitionFragment wordDefinitionFragment = new WordDefinitionFragment();
             Bundle bundle = new Bundle();
@@ -107,7 +107,7 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
             fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-        } else if(action.equals("compare")){
+        } else if (action.equals("compare")) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             WordFinderScoreComparisonFragment scoreComparisonFragment = new WordFinderScoreComparisonFragment();
             Bundle bundle = new Bundle();
@@ -135,7 +135,7 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
         WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
         ArrayList<String> words = new ArrayList<>();
 
-        for(Word word : matches){
+        for (Word word : matches) {
             words.add(word.getWord());
         }
 
@@ -153,10 +153,10 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
 
-        if(wordFinderMainFragment != null) {
+        if (wordFinderMainFragment != null) {
             wordFinderMainFragment.backButtonWasPressed();
         }
     }
@@ -176,7 +176,7 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
         loadSynonymsFragment(word, synonyms);
     }
 
-    private void loadSynonymsFragment(String word, ArrayList<String> synonyms){
+    private void loadSynonymsFragment(String word, ArrayList<String> synonyms) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         SynonymResultListFragment synonymFragment = new SynonymResultListFragment();
         Bundle bundle = new Bundle();
@@ -188,7 +188,7 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
         fragmentTransaction.commit();
     }
 
-    private void loadDefinitionsFragment(String word, DefinitionList definitionList){
+    private void loadDefinitionsFragment(String word, DefinitionList definitionList) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         WordDefinitionFragment wordDefinitionFragment = new WordDefinitionFragment();
         Bundle bundle = new Bundle();
@@ -203,7 +203,7 @@ public class WordFinderActivity extends Activity implements WordFinderMainFragme
     @Override
     public void onFragmentInteraction(String option) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        switch (option){
+        switch (option) {
             case "Report Bug":
                 BugReportFragment bugReportFragment = new BugReportFragment();
                 fragmentTransaction.replace(R.id.containerWordFinder, bugReportFragment);

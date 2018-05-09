@@ -105,7 +105,7 @@ public class WordFinderDictionaryFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
-                if(vibrator.hasVibrator()){
+                if (vibrator.hasVibrator()) {
                     vibrator.vibrate(125);
 
                     try {
@@ -128,7 +128,7 @@ public class WordFinderDictionaryFragment extends Fragment {
                         String word = listViewResults.getItemAtPosition(position).toString();
                         WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, null, mListener, getActivity(), word);
 
-                        switch(which){
+                        switch (which) {
                             case 0:
                                 wordOptionsHandler.loadDefinitions();
                                 break;
@@ -144,7 +144,6 @@ public class WordFinderDictionaryFragment extends Fragment {
                 builder.show();
 
 
-
                 return true;
             }
         });
@@ -153,13 +152,13 @@ public class WordFinderDictionaryFragment extends Fragment {
         SharedPreferences sharedPreferences = context.getSharedPreferences("hint", Context.MODE_PRIVATE);
         boolean shown = sharedPreferences.getBoolean("shown", false);
 
-        if(!shown){
+        if (!shown) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("You can view the definitions and synonyms for the majority of words by long-pressing any word in the list, which will pop-up a list of options for that word");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                    dialog.dismiss();
                 }
             });
 
@@ -209,6 +208,7 @@ public class WordFinderDictionaryFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         public void onDictionaryFragmentInteraction(String word, DefinitionList definitionList);
+
         public void onDictionaryFragmentInteraction(String word, ArrayList<String> synonyms);
     }
 

@@ -76,8 +76,8 @@ public class TileBreakdownFragment extends Fragment {
 
         ArrayList<String> tileDistribution = new ArrayList<String>();
 
-        for(Tile tile : this.scrabbleGame.getTiles()){
-            if(tile.getLetter().equals(" ")){
+        for (Tile tile : this.scrabbleGame.getTiles()) {
+            if (tile.getLetter().equals(" ")) {
                 tileDistribution.add("BLANK: " + tile.getQuantity());
             } else {
                 tileDistribution.add(tile.getLetter() + ": " + tile.getQuantity());

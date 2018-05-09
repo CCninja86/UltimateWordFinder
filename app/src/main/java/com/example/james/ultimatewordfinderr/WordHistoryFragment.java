@@ -39,6 +39,7 @@ public class WordHistoryFragment extends Fragment {
 
     private Player player;
     private ArrayAdapter<String> adapter;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -79,7 +80,7 @@ public class WordHistoryFragment extends Fragment {
         Bundle bundle = getArguments();
         this.player = (Player) bundle.getSerializable("Player");
         final ListView listWordHistory = (ListView) view.findViewById(R.id.listWordHistory);
-        this.adapter = new ListViewAdapter(getActivity(),this.player.getPlayerWordHistory(), R.layout.row_player);
+        this.adapter = new ListViewAdapter(getActivity(), this.player.getPlayerWordHistory(), R.layout.row_player);
         listWordHistory.setAdapter(this.adapter);
 
         listWordHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,7 +88,7 @@ public class WordHistoryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 final String word = listWordHistory.getItemAtPosition(position).toString();
 
-                if(word.contains("?")){
+                if (word.contains("?")) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                     builder.setTitle("Set Blank Tile");
@@ -110,7 +111,7 @@ public class WordHistoryFragment extends Fragment {
                             builder.setPositiveButton("Set Blanks", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if(!input.getText().toString().isEmpty()){
+                                    if (!input.getText().toString().isEmpty()) {
                                         String text = input.getText().toString();
 
                                         String[] blankTiles = text.split(",");
@@ -120,10 +121,10 @@ public class WordHistoryFragment extends Fragment {
                                         String[] wordCharacters = word.split("");
                                         ArrayList<String> newWordCharacters = new ArrayList<>();
 
-                                        for(int i = 0; i < wordCharacters.length; i++){
+                                        for (int i = 0; i < wordCharacters.length; i++) {
                                             String character = wordCharacters[i];
 
-                                            if(character.equals("?")){
+                                            if (character.equals("?")) {
                                                 newWordCharacters.add(blankTiles[counter].toUpperCase());
                                                 counter++;
                                             } else {
@@ -133,7 +134,7 @@ public class WordHistoryFragment extends Fragment {
 
                                         String newWord = "";
 
-                                        for(String character : newWordCharacters){
+                                        for (String character : newWordCharacters) {
                                             newWord += character;
                                         }
 

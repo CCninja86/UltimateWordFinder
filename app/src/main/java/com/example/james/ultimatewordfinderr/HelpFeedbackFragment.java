@@ -78,7 +78,7 @@ public class HelpFeedbackFragment extends Fragment {
         listViewOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position){
+                switch (position) {
                     case 0:
                         mListener.onFragmentInteraction("Report Bug");
                         break;
@@ -86,7 +86,6 @@ public class HelpFeedbackFragment extends Fragment {
                 }
             }
         });
-
 
 
         return view;

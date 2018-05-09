@@ -4,15 +4,15 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -84,12 +84,21 @@ public class GameSetupFragment extends Fragment {
 
         final SpeedDialView speedDialView = view.findViewById(R.id.speedDial);
         speedDialView.addActionItem(
-                new SpeedDialActionItem.Builder(R.id.fab_add_player, R.drawable.ic_add_black_24dp)
+                new SpeedDialActionItem.Builder(R.id.fab_add_player, R.drawable.player_add_white)
                         .setLabel("Add Player")
                         .setLabelColor(Color.WHITE)
                         .setLabelBackgroundColor(Color.BLACK)
                         .setTheme(R.style.AppTheme)
                         .create()
+        );
+
+        speedDialView.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.fab_remove_players, R.drawable.player_minus_white)
+                    .setLabel("Remove Player")
+                    .setLabelColor(Color.WHITE)
+                    .setLabelBackgroundColor(Color.BLACK)
+                    .setTheme(R.style.AppTheme)
+                    .create()
         );
 
         SpeedDialOverlayLayout overlayLayout = view.findViewById(R.id.overlay);
@@ -98,7 +107,7 @@ public class GameSetupFragment extends Fragment {
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
             public boolean onActionSelected(SpeedDialActionItem actionItem) {
-                switch (actionItem.getId()){
+                switch (actionItem.getId()) {
                     case R.id.fab_add_player:
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("players", players);
@@ -110,6 +119,8 @@ public class GameSetupFragment extends Fragment {
                         fragmentTransaction.commit();
 
                         return true;
+                    case R.id.fab_remove_players:
+
                     default:
                         return false;
 
@@ -135,7 +146,7 @@ public class GameSetupFragment extends Fragment {
             }
         });
 
-        if(getArguments() != null){
+        if (getArguments() != null) {
             players = (ArrayList<Player>) getArguments().getSerializable("players");
         } else {
             players = new ArrayList<>();
@@ -146,8 +157,7 @@ public class GameSetupFragment extends Fragment {
         playerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String name = playerList.getItemAtPosition(position).toString();
-                txtPlayerName.setText(name);
+
             }
         });
 
@@ -157,10 +167,10 @@ public class GameSetupFragment extends Fragment {
         return view;
     }
 
-    private ArrayList<String> getPlayerNames(ArrayList<Player> players){
+    private ArrayList<String> getPlayerNames(ArrayList<Player> players) {
         ArrayList<String> playerNames = new ArrayList<>();
 
-        for(Player player : players){
+        for (Player player : players) {
             playerNames.add(player.getName());
         }
 
