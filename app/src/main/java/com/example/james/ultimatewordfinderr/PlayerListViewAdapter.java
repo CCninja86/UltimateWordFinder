@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by James on 30/11/2015.
  */
-public class PlayerListViewAdapter extends ArrayAdapter {
+public class PlayerListViewAdapter extends ArrayAdapter<Player> {
 
     private ArrayList<Player> players;
     private ArrayList<Integer> selectedItems;
