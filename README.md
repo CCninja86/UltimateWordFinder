@@ -1,3 +1,4 @@
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/CCninja86/UltimateWordFinder.png?columns=all)](https://waffle.io/CCninja86/UltimateWordFinder?utm_source=badge)
 This project is licensed under the terms of the MIT license.
 
 ### Download
