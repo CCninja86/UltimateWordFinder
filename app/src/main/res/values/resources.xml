@@ -8,6 +8,14 @@
         <item name="dictionary">Dictionary</item>
     </string-array>
 
+    <!-- Game Setup FAB -->
     <item name="fab_add_player" type="id"/>
     <item name="fab_remove_players" type="id"/>
+
+    <!-- Word Finder Search Results FAB -->
+    <item name="fab_select_all" type="id"/>
+    <item name="fab_deselect_all" type="id"/>
+    <item name="fab_official" type="id"/>
+    <item name="fab_min_word_score" type="id"/>
+    <item name="fab_compare_scores" type="id"/>
 </resources>
