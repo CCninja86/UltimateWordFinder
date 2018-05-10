@@ -93,6 +93,7 @@ public class AddPlayerFragment extends Fragment {
                     @Override
                     public void onDonePressed(ArrayList<Integer> mSelectedColors) {
                         int selectedColour = dialog.getSelectedColors().get(0);
+                        String hexColor = String.format("#%06X", (0xFFFFFF & selectedColour));
                         btnChooseColour.setBackgroundColor(selectedColour);
                     }
 

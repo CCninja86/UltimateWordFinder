@@ -2,6 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:layout_marginTop="?attr/actionBarSize"
              tools:context="com.example.james.ultimatewordfinderr.WordFinderMainFragment">
 
     <Button
@@ -17,42 +18,36 @@
 
     <TextView
         android:id="@+id/textViewLettersBoard"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/btnExample"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="115dp"
         android:text="@string/word_finder_text_letters_on_board" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/editTextLettersBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/textViewLettersBoard"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/btnExample"
-        android:layout_alignEnd="@+id/btnExample"/>
+        android:layout_alignParentStart="true" />
 
     <TextView
+        android:id="@+id/textViewLettersRack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Letters in Rack (Leave blank to search for all possible words)"
-        android:id="@+id/textViewLettersRack"
-        android:layout_marginTop="22dp"
         android:layout_below="@+id/editTextLettersBoard"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:text="Letters in Rack (Leave blank to search for all possible words)"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/editTextLettersRack"
-        android:layout_below="@+id/textViewLettersRack"
-        android:layout_alignParentLeft="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/editTextLettersBoard"
-        android:layout_alignEnd="@+id/editTextLettersBoard" />
+        android:layout_below="@+id/textViewLettersRack" />
 
     <Button
         android:id="@+id/btnSearch"
@@ -61,7 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:background="@color/colorAccent"
         android:text="@string/word_finder_button_search"
         android:theme="@android:style/Theme.Material"/>
@@ -72,7 +66,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/progressDatabase"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@color/colorAccent"
         android:text="Populate Database"
@@ -87,9 +80,7 @@
         android:indeterminate="false"
         android:visibility="visible"
         android:layout_above="@+id/textViewRestartTimer"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/btnSearch"
         android:layout_alignEnd="@+id/btnSearch" />
 
     <TextView
@@ -99,8 +90,7 @@
         android:id="@+id/textViewWordProgress"
         android:layout_alignParentStart="true"
         android:visibility="visible"
-        android:layout_above="@+id/textViewReconnect"
-        android:layout_alignParentLeft="true" />
+        android:layout_above="@+id/textViewReconnect" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -109,7 +99,6 @@
         android:id="@+id/textViewReconnect"
         android:visibility="visible"
         android:layout_above="@+id/btnSearch"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -119,8 +108,7 @@
         android:id="@+id/textViewWebpage"
         android:layout_alignParentStart="true"
         android:visibility="visible"
-        android:layout_above="@+id/textViewWordProgress"
-        android:layout_alignParentLeft="true" />
+        android:layout_above="@+id/textViewWordProgress"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -129,19 +117,18 @@
         android:id="@+id/textViewRestartTimer"
         android:visibility="visible"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/textViewWebpage"
-        android:layout_alignParentLeft="true" />
+        android:layout_above="@+id/textViewWebpage"/>
 
     <Button
         android:id="@+id/btnAdvancedSearch"
         style="@android:style/Widget.Material.Button.Borderless"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/editTextLettersRack"
+        android:layout_marginBottom="240dp"
         android:background="@color/colorAccent"
-        android:theme="@android:style/Theme.Material"
-        android:text="@string/word_finder_button_advanced_search" />
+        android:text="@string/word_finder_button_advanced_search"
+        android:theme="@android:style/Theme.Material" />
 
 </RelativeLayout>

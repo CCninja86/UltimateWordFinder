@@ -5,9 +5,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.james.ultimatewordfinderr.WordFinderActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/word_finder_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.ActionBarOverflow"
+        app:titleTextColor="@color/white"
+        app:popupTheme="@style/Theme.AppCompat.Light"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:id="@+id/containerWordFinder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></LinearLayout>
+        android:layout_height="match_parent"/>
 </RelativeLayout>

@@ -19,6 +19,7 @@ import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -37,7 +39,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class ScoringTableActivity extends Activity implements ScoringFragment.OnFragmentInteractionListener, PlayerDetailsFragment.OnFragmentInteractionListener,
+public class ScoringTableActivity extends AppCompatActivity implements ScoringFragment.OnFragmentInteractionListener, PlayerDetailsFragment.OnFragmentInteractionListener,
         AddWordsFragment.OnFragmentInteractionListener, WordHistoryFragment.OnFragmentInteractionListener,
         ScoreDisplayFragment.OnFragmentInteractionListener, TileBreakdownFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener {
 
@@ -65,6 +67,9 @@ public class ScoringTableActivity extends Activity implements ScoringFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoring_table);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.scoring_activity_toolbar);
+        setSupportActionBar(toolbar);
 
         context = this;
         mTitle = mDrawerTitle = getTitle();

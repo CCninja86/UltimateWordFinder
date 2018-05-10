@@ -1,14 +1,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.example.james.ultimatewordfinderr.GameSetupActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.james.ultimatewordfinderr.GameSetupActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/game_setup_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.ActionBarOverflow"
+        app:titleTextColor="@color/white"
+        app:popupTheme="@style/Theme.AppCompat.Light"/>
 
     <LinearLayout
         android:id="@+id/containerGameSetup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical"/>
 
 </RelativeLayout>

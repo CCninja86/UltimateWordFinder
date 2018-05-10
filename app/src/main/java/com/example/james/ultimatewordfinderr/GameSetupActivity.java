@@ -4,18 +4,23 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 
-public class GameSetupActivity extends Activity implements GameSetupFragment.OnFragmentInteractionListener, AddPlayerFragment.OnFragmentInteractionListener {
+public class GameSetupActivity extends AppCompatActivity implements GameSetupFragment.OnFragmentInteractionListener, AddPlayerFragment.OnFragmentInteractionListener {
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_setup);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.game_setup_activity_toolbar);
+        setSupportActionBar(toolbar);
 
         GameSetupFragment gameSetupFragment = new GameSetupFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

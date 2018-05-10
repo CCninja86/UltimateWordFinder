@@ -2,17 +2,19 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:layout_marginTop="?attr/actionBarSize"
              tools:context="com.example.james.ultimatewordfinderr.WordFinderDictionaryFragment">
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/editTextSearch"
-        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/btnSearch"
-        android:layout_toStartOf="@+id/btnSearch" />
+        android:layout_toStartOf="@+id/btnSearch"
+        android:hint="Enter word" />
 
     <ListView
         android:layout_width="wrap_content"
