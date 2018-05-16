@@ -206,7 +206,7 @@ public class AdvancedSearchFragment extends Fragment {
             if (matches.size() > 0) {
                 mListener.onAdvancedSearchFragmentInteraction(view, matches);
             } else {
-                Toast.makeText(getContext(), "No results found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
             }
 
         }
