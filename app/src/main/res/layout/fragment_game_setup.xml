@@ -33,7 +33,7 @@
         app:sdExpansionMode="top"
         app:sdMainFabAnimationRotateAngle="90"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
-        app:sdMainFabOpenedSrc="@drawable/ic_add_white_24dp"
-        app:sdMainFabClosedSrc="@drawable/play_icon"/>
+        app:sdMainFabOpenedSrc="@drawable/play_icon"
+        app:sdMainFabClosedSrc="@drawable/ic_add_white_24dp"/>
 
 </RelativeLayout>
