@@ -30,10 +30,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
-        app:sdExpansionMode="top"
-        app:sdMainFabCloseRotateAngle="90"
+        sdExpansionMode="top"
+        sdMainFabAnimationRotateAngle="90"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
-        app:sdMainFabOpenSrc="@drawable/ic_add_white_24dp"
-        app:sdMainFabCloseSrc="@drawable/play_icon"/>
+        sdMainFabOpenSrc="@drawable/ic_add_white_24dp"
+        sdMainFabCloseSrc="@drawable/play_icon"/>
 
 </RelativeLayout>
