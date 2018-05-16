@@ -25,6 +25,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -94,6 +97,9 @@ public class WordFinderSearchResultsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_finder_search_results, container, false);
         setRetainInstance(true);
+
+        final SpeedDialView speedDialView = view.findViewById(R.id.speedDialSearchResults);
+        // TODO: Add Select All FAB
 
         final TextView textViewNumResults = (TextView) view.findViewById(R.id.textViewNumResults);
 

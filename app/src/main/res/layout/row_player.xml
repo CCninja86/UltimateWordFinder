@@ -21,7 +21,6 @@
         android:layout_width="31dp"
         android:layout_height="31dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        app:srcCompat="@color/black" />
+        android:layout_alignParentTop="true"/>
 
 </RelativeLayout>

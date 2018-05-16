@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:layout_marginTop="?attr/actionBarSize"
-             tools:context="com.example.james.ultimatewordfinderr.WordFinderSearchResultsFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="?attr/actionBarSize"
+    tools:context="com.example.james.ultimatewordfinderr.WordFinderSearchResultsFragment">
 
     <ListView
         android:layout_width="261dp"
@@ -135,5 +136,25 @@
         android:layout_marginBottom="218dp"
         android:checked="false"
         android:text="@string/word_finder_results_switch_smart_selection" />
+
+    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+        android:id="@+id/overlaySearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:clickable_overlay="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/speedDialSearchResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        app:sdExpansionMode="top"
+        app:sdMainFabAnimationRotateAngle="90"
+        app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
+        app:sdMainFabOpenedSrc="@drawable/ic_add_white_24dp"
+        app:sdMainFabClosedSrc="@drawable/play_icon"/>
 
 </RelativeLayout>

@@ -17,23 +17,23 @@
         tools:listitem="@android:layout/simple_list_item_1" />
 
     <com.leinardi.android.speeddial.SpeedDialOverlayLayout
-        android:id="@+id/overlay"
+        android:id="@+id/overlayGameSetup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:clickable_overlay="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.leinardi.android.speeddial.SpeedDialView
-        android:id="@+id/speedDial"
+        android:id="@+id/speedDialGameSetup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
         app:sdExpansionMode="top"
-        app:sdMainFabCloseRotateAngle="90"
+        app:sdMainFabAnimationRotateAngle="90"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
-        app:sdMainFabOpenSrc="@drawable/ic_add_white_24dp"
-        app:sdMainFabCloseSrc="@drawable/play_icon"/>
+        app:sdMainFabOpenedSrc="@drawable/ic_add_white_24dp"
+        app:sdMainFabClosedSrc="@drawable/play_icon"/>
 
 </RelativeLayout>

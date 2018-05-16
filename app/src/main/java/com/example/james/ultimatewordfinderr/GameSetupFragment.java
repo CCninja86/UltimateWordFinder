@@ -90,7 +90,7 @@ public class GameSetupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_setup, container, false);
 
-        final SpeedDialView speedDialView = view.findViewById(R.id.speedDial);
+        final SpeedDialView speedDialView = view.findViewById(R.id.speedDialGameSetup);
         speedDialView.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.fab_add_player, R.drawable.player_add_white)
                         .setLabel("Add Player")
@@ -100,7 +100,7 @@ public class GameSetupFragment extends Fragment {
                         .create()
         );
 
-        SpeedDialOverlayLayout overlayLayout = view.findViewById(R.id.overlay);
+        SpeedDialOverlayLayout overlayLayout = view.findViewById(R.id.overlayGameSetup);
         speedDialView.setOverlayLayout(overlayLayout);
 
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
