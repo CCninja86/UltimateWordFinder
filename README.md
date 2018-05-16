@@ -2,6 +2,7 @@
 
 This project is licensed under the terms of the GPL-2.0 license.
 
+
 ### Download
 
 1. Before you download the app, you must opt-in to the Beta here: https://play.google.com/apps/testing/nz.ac.aut.ultimatewordfinderr
