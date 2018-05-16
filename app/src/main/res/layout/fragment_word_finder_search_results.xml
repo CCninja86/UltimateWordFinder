@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.example.james.ultimatewordfinderr.WordFinderSearchResultsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="?attr/actionBarSize"
+    tools:context="com.example.james.ultimatewordfinderr.WordFinderSearchResultsFragment">
 
     <ListView
         android:layout_width="261dp"
@@ -32,7 +32,8 @@
         android:layout_toEndOf="@+id/listSearchResults"
         android:layout_toRightOf="@+id/listSearchResults"
         android:background="@color/colorAccent"
-        android:text="@string/word_finder_results_button_is_official" />
+        android:text="@string/word_finder_results_button_is_official"
+        android:theme="@android:style/Theme.Material"/>
 
     <Button
         android:id="@+id/btnSelectAll"
@@ -44,35 +45,22 @@
         android:layout_alignParentTop="true"
         android:background="@color/colorAccent"
         android:text="@string/word_finder_results_button_select_all"
-        android:textSize="12dp" />
+        android:textSize="12dp"
+        android:theme="@android:style/Theme.Material"/>
 
     <Button
         android:id="@+id/btnDeselectAll"
         style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/btnOfficial"
-        android:layout_toRightOf="@+id/btnSelectAll"
-        android:layout_toStartOf="@+id/btnOfficial"
+        android:layout_marginStart="98dp"
         android:background="@color/colorAccent"
+        android:padding="3dp"
         android:text="@string/word_finder_results_button_deselect_all"
-        android:textSize="12dp" />
-
-    <Switch
-        android:id="@+id/switchSmartSelection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnCompareScores"
-        android:layout_marginTop="39dp"
-        android:layout_toEndOf="@+id/btnDeselectAll"
-        android:layout_toRightOf="@+id/btnDeselectAll"
-        android:checked="false"
-        android:text="@string/word_finder_results_switch_smart_selection"
-        android:thumbTint="@color/colorAccent"
-        android:trackTint="@color/colorAccent" />
+        android:textSize="12dp"
+        android:theme="@android:style/Theme.Material" />
 
     <Switch
         android:id="@+id/switchOfficialSelection"
@@ -85,9 +73,9 @@
         android:layout_toEndOf="@+id/listSearchResults"
         android:layout_toRightOf="@+id/listSearchResults"
         android:checked="true"
+        android:splitTrack="false"
         android:text="Use your selection"
-        android:thumbTint="@color/colorAccent"
-        android:trackTint="@color/colorAccent" />
+        tools:checked="false" />
 
     <TextView
         android:text="[numResults]"
@@ -110,7 +98,9 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="42dp"
         android:background="@color/colorAccent"
-        android:text="@string/word_finder_results_button_minimum_word_score" />
+        android:padding="3dp"
+        android:text="@string/word_finder_results_button_minimum_word_score"
+        android:theme="@android:style/Theme.Material" />
 
     <Button
         android:id="@+id/btnCompareScores"
@@ -123,7 +113,9 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/listSearchResults"
         android:background="@color/colorAccent"
-        android:text="@string/word_finder_results_button_compare_scores" />
+        android:padding="3dp"
+        android:text="@string/word_finder_results_button_compare_scores"
+        android:theme="@android:style/Theme.Material" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -134,5 +126,35 @@
         android:layout_alignParentStart="true"
         android:id="@+id/editTextSearch"
         android:layout_toStartOf="@+id/btnOfficial" />
+
+    <Switch
+        android:id="@+id/switchSmartSelection"
+        android:layout_width="117dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="218dp"
+        android:checked="false"
+        android:text="@string/word_finder_results_switch_smart_selection" />
+
+    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+        android:id="@+id/overlaySearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:clickable_overlay="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/speedDialSearchResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        app:sdExpansionMode="top"
+        sdMainFabCloseRotateAngle="90"
+        app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
+        sdMainFabOpenSrc="@drawable/ic_add_white_24dp"
+        sdMainFabCloseSrc="@drawable/play_icon"/>
 
 </RelativeLayout>

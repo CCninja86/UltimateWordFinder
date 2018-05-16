@@ -3,45 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
     tools:context="com.example.james.ultimatewordfinderr.GameSetupFragment">
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/listPlayer"
-        android:layout_alignParentLeft="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        tools:listitem="@android:layout/simple_list_item_1"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/floatingActionButtonAddPlayer" />
+        android:choiceMode="multipleChoice"
+        android:listSelector="#00000000"
+        tools:listitem="@android:layout/simple_list_item_1" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonAddPlayer"
+    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+        android:id="@+id/overlayGameSetup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:clickable_overlay="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/speedDialGameSetup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:clickable="true"
-        android:src="@drawable/add_plus_button"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="normal"
-        app:rippleColor="@color/colorAccent"
-        app:srcCompat="@color/colorAccent"
-        android:layout_above="@+id/floatingActionButtonStart"
-        android:layout_alignStart="@+id/floatingActionButtonStart"
-        android:layout_marginBottom="15dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:clickable="true"
-        android:src="@drawable/play_icon"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="normal"
-        app:rippleColor="@color/colorAccent"
-        app:srcCompat="@color/colorAccent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        sdExpansionMode="top"
+        sdMainFabAnimationRotateAngle="90"
+        app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
+        sdMainFabOpenSrc="@drawable/ic_add_white_24dp"
+        sdMainFabCloseSrc="@drawable/play_icon"/>
 
 </RelativeLayout>
