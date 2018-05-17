@@ -5,7 +5,7 @@ public class Synonym {
     private String word;
     private int score;
 
-    public Synonym(){
+    public Synonym() {
 
     }
 

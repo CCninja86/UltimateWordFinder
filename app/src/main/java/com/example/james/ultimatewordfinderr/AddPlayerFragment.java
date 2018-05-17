@@ -2,12 +2,15 @@ package com.example.james.ultimatewordfinderr;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.savvisingh.colorpickerdialog.ColorPickerDialog;
 
 import java.util.ArrayList;
 
@@ -20,18 +23,17 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class AddPlayerFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<String> playerNames;
+    private ArrayList<Player> players;
+    private ArrayList<Integer> coloursList;
 
     public AddPlayerFragment() {
         // Required empty public constructor
@@ -45,7 +47,7 @@ public class AddPlayerFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment AddPlayerFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static AddPlayerFragment newInstance(String param1, String param2) {
         AddPlayerFragment fragment = new AddPlayerFragment();
         Bundle args = new Bundle();
@@ -71,71 +73,59 @@ public class AddPlayerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_player, container, false);
 
         Bundle bundle = getArguments();
-        playerNames = bundle.getStringArrayList("playerNames");
+        players = (ArrayList<Player>) bundle.getSerializable("players");
 
-        //final Button btnChooseColour = (Button) view.findViewById(R.id.btnChooseColour);
+        int[] colourCodes = getResources().getIntArray(R.array.materialColours);
+        coloursList = new ArrayList<>();
+
+        for (int code : colourCodes) {
+            coloursList.add(code);
+        }
+
+        final Button btnChooseColour = (Button) view.findViewById(R.id.btnChooseColour);
         final EditText editTextPlayerName = (EditText) view.findViewById(R.id.editTextPlayerName);
 
-//        btnChooseColour.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ColorPickerDialogBuilder
-//                        .with(getActivity())
-//                        .setTitle("Choose color")
-//                        .initialColor(Color.BLUE)
-//                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-//                        .density(12)
-//                        .setOnColorSelectedListener(new OnColorSelectedListener() {
-//                            @Override
-//                            public void onColorSelected(int selectedColor) {
-//                                Toast.makeText(getActivity(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_LONG).show();
-//                            }
-//                        })
-//                        .setPositiveButton("ok", new ColorPickerClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-//                                btnChooseColour.setBackgroundColor(selectedColor);
-//                            }
-//                        })
-//                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        })
-//                        .build()
-//                        .show();
-//            }
-//        });
+        btnChooseColour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ColorPickerDialog dialog = ColorPickerDialog.newInstance(ColorPickerDialog.SELECTION_SINGLE, coloursList, 4, ColorPickerDialog.SIZE_SMALL);
+                dialog.setOnDialodButtonListener(new ColorPickerDialog.OnDialogButtonListener() {
+                    @Override
+                    public void onDonePressed(ArrayList<Integer> mSelectedColors) {
+                        int selectedColour = dialog.getSelectedColors().get(0);
+                        String hexColor = String.format("#%06X", (0xFFFFFF & selectedColour));
+                        btnChooseColour.setBackgroundColor(selectedColour);
+                    }
 
-        Button btnAddPlayer = (Button) view.findViewById(R.id.btnAddPlayer);
+                    @Override
+                    public void onDismiss() {
+
+                    }
+                });
+
+                dialog.show(getFragmentManager(), "colour_picker");
+            }
+        });
+
+        final Button btnAddPlayer = (Button) view.findViewById(R.id.btnAddPlayer);
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playerNames.add(editTextPlayerName.getText().toString().trim());
-                mListener.onFragmentInteractionAddPlayer(playerNames);
+                ColorDrawable buttonColour = (ColorDrawable) btnChooseColour.getBackground();
+
+                Player player = new Player(editTextPlayerName.getText().toString().trim(), buttonColour.getColor());
+                players.add(player);
+                mListener.onFragmentInteractionAddPlayer(players);
             }
         });
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(ArrayList<String> playerNames) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteractionAddPlayer(playerNames);
-//        }
-//    }
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
@@ -166,7 +156,6 @@ public class AddPlayerFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteractionAddPlayer(ArrayList<String> playerNames);
+        void onFragmentInteractionAddPlayer(ArrayList<Player> players);
     }
 }

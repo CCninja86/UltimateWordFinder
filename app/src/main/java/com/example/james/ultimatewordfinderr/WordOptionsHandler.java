@@ -3,6 +3,7 @@ package com.example.james.ultimatewordfinderr;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -43,7 +44,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
 
     private DatamuseAPIResultsListener datamuseAPIResultsListener;
 
-    public WordOptionsHandler(SynonymResultListFragment.OnFragmentInteractionListener synonymListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener, WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener, Context context, String word){
+    public WordOptionsHandler(SynonymResultListFragment.OnFragmentInteractionListener synonymListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener, WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener, Context context, String word) {
         this.word = word;
         this.context = context;
         this.synonymListener = synonymListener;
@@ -62,27 +63,27 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
         this.word = word;
     }
 
-    public void loadDefinitions(){
+    public void loadDefinitions() {
         GetDefinitionsTask getDefinitionsTask = new GetDefinitionsTask();
         getDefinitionsTask.execute();
     }
 
-    public void loadSynonyms(){
+    public void loadSynonyms() {
         GetSynonymsTask getSynonymsTask = new GetSynonymsTask();
         getSynonymsTask.execute();
     }
 
     @Override
     public void onSynonymResults(ArrayList<String> synonyms) {
-        if(progressDialog != null && progressDialog.isShowing()){
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
             progressDialog = null;
         }
 
-        if(!synonyms.isEmpty() && synonyms != null){
-            if(dictionaryListener != null){
+        if (!synonyms.isEmpty() && synonyms != null) {
+            if (dictionaryListener != null) {
                 dictionaryListener.onDictionaryFragmentInteraction(word, synonyms);
-            } else if(wordFinderListener != null) {
+            } else if (wordFinderListener != null) {
                 wordFinderListener.onResultsFragmentInteraction(word, synonyms);
             } else {
                 synonymListener.onFragmentInteraction(word, synonyms);
@@ -94,12 +95,12 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
 
     private class GetDefinitionsTask extends AsyncTask<Void, Void, Void> {
 
-        public GetDefinitionsTask(){
+        public GetDefinitionsTask() {
 
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progressDialog = new ProgressDialog(context);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setMessage("Searching...");
@@ -115,7 +116,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
             ArrayList<String> subjectHeaders = new ArrayList<>();
             int numAttempts = 0;
 
-            while (numAttempts < MAX_ATTEMPTS){
+            while (numAttempts < MAX_ATTEMPTS) {
                 try {
                     searchUrl = "http://www.dictionary.com/browse/" + word;
                     Document document = Jsoup.connect(searchUrl).userAgent("Mozilla/5.0 (Linux; Android 5.1.1; Vodafone Smart ultra 6"
@@ -126,11 +127,11 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
                     Elements definitionElements = document.getElementsByClass("_14Msm");
 
 
-                    for(Element element : definitionElements){
+                    for (Element element : definitionElements) {
                         Elements childElements = element.children();
 
-                        for(Element child : childElements){
-                            if(child.hasClass("dbox-italic")){
+                        for (Element child : childElements) {
+                            if (child.hasClass("dbox-italic")) {
                                 String sublistHeader = child.text();
                                 subjectHeaders.add(sublistHeader);
                             }
@@ -138,7 +139,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
 
                         String definition = element.text();
 
-                        if(!definition.startsWith("see:")){
+                        if (!definition.startsWith("see:")) {
                             definitions.add(definition);
                         }
                     }
@@ -151,32 +152,32 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
 
                     Iterator<String> iterator = subjectHeaders.iterator();
 
-                    while(iterator.hasNext()){
+                    while (iterator.hasNext()) {
                         String header = iterator.next();
 
-                        if(!Character.isUpperCase(header.charAt(0))){
+                        if (!Character.isUpperCase(header.charAt(0))) {
                             iterator.remove();
                         }
                     }
 
-                    for(String definition : definitions){
-                        for(String header : subjectHeaders){
-                            if(definition.startsWith(header)){
+                    for (String definition : definitions) {
+                        for (String header : subjectHeaders) {
+                            if (definition.startsWith(header)) {
                                 String subject = definition.substring(0, definition.indexOf("."));
                                 String[] definitionSublist = null;
 
-                                if(!definition.contains("etc.")){
+                                if (!definition.contains("etc.")) {
                                     definitionSublist = definition.split("\\.");
                                 } else {
                                     StringBuilder stringBuilder = new StringBuilder(definition);
 
-                                    for(int i = 0; i < definition.length(); i++){
+                                    for (int i = 0; i < definition.length(); i++) {
                                         String character = String.valueOf(definition.charAt(i));
 
-                                        if(character.equals(".")){
+                                        if (character.equals(".")) {
                                             String trailingSubstring = definition.substring(i - 3, i);
 
-                                            if(trailingSubstring.equals("etc")){
+                                            if (trailingSubstring.equals("etc")) {
                                                 stringBuilder.setCharAt(i, ',');
                                                 stringBuilder.setCharAt(i + 1, ' ');
                                             }
@@ -187,14 +188,13 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
                                 }
 
 
-
-                                for(String def : definitionSublist){
-                                    if(!subjectHeaders.contains(def + ".")){
+                                for (String def : definitionSublist) {
+                                    if (!subjectHeaders.contains(def + ".")) {
                                         Definition definitionObject = new Definition();
                                         definitionObject.setSubject(subject);
                                         definitionObject.setDefinition(def);
 
-                                        if(!definitionList.containsDefinition(definition)){
+                                        if (!definitionList.containsDefinition(definition)) {
                                             definitionList.addDefinition(definitionObject);
                                         }
                                     }
@@ -203,7 +203,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
                             }
                         }
 
-                        if(!definitionList.containsDefinition(definition)){
+                        if (!definitionList.containsDefinition(definition)) {
                             Definition definitionObject = new Definition();
                             definitionObject.setDefinition(definition);
                             definitionList.addDefinition(definitionObject);
@@ -212,23 +212,23 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
 
                     Iterator<Definition> definitionIterator = definitionList.getDefinitions().iterator();
 
-                    while (definitionIterator.hasNext()){
+                    while (definitionIterator.hasNext()) {
                         Definition definition = definitionIterator.next();
 
-                        if(subjectHeaders.contains(definition.getDefinition().substring(0, definition.getDefinition().indexOf(".") + 1))){
+                        if (subjectHeaders.contains(definition.getDefinition().substring(0, definition.getDefinition().indexOf(".") + 1))) {
                             definitionIterator.remove();
                         }
                     }
 
                     definitionList.trimStrings();
 
-                    if(definitionList.getDefinitions().size() < 1){
+                    if (definitionList.getDefinitions().size() < 1) {
                         numAttempts++;
                     } else {
                         break;
                     }
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    Log.e("MalformedURLException", e.getMessage());
                 } catch (IOException e) {
                     numAttempts++;
                 }
@@ -238,17 +238,17 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
 
-            if(definitionList != null){
-                if(definitionList.getDefinitions().size() > 0){
-                    if(dictionaryListener != null){
+            if (definitionList != null) {
+                if (definitionList.getDefinitions().size() > 0) {
+                    if (dictionaryListener != null) {
                         dictionaryListener.onDictionaryFragmentInteraction(word, definitionList);
-                    } else if(wordFinderListener != null){
+                    } else if (wordFinderListener != null) {
                         wordFinderListener.onResultsFragmentInteraction(word, definitionList);
                     } else {
                         synonymListener.onFragmentInteraction(word, definitionList);
@@ -264,14 +264,14 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
         }
     }
 
-    private class GetSynonymsTask extends AsyncTask<Object, Void, Void>{
+    private class GetSynonymsTask extends AsyncTask<Object, Void, Void> {
 
-        public GetSynonymsTask(){
+        public GetSynonymsTask() {
 
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage("Searching...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -282,7 +282,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
 
         @Override
         protected Void doInBackground(Object... params) {
-            String searchUrl = "";
+            String searchUrl;
 
             //try {
             if (word.contains(" ")) {
@@ -311,7 +311,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
 
 
         }

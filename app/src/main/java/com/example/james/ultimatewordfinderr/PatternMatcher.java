@@ -25,28 +25,28 @@ public class PatternMatcher {
 
     private PatternMatcherResultsListener patternMatcherResultsListener;
 
-    public PatternMatcher(PatternMatcherResultsListener patternMatcherResultsListener){
+    public PatternMatcher(PatternMatcherResultsListener patternMatcherResultsListener) {
         this.g = Globals.getInstance();
         this.dictionary = g.getDictionary();
         this.patternMatcherResultsListener = patternMatcherResultsListener;
     }
 
-    public void matchWithPlayerPattern(ArrayList<Word> wordsToMatch, String playerPattern, String boardPattern){
+    public void matchWithPlayerPattern(ArrayList<Word> wordsToMatch, String playerPattern, String boardPattern) {
         new MatchWithPlayerPatternTask(wordsToMatch, playerPattern, boardPattern).execute();
     }
 
-    public String generateBoardRegex(String boardPattern){
+    public String generateBoardRegex(String boardPattern) {
         return boardPattern.replaceAll("\\?", REGEX_LETTER_WILDCARD);
     }
 
-    public void getAllWordsMatchingRegex(String regex){
+    public void getAllWordsMatchingRegex(String regex) {
         new GetAllWordsMatchingRegexTask(regex).execute();
     }
 
-    private Map<String, Integer> generateLetterMap(String pattern){
+    private Map<String, Integer> generateLetterMap(String pattern) {
         Map<String, Integer> letterMap = new HashMap<>();
 
-        for(int i = 0; i < pattern.length(); i++){
+        for (int i = 0; i < pattern.length(); i++) {
             String letter = String.valueOf(pattern.charAt(i));
             int letterCount = countLetters(pattern, letter);
 
@@ -56,11 +56,11 @@ public class PatternMatcher {
         return letterMap;
     }
 
-    private int countLetters(String string, String letter){
+    private int countLetters(String string, String letter) {
         int letterCount = 0;
 
-        for(int i = 0; i < string.length(); i++){
-            if(String.valueOf(string.charAt(i)).equalsIgnoreCase(letter)){
+        for (int i = 0; i < string.length(); i++) {
+            if (String.valueOf(string.charAt(i)).equalsIgnoreCase(letter)) {
                 letterCount++;
             }
         }
@@ -68,10 +68,10 @@ public class PatternMatcher {
         return letterCount;
     }
 
-    private int countLetterMapTotal(Map<String, Integer> letterMap){
+    private int countLetterMapTotal(Map<String, Integer> letterMap) {
         int total = 0;
 
-        for(int value : letterMap.values()){
+        for (int value : letterMap.values()) {
             total += value;
         }
 
@@ -83,7 +83,7 @@ public class PatternMatcher {
         private String regex;
         private ArrayList<Word> matches;
 
-        public GetAllWordsMatchingRegexTask(String regex){
+        public GetAllWordsMatchingRegexTask(String regex) {
             this.regex = regex;
             this.matches = new ArrayList<>();
         }
@@ -92,10 +92,10 @@ public class PatternMatcher {
         protected Void doInBackground(Void... voids) {
             Pattern pattern = Pattern.compile(regex);
 
-            for(Word word : dictionary.getWordList()){
+            for (Word word : dictionary.getWordList()) {
                 Matcher matcher = pattern.matcher(word.getWord());
 
-                if(matcher.matches()){
+                if (matcher.matches()) {
                     matches.add(word);
                 }
             }
@@ -104,7 +104,7 @@ public class PatternMatcher {
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
             patternMatcherResultsListener.onPatternMatcherGetAllWordsMatchingRegexTaskComplete(matches);
         }
     }
@@ -115,15 +115,15 @@ public class PatternMatcher {
         private ArrayList<Word> matches;
         private ArrayList<Word> wordsToMatch;
 
-        public MatchWithPlayerPatternTask(ArrayList<Word> wordsToMatch, String playerPattern, String boardPattern){
+        public MatchWithPlayerPatternTask(ArrayList<Word> wordsToMatch, String playerPattern, String boardPattern) {
             this.playerPattern = playerPattern;
             this.matches = new ArrayList<>();
             this.wordsToMatch = wordsToMatch;
 
-            for(int i = 0; i < boardPattern.length(); i++){
+            for (int i = 0; i < boardPattern.length(); i++) {
                 String character = String.valueOf(boardPattern.charAt(i));
 
-                if(!character.equals("?")){
+                if (!character.equals("?")) {
                     this.playerPattern += character;
                 }
             }
@@ -132,41 +132,41 @@ public class PatternMatcher {
         @Override
         protected Void doInBackground(Void... voids) {
             // Find words in list that can be made with player's tiles
-            for(Word word : wordsToMatch){
+            for (Word word : wordsToMatch) {
                 Map<String, Integer> playerLetterMap = generateLetterMap(playerPattern);
                 Map<String, Integer> wordLetterMap = generateLetterMap(word.getWord());
                 int numCountMatches = 0;
 
-                for(Map.Entry<String, Integer> entry : wordLetterMap.entrySet()){
+                for (Map.Entry<String, Integer> entry : wordLetterMap.entrySet()) {
                     String wordLetter = entry.getKey();
                     int wordLetterCount = entry.getValue();
                     int playerLetterCount = 0;
 
-                    if(playerLetterMap.containsKey(wordLetter)){
+                    if (playerLetterMap.containsKey(wordLetter)) {
                         playerLetterCount = playerLetterMap.get(wordLetter);
                     }
 
-                    if(playerLetterMap.containsKey("?")){
+                    if (playerLetterMap.containsKey("?")) {
                         playerLetterCount += playerLetterMap.get("?");
                     }
 
-                    if(playerLetterCount >= wordLetterCount){
+                    if (playerLetterCount >= wordLetterCount) {
                         numCountMatches += wordLetterCount;
 
-                        for(int i = wordLetterCount; i > 0; i--){
-                            if(playerLetterMap.containsKey(wordLetter)){
-                                if(playerLetterMap.get(wordLetter) > 0){
+                        for (int i = wordLetterCount; i > 0; i--) {
+                            if (playerLetterMap.containsKey(wordLetter)) {
+                                if (playerLetterMap.get(wordLetter) > 0) {
                                     playerLetterMap.put(wordLetter, playerLetterMap.get(wordLetter) - 1);
                                 } else {
-                                    if(playerLetterMap.containsKey("?")){
-                                        if(playerLetterMap.get("?") > 0){
+                                    if (playerLetterMap.containsKey("?")) {
+                                        if (playerLetterMap.get("?") > 0) {
                                             playerLetterMap.put("?", playerLetterMap.get("?") - 1);
                                         }
                                     }
                                 }
                             } else {
-                                if(playerLetterMap.containsKey("?")){
-                                    if(playerLetterMap.get("?") > 0){
+                                if (playerLetterMap.containsKey("?")) {
+                                    if (playerLetterMap.get("?") > 0) {
                                         playerLetterMap.put("?", playerLetterMap.get("?") - 1);
                                     }
                                 }
@@ -175,7 +175,7 @@ public class PatternMatcher {
                     }
                 }
 
-                if(numCountMatches == countLetterMapTotal(wordLetterMap)){
+                if (numCountMatches == countLetterMapTotal(wordLetterMap)) {
                     matches.add(word);
                 }
             }
@@ -184,7 +184,7 @@ public class PatternMatcher {
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
             patternMatcherResultsListener.onPatternMatcherMatchWithPlayerPatternTaskComplete(matches);
         }
     }

@@ -33,12 +33,10 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class AddWordsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -61,7 +59,6 @@ public class AddWordsFragment extends Fragment {
     private String m_text = "";
 
 
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -70,7 +67,7 @@ public class AddWordsFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment AddWordsFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static AddWordsFragment newInstance(String param1, String param2) {
         AddWordsFragment fragment = new AddWordsFragment();
         Bundle args = new Bundle();
@@ -114,10 +111,10 @@ public class AddWordsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 ArrayList<String> words = new ArrayList<>();
 
-                if(!editTextWords.getText().toString().isEmpty()){
+                if (!editTextWords.getText().toString().isEmpty()) {
                     String[] enteredWords = editTextWords.getText().toString().split(",");
 
-                    for(String enteredWord : enteredWords){
+                    for (String enteredWord : enteredWords) {
                         words.add(enteredWord);
                     }
                 }
@@ -143,6 +140,8 @@ public class AddWordsFragment extends Fragment {
         addManualScoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final View finalView = view;
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Add Manual Score");
                 builder.setMessage("Enter the custom number");
@@ -155,6 +154,8 @@ public class AddWordsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         player.addCustomScore(Integer.valueOf(input.getText().toString()));
                         Toast.makeText(getActivity(), "Added score to total!", Toast.LENGTH_SHORT).show();
+
+                        mListener.onAddWordsFragmentInteraction(finalView);
                     }
                 });
 
@@ -172,89 +173,79 @@ public class AddWordsFragment extends Fragment {
         addWordScoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    ArrayList<String> words = new ArrayList<>();
-                    String[] enteredWords = null;
+                ArrayList<String> words = new ArrayList<>();
+                String[] enteredWords = null;
 
-                    if(!editTextWords.getText().toString().isEmpty()){
-                        enteredWords = editTextWords.getText().toString().split(",");
+                if (!editTextWords.getText().toString().isEmpty()) {
+                    enteredWords = editTextWords.getText().toString().split(",");
 
-                        for(String enteredWord : enteredWords){
-                            words.add(enteredWord);
-                        }
+                    for (String enteredWord : enteredWords) {
+                        words.add(enteredWord);
                     }
+                }
 
-                    Map<String, Integer> wordsWithBonuses = new HashMap<>();
-                    ArrayList<String> doubleLetters = new ArrayList<>();
-                    ArrayList<String> tripleLetters = new ArrayList<>();
-                    boolean doubleLetter = false;
-                    boolean tripleLetter = false;
-                    boolean doubleWord = false;
-                    boolean tripleWord = false;
+                Map<String, Integer> wordsWithBonuses = new HashMap<>();
+                ArrayList<String> doubleLetters = new ArrayList<>();
+                ArrayList<String> tripleLetters = new ArrayList<>();
+                boolean doubleLetter = false;
+                boolean tripleLetter = false;
+                boolean doubleWord = false;
+                boolean tripleWord = false;
 
 
+                for (int i = 0; i < listViewWordScores.getCount(); i++) {
+                    RelativeLayout row = (RelativeLayout) listViewWordScores.getChildAt(i);
 
+                    for (int x = 0; x < row.getChildCount(); x++) {
+                        LinearLayout linearLayout = (LinearLayout) row.getChildAt(0);
 
-                    for(int i = 0; i < listViewWordScores.getCount(); i++){
-                        RelativeLayout row = (RelativeLayout) listViewWordScores.getChildAt(i);
+                        for (int j = 0; j < linearLayout.getChildCount(); j++) {
+                            View childView = linearLayout.getChildAt(j);
 
-                        for(int x = 0; x < row.getChildCount(); x++){
-                            LinearLayout linearLayout = (LinearLayout) row.getChildAt(0);
+                            if (childView.getClass() == TextView.class) {
+                                TextView textViewLetter = (TextView) childView;
 
-                            for(int j = 0; j < linearLayout.getChildCount(); j++){
-                                View childView = linearLayout.getChildAt(j);
+                                String textViewText = textViewLetter.getText().toString();
 
-                                if(childView.getClass() == TextView.class){
-                                    TextView textViewLetter = (TextView) childView;
+                                if (textViewText.contains("x2")) {
+                                    doubleLetters.add(textViewText.substring(0, textViewText.indexOf("x") - 1));
+                                    doubleLetter = true;
+                                } else if (textViewText.contains("x3")) {
+                                    tripleLetters.add(textViewText.substring(0, textViewText.indexOf("x") - 1));
+                                    tripleLetter = true;
+                                }
 
-                                    String textViewText = textViewLetter.getText().toString();
+                            } else if (childView.getClass() == Button.class) {
+                                Button buttonWordBonus = (Button) childView;
 
-                                    if(textViewText.contains("x2")){
-                                        doubleLetters.add(textViewText.substring(0, textViewText.indexOf("x") - 1));
-                                        doubleLetter = true;
-                                    } else if(textViewText.contains("x3")){
-                                        tripleLetters.add(textViewText.substring(0, textViewText.indexOf("x") - 1));
-                                        tripleLetter = true;
-                                    }
+                                String buttonText = buttonWordBonus.getText().toString();
 
-                                } else if(childView.getClass() == Button.class){
-                                    Button buttonWordBonus = (Button) childView;
-
-                                    String buttonText = buttonWordBonus.getText().toString();
-
-                                    switch (buttonText){
-                                        case "Double Word":
-                                            wordsWithBonuses.put(enteredWords[i], 2);
-                                            doubleWord = true;
-                                            break;
-                                        case "Triple Word":
-                                            wordsWithBonuses.put(enteredWords[i], 3);
-                                            tripleWord = true;
-                                            break;
-                                    }
+                                switch (buttonText) {
+                                    case "Double Word":
+                                        wordsWithBonuses.put(enteredWords[i], 2);
+                                        doubleWord = true;
+                                        break;
+                                    case "Triple Word":
+                                        wordsWithBonuses.put(enteredWords[i], 3);
+                                        tripleWord = true;
+                                        break;
                                 }
                             }
                         }
-
-                        player.addWordScore(enteredWords[i].toUpperCase(), wordsWithBonuses, doubleLetter, tripleLetter, doubleWord, tripleWord, doubleLetters, tripleLetters);
                     }
 
-
-                    Toast.makeText(getActivity(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
-                    mListener.onAddWordsFragmentInteraction(view);
+                    player.addWordScore(enteredWords[i].toUpperCase(), wordsWithBonuses, doubleLetter, tripleLetter, doubleWord, tripleWord, doubleLetters, tripleLetters);
                 }
-        });
 
+
+                Toast.makeText(getActivity(), "Words added for " + player.getName() + "", Toast.LENGTH_SHORT).show();
+                mListener.onAddWordsFragmentInteraction(view);
+            }
+        });
 
 
         return view;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
 
     @Override
     public void onAttach(Activity activity) {
@@ -274,7 +265,6 @@ public class AddWordsFragment extends Fragment {
     }
 
 
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -286,7 +276,6 @@ public class AddWordsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onAddWordsFragmentInteraction(View view);
     }
 

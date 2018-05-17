@@ -9,28 +9,28 @@ public class Globals {
     private Scrabble game;
     private boolean wordOptionsHintShown = false;
 
-    private Globals(){
+    private Globals() {
 
     }
 
-    public void setDictionary(Dictionary dictionary){
+    public void setDictionary(Dictionary dictionary) {
         this.dictionary = dictionary;
     }
 
-    public Dictionary getDictionary(){
+    public Dictionary getDictionary() {
         return this.dictionary;
     }
 
-    public void setGame(Scrabble game){
+    public void setGame(Scrabble game) {
         this.game = game;
     }
 
-    public Scrabble getGame(){
-        return  this.game;
+    public Scrabble getGame() {
+        return this.game;
     }
 
-    public static synchronized Globals getInstance(){
-        if(instance == null){
+    public static synchronized Globals getInstance() {
+        if (instance == null) {
             instance = new Globals();
         }
 

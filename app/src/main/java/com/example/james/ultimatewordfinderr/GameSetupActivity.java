@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 
-public class GameSetupActivity extends Activity implements GameSetupFragment.OnFragmentInteractionListener, AddPlayerFragment.OnFragmentInteractionListener {
-
-
+public class GameSetupActivity extends AppCompatActivity implements GameSetupFragment.OnFragmentInteractionListener, AddPlayerFragment.OnFragmentInteractionListener {
 
 
     @Override
@@ -19,13 +19,15 @@ public class GameSetupActivity extends Activity implements GameSetupFragment.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_setup);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.game_setup_activity_toolbar);
+        setSupportActionBar(toolbar);
+
         GameSetupFragment gameSetupFragment = new GameSetupFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.containerGameSetup, gameSetupFragment);
         fragmentTransaction.commit();
 
     }
-
 
 
     @Override
@@ -51,8 +53,8 @@ public class GameSetupActivity extends Activity implements GameSetupFragment.OnF
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState){
-       super.onSaveInstanceState(savedState);
+    public void onSaveInstanceState(Bundle savedState) {
+        super.onSaveInstanceState(savedState);
     }
 
 
@@ -62,9 +64,9 @@ public class GameSetupActivity extends Activity implements GameSetupFragment.OnF
     }
 
     @Override
-    public void onFragmentInteractionAddPlayer(ArrayList<String> playerNames) {
+    public void onFragmentInteractionAddPlayer(ArrayList<Player> players) {
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList("playerNames", playerNames);
+        bundle.putSerializable("players", players);
         GameSetupFragment gameSetupFragment = new GameSetupFragment();
         gameSetupFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

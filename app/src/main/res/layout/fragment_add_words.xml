@@ -2,31 +2,28 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:layout_marginTop="?attr/actionBarSize"
              tools:context="com.example.james.ultimatewordfinderr.AddWordsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
 
     <EditText
         android:id="@+id/editTextWords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewItem"
-        android:hint="Word(s)" />
+        android:hint="@string/add_words_input_hint_text" />
 
     <Button
         android:id="@+id/btnAddWordScore"
         style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_below="@+id/scrollView"
         android:background="@color/colorAccent"
-        android:text="Add Word Score" />
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:text="@string/add_word_score_button_text" />
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
@@ -41,11 +38,7 @@
             android:orientation="vertical" >
 
             <ListView
-                android:layout_below="@+id/editTextWords"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_marginTop="27dp"
-                android:layout_above="@+id/btnAddManualScore"
                 android:id="@+id/listViewWordScores"
                 android:layout_height="360dp"
                 android:layout_width="3000dp" />
@@ -58,9 +51,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="5dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="5dp"
         android:layout_toStartOf="@+id/btnAddWordScore"
         android:background="@color/colorAccent"
-        android:text="Add Number Score" />
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:text="@string/add_manual_score_button_text" />
 
 </RelativeLayout>

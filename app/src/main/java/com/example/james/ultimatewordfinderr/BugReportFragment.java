@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +31,10 @@ import javax.net.ssl.HttpsURLConnection;
  * create an instance of this fragment.
  */
 public class BugReportFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -55,7 +54,7 @@ public class BugReportFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment BugReportFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static BugReportFragment newInstance(String param1, String param2) {
         BugReportFragment fragment = new BugReportFragment();
         Bundle args = new Bundle();
@@ -87,7 +86,7 @@ public class BugReportFragment extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.radioButtonLow:
                         setPriority("LOW");
                         break;
@@ -130,8 +129,6 @@ public class BugReportFragment extends Fragment {
         });
 
 
-
-
         return view;
     }
 
@@ -143,7 +140,7 @@ public class BugReportFragment extends Fragment {
         String body;
         ProgressDialog progressDialog;
 
-        public TrelloAPITask(String url, String requestMethod, String contentType, String body){
+        public TrelloAPITask(String url, String requestMethod, String contentType, String body) {
             this.url = url;
             this.requestMethod = requestMethod;
             this.contentType = contentType;
@@ -151,8 +148,8 @@ public class BugReportFragment extends Fragment {
         }
 
         @Override
-        protected void onPreExecute(){
-            progressDialog = new ProgressDialog(getContext());
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Submitting...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setIndeterminate(true);
@@ -172,28 +169,28 @@ public class BugReportFragment extends Fragment {
                 connection.setRequestProperty("Content-Length", body);
                 connection.getOutputStream().write(body.getBytes("UTF8"));
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                Log.e("MalformedURLException", e.getMessage());
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("IOException", e.getMessage());
             }
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
         }
     }
 
-    private void setPriority(String priority){
+    private void setPriority(String priority) {
         this.priority = priority;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -228,7 +225,6 @@ public class BugReportFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

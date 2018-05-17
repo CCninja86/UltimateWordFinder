@@ -9,51 +9,52 @@ import java.util.Map;
  */
 public class Player implements Serializable {
     private String name;
+    private int colour;
     private int score;
     private PlayerStatus status;
     private Scrabble scrabbleGame;
     private ArrayList<String> playerWordHistory;
 
-    public Player(String name, Scrabble scrabbleGame){
+    public Player(String name, int colour) {
         this.setName(name);
         this.score = 0;
         this.status = PlayerStatus.TIED;
-        this.scrabbleGame = scrabbleGame;
         this.playerWordHistory = new ArrayList<>();
+        this.colour = colour;
     }
 
-    public String getName(){
+    public String getName() {
 
         return this.name;
     }
 
-    public int getScore(){
+    public int getScore() {
         return this.score;
     }
 
-    public PlayerStatus getStatus(){
+    public PlayerStatus getStatus() {
         return this.status;
     }
 
-    public void addWordScore(String word, Map<String, Integer> wordsWithWordBonuses, boolean doubleLetter, boolean tripleLetter, boolean doubleWord, boolean tripleWord, ArrayList<String> doubleLetters, ArrayList<String> tripleLetters){
+    public void addWordScore(String word, Map<String, Integer> wordsWithWordBonuses, boolean doubleLetter, boolean tripleLetter, boolean doubleWord, boolean tripleWord, ArrayList<String> doubleLetters, ArrayList<String> tripleLetters) {
         String[] letters = word.split("");
-        ArrayList<Tile> tiles = this.scrabbleGame.getTiles();
+        ArrayList<Tile> tiles = this.getScrabbleGame().getTiles();
         ArrayList<String> doubleLetterBonuses = new ArrayList<>();
         ArrayList<String> tripleLetterBonuses = new ArrayList<>();
         int totalPoints = 0;
 
-        if(doubleLetter){
+        if (doubleLetter) {
             doubleLetterBonuses = doubleLetters;
         }
 
-        if(tripleLetter){
+        if (tripleLetter) {
             tripleLetterBonuses = tripleLetters;
         }
 
-        for(int i = 0; i < letters.length; i++){
+        for (int i = 0; i < letters.length; i++) {
             String letter = letters[i];
 
-            if(!letter.equals("")) {
+            if (!letter.equals("")) {
                 for (Tile tile : tiles) {
                     if (tile.getLetter().equals(letter)) {
                         int letterPoints = tile.getPoints();
@@ -72,17 +73,17 @@ public class Player implements Serializable {
             }
         }
 
-        if(doubleWord){
-            if(wordsWithWordBonuses.containsKey(word.toLowerCase())){
-                if(wordsWithWordBonuses.get(word.toLowerCase()) == 2){
+        if (doubleWord) {
+            if (wordsWithWordBonuses.containsKey(word.toLowerCase())) {
+                if (wordsWithWordBonuses.get(word.toLowerCase()) == 2) {
                     totalPoints *= 2;
                 }
             }
         }
 
-        if(tripleWord){
-            if(wordsWithWordBonuses.containsKey(word.toLowerCase())){
-                if(wordsWithWordBonuses.get(word.toLowerCase()) == 3){
+        if (tripleWord) {
+            if (wordsWithWordBonuses.containsKey(word.toLowerCase())) {
+                if (wordsWithWordBonuses.get(word.toLowerCase()) == 3) {
                     totalPoints *= 3;
                 }
             }
@@ -92,7 +93,7 @@ public class Player implements Serializable {
         this.setScore(this.score + totalPoints);
     }
 
-    public void addCustomScore(int score){
+    public void addCustomScore(int score) {
         this.setScore(this.score + score);
     }
 
@@ -110,7 +111,7 @@ public class Player implements Serializable {
         this.playerWordHistory = playerWordHistory;
     }
 
-    public void updatePlayerWordHistory(String oldItem, String newItem){
+    public void updatePlayerWordHistory(String oldItem, String newItem) {
         int oldItemIndex = this.playerWordHistory.indexOf(oldItem);
         this.playerWordHistory.set(oldItemIndex, newItem);
     }
@@ -124,5 +125,21 @@ public class Player implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getColour() {
+        return colour;
+    }
+
+    public void setColour(int colour) {
+        this.colour = colour;
+    }
+
+    public Scrabble getScrabbleGame() {
+        return scrabbleGame;
+    }
+
+    public void setScrabbleGame(Scrabble scrabbleGame) {
+        this.scrabbleGame = scrabbleGame;
     }
 }

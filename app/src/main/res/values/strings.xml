@@ -41,6 +41,17 @@
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_nav_bar_text_player">Players</string>
+    <string name="bottom_nav_bar_text_scores">Scores</string>
+    <string name="bottom_nav_bar_text_tile_breakdown">Tiles</string>
+    <string name="bottom_nav_bar_text_word_finder">Word Finder</string>
+    <string name="bottom_nav_bar_text_dictionary">Dictionary</string>
+
+    <string name="add_words_input_hint_text">Word(s)</string>
+    <string name="add_manual_score_button_text">Add Number Score</string>
+    <string name="add_word_score_button_text">Add Word Score</string>
+
+    <string name="add_player_edit_text_hint">Player Name</string>
+    <string name="add_player_add_text">Add Player</string>
+    <string name="add_player_choose_colour_text">Choose Colour</string>
 </resources>

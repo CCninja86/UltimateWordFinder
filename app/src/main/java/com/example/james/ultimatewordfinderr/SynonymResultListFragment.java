@@ -20,12 +20,10 @@ import java.util.ArrayList;
  */
 
 public class SynonymResultListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -48,7 +46,7 @@ public class SynonymResultListFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment ResultListFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static SynonymResultListFragment newInstance(String param1, String param2) {
         SynonymResultListFragment fragment = new SynonymResultListFragment();
         Bundle args = new Bundle();
@@ -79,8 +77,6 @@ public class SynonymResultListFragment extends Fragment {
 
         TextView textViewWord = (TextView) view.findViewById(R.id.textViewWord);
         textViewWord.setText(word);
-        ImageButton imageButtonReturn = (ImageButton) view.findViewById(R.id.imageButtonReturn);
-        imageButtonReturn.setVisibility(View.INVISIBLE);
 
         adapter = new ListViewAdapter(getActivity(), synonyms, R.layout.row_result_list);
         listResults = (ListView) view.findViewById(R.id.listViewResults);
@@ -102,8 +98,8 @@ public class SynonymResultListFragment extends Fragment {
                 String search = editTextSearch.getText().toString();
                 ArrayList<String> results = new ArrayList<>();
 
-                for(String word : synonyms){
-                    if(word.startsWith(search)){
+                for (String word : synonyms) {
+                    if (word.startsWith(search)) {
                         results.add(word);
                     }
                 }
@@ -119,66 +115,10 @@ public class SynonymResultListFragment extends Fragment {
             }
         });
 
-//        imageButtonReturn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mListener.onFragmentInteraction("return");
-//            }
-//        });
-
-//        listResults.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-//                Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-//
-//                if(vibrator.hasVibrator()){
-//                    vibrator.vibrate(125);
-//
-//                    try {
-//                        Thread.sleep(125);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                final CharSequence options[] = new CharSequence[]{"Definitions", "Synonyms"};
-//
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//                builder.setItems(options, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        String word = listResults.getItemAtPosition(position).toString();
-//                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(mListener, null, null, getContext(), word);
-//
-//                        switch(which){
-//                            case 0:
-//                                wordOptionsHandler.loadDefinitions();
-//                                break;
-//                            case 1:
-//                                wordOptionsHandler.loadSynonyms();
-//                                break;
-//                        }
-//
-//
-//                    }
-//                });
-//
-//                builder.show();
-//
-//
-//
-//                return true;
-//            }
-//        });
-
-
-
-
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(String word, ArrayList<String> synonyms) {
         if (mListener != null) {
             mListener.onFragmentInteraction(word, synonyms);
@@ -213,9 +153,10 @@ public class SynonymResultListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(String word, ArrayList<String> synonyms);
+
         void onFragmentInteraction(String word, DefinitionList definitionList);
+
         void onFragmentInteraction(String option);
     }
 }

@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * Created by James on 19/11/2015.
@@ -57,7 +58,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS" + TABLE_WORDS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDS);
         onCreate(sqLiteDatabase);
     }
 
@@ -110,7 +111,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             int baseScore = Integer.parseInt(cursor.getString(2));
             boolean isOfficial = false;
 
-            if(Integer.parseInt(cursor.getString(3)) == 1){
+            if (Integer.parseInt(cursor.getString(3)) == 1) {
                 isOfficial = true;
             }
 
@@ -136,26 +137,26 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-                do {
-                    progress++;
-                    progressDialog.setProgress(progress);
-                    Word word = new Word();
-                    word.setId(Integer.parseInt(cursor.getString(0)));
-                    word.setWord(cursor.getString(1));
-                    word.setBaseScore(Integer.parseInt(cursor.getString(2)));
+            do {
+                progress++;
+                progressDialog.setProgress(progress);
+                Word word = new Word();
+                word.setId(Integer.parseInt(cursor.getString(0)));
+                word.setWord(cursor.getString(1));
+                word.setBaseScore(Integer.parseInt(cursor.getString(2)));
 
 
-                    boolean wordIsOfficial = false;
+                boolean wordIsOfficial = false;
 
-                    if (cursor.getString(3).equals("1")) {
-                        wordIsOfficial = true;
-                    }
+                if (cursor.getString(3).equals("1")) {
+                    wordIsOfficial = true;
+                }
 
-                    word.setWordIsOfficial(wordIsOfficial);
-                    wordList.add(word);
-                } while (cursor.moveToNext());
+                word.setWordIsOfficial(wordIsOfficial);
+                wordList.add(word);
+            } while (cursor.moveToNext());
 
-                cursor.close();
+            cursor.close();
 
         }
 
@@ -173,12 +174,11 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     }
 
 
-
     public void insertAllWords(AssetManager assetManager, Dictionary dictionary, final ProgressBar progressBar) {
         initialisationCurrent = 0;
         initialisationTimer = 30;
 
-        while(initialisationCurrent < initialisationTimer){
+        while (initialisationCurrent < initialisationTimer) {
             ((Activity) context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -190,12 +190,12 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e("InterruptedException", e.getMessage());
+                Thread.currentThread().interrupt();
             }
 
             initialisationCurrent++;
         }
-
 
 
         InputStream inputStream = null;
@@ -203,8 +203,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         try {
             inputStream = assetManager.open("words.txt");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("IOException", e.getMessage());
         }
+
 
         try {
             final TextView textViewWebpageProgress = (TextView) ((Activity) context).findViewById(R.id.textViewWebpage);
@@ -228,7 +229,6 @@ public class DatabaseHandler extends SQLiteAssetHelper {
                         int baseWordScore = dictionary.getBaseWordScore(currentWord);
                         boolean isWordOffical = false;
                         URL url = new URL("http://www.wordfind.com/word/" + currentWord + "/");
-
 
 
                         ((Activity) context).runOnUiThread(new Runnable() {
@@ -316,9 +316,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         } catch (InterruptedException e) {
             Log.e("InterruptedException", "InterruptedException thrown, restarting...");
             this.insertAllWords(assetManager, dictionary, progressBar);
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
-            Log.e("Other Error", "Other Exception thrown, printing stack trace...");
-            e.printStackTrace();
+            Log.e("Other Error", e.getMessage());
         }
     }
 }

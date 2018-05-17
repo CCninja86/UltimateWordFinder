@@ -2,9 +2,8 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:layout_marginTop="?attr/actionBarSize"
              tools:context="com.example.james.ultimatewordfinderr.WordFinderScoreComparisonFragment">
-
-    <!-- TODO: Update blank fragment layout -->
 
     <ListView
         android:layout_width="201dp"
@@ -33,6 +32,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="right|top"
         android:background="@color/colorAccent"
+        android:textColor="@color/white"
         android:text="@string/word_finder_score_comparison_button_compare" />
 
     <ListView

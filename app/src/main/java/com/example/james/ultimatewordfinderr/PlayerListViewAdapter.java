@@ -7,23 +7,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.jsoup.Connection;
 
 import java.util.ArrayList;
 
 /**
  * Created by James on 30/11/2015.
  */
-public class ListViewAdapter extends ArrayAdapter<String> {
+public class PlayerListViewAdapter extends ArrayAdapter<Player> {
 
-    private ArrayList<String> words;
+    private ArrayList<Player> players;
     private ArrayList<Integer> selectedItems;
     private int layout;
 
-    public ListViewAdapter(Activity context, ArrayList<String> words, int layout) {
-        super(context, layout, words);
+    public PlayerListViewAdapter(Activity context, ArrayList<Player> players, int layout) {
+        super(context, layout, players);
         this.layout = layout;
-        this.words = words;
+        this.players = players;
         this.selectedItems = new ArrayList<>();
     }
 
@@ -41,12 +45,12 @@ public class ListViewAdapter extends ArrayAdapter<String> {
 
     @Override
     public int getCount() {
-        return words.size();
+        return players.size();
     }
 
     @Override
-    public String getItem(int position) {
-        return words.get(position);
+    public Player getItem(int position) {
+        return players.get(position);
     }
 
     @Override
@@ -62,13 +66,18 @@ public class ListViewAdapter extends ArrayAdapter<String> {
             convertView = inflater.inflate(layout, null);
         }
 
-        String word = words.get(position);
+        Player player = players.get(position);
 
-        if (word != null) {
+        if (player != null) {
             TextView textView = (TextView) convertView.findViewById(R.id.textViewItem);
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.imageViewPlayerColour);
 
             if (textView != null) {
-                textView.setText(word);
+                textView.setText(player.getName());
+            }
+
+            if (imageView != null) {
+                imageView.setBackgroundColor(player.getColour());
             }
         }
 

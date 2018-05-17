@@ -24,13 +24,12 @@ import java.util.List;
  * Use the {@link WordDefinitionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class WordDefinitionFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -53,7 +52,7 @@ public class WordDefinitionFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment WordDefinitionFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static WordDefinitionFragment newInstance(String param1, String param2) {
         WordDefinitionFragment fragment = new WordDefinitionFragment();
         Bundle args = new Bundle();
@@ -80,32 +79,29 @@ public class WordDefinitionFragment extends Fragment {
 
         Bundle bundle = getArguments();
         String word = bundle.getString("Word");
-        TextView textViewWord = (TextView) view.findViewById(R.id.textViewWord);
-        textViewWord.setText(word);
+        TextView textViewWord = view.findViewById(R.id.textViewWord);
+        textViewWord.setText(word.toUpperCase());
 
-        listView = (ExpandableListView) view.findViewById(R.id.expandableListView);
+        listView = view.findViewById(R.id.expandableListView);
         prepareListData();
-
 
 
         return view;
     }
 
-    private void prepareListData(){
-        listHeader = new ArrayList<String>();
-        listChild = new HashMap<String, List<String>>();
+    private void prepareListData() {
+        listHeader = new ArrayList<>();
+        listChild = new HashMap<>();
 
         Bundle bundle = getArguments();
         String json = bundle.getString("Definition List");
         DefinitionList definitionList = new Gson().fromJson(json, DefinitionList.class);
 
 
-
-
         int i = 0;
 
 
-        for(Definition definition : definitionList.getDefinitions()){
+        for (Definition definition : definitionList.getDefinitions()) {
             listHeader.add("Definition " + (i + 1));
 
             List<String> definitionParts = new ArrayList<>();
@@ -122,7 +118,7 @@ public class WordDefinitionFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -157,7 +153,6 @@ public class WordDefinitionFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

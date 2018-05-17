@@ -9,7 +9,7 @@ public class Definition {
     private String definition;
 
 
-    public Definition(){
+    public Definition() {
 
     }
 

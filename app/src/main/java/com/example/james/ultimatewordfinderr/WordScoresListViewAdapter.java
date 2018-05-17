@@ -29,7 +29,7 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
     private View.OnClickListener btnOnClickListener;
     private static int MAX_ROWS = 11;
 
-    public WordScoresListViewAdapter(Activity context, ArrayList<String> words, int layout){
+    public WordScoresListViewAdapter(Activity context, ArrayList<String> words, int layout) {
         super(context, layout, words);
         this.words = words;
         this.layout = layout;
@@ -37,30 +37,30 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
         this.letterOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(view != null){
+                if (view != null) {
                     int colour = 0;
                     Drawable background = view.getBackground();
 
-                    if(background instanceof ColorDrawable){
+                    if (background instanceof ColorDrawable) {
                         colour = ((ColorDrawable) background).getColor();
                         String hexColor = String.format("#%06X", (0xFFFFFF & colour));
                         TextView textView = (TextView) view;
                         String currentText = textView.getText().toString();
                         String newText = "";
 
-                        switch (hexColor){
-                            case "#C3BDA5":
-                                view.setBackgroundColor(Color.argb(255, 197, 222, 210));
+                        switch (hexColor) {
+                            case "#00C853":
+                                view.setBackgroundColor(Color.argb(255, 0, 255, 106));
                                 newText = currentText + " x2";
                                 textView.setText(newText);
                                 break;
-                            case "#C5DED2":
-                                view.setBackgroundColor(Color.argb(255, 43, 140, 174));
+                            case "#00FF6A":
+                                view.setBackgroundColor(Color.argb(255, 0, 153, 64));
                                 newText = currentText.substring(0, currentText.indexOf("x") - 1) + " x3";
                                 textView.setText(newText);
                                 break;
-                            case "#2B8CAE":
-                                view.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                            case "#009940":
+                                view.setBackgroundColor(Color.argb(255, 0, 200, 83));
                                 textView.setText(currentText.substring(0, currentText.indexOf("x") - 1));
                                 break;
                         }
@@ -72,20 +72,20 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
         this.btnOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(view != null){
+                if (view != null) {
                     Button button = (Button) view;
 
-                    switch (button.getText().toString()){
+                    switch (button.getText().toString()) {
                         case "No Word Bonus":
-                            button.setBackgroundColor(Color.argb(255, 249, 189, 178));
+                            button.setBackgroundColor(Color.argb(255, 0, 255, 106));
                             button.setText("Double Word");
                             break;
                         case "Double Word":
-                            button.setBackgroundColor(Color.argb(255, 236, 92, 79));
+                            button.setBackgroundColor(Color.argb(255, 0, 153, 64));
                             button.setText("Triple Word");
                             break;
                         case "Triple Word":
-                            button.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                            button.setBackgroundColor(Color.argb(255, 0, 200, 83));
                             button.setText("No Word Bonus");
                             break;
                     }
@@ -94,12 +94,12 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
         };
     }
 
-    public ArrayList<Integer> getSelectedItems(){
-        return  this.selectedItems;
+    public ArrayList<Integer> getSelectedItems() {
+        return this.selectedItems;
     }
 
-    public void toggleSelected(Integer position){
-        if(selectedItems.contains(position)){
+    public void toggleSelected(Integer position) {
+        if (selectedItems.contains(position)) {
             selectedItems.remove(position);
         } else {
             selectedItems.add(position);
@@ -107,53 +107,52 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public int getCount(){
-        if(words != null){
-            return  Math.min(words.size(), MAX_ROWS);
+    public int getCount() {
+        if (words != null) {
+            return Math.min(words.size(), MAX_ROWS);
         } else {
             return 0;
         }
     }
 
     @Override
-    public String getItem(int position){
+    public String getItem(int position) {
         return words.get(position);
     }
 
     @Override
-    public long getItemId(int position){
+    public long getItemId(int position) {
         return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout.LayoutParams textViewLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 
-        if(convertView == null){
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, null);
 
             String word = words.get(position);
 
-            if(word != null){
+            if (word != null) {
                 LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.wordScoreLayout);
 
                 String[] letters = word.split("");
 
-                for(String letter : letters){
-                    if(!letter.equals("")){
+                for (String letter : letters) {
+                    if (!letter.equals("")) {
                         TextView letterTextView = new TextView(getContext());
                         letterTextView.setText(letter.toUpperCase());
-                        letterTextView.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                        letterTextView.setBackgroundColor(Color.argb(255, 0, 200, 83));
+                        letterTextView.setTextColor(Color.argb(255, 255, 255, 255));
                         letterTextView.setTextSize(24);
                         letterTextView.setWidth(200);
                         letterTextView.setHeight(100);
                         letterTextView.setGravity(Gravity.CENTER_HORIZONTAL);
                         letterTextView.setOnClickListener(this.letterOnClickListener);
-
-
 
 
                         textViewLayoutParams.setMargins(0, 0, 10, 0);
@@ -164,7 +163,9 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
 
                 Button wordBonusButton = new Button(getContext());
                 wordBonusButton.setText("No Word Bonus");
-                wordBonusButton.setBackgroundColor(Color.argb(255, 195, 189, 165));
+                wordBonusButton.setBackgroundColor(Color.argb(255, 0, 200, 83));
+                wordBonusButton.setPadding(10, 10, 10, 10);
+                wordBonusButton.setTextColor(Color.argb(255, 255, 255, 255));
                 wordBonusButton.setOnClickListener(this.btnOnClickListener);
 
 
@@ -176,8 +177,7 @@ public class WordScoresListViewAdapter extends ArrayAdapter<String> {
         }
 
 
-
-        return  convertView;
+        return convertView;
     }
 
 }

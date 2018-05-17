@@ -24,12 +24,10 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class AdvancedSearchFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -47,7 +45,7 @@ public class AdvancedSearchFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment AdvancedSearchFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static AdvancedSearchFragment newInstance(String param1, String param2) {
         AdvancedSearchFragment fragment = new AdvancedSearchFragment();
         Bundle args = new Bundle();
@@ -128,7 +126,7 @@ public class AdvancedSearchFragment extends Fragment {
 
             }
         });
-        
+
         btnAdvancedSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,11 +137,11 @@ public class AdvancedSearchFragment extends Fragment {
                 int maxLength = seekBarNumLettersMax.getProgress();
                 SearchWordsTask searchWordsTask = null;
 
-                if(minLength == 0 && maxLength == 0){
+                if (minLength == 0 && maxLength == 0) {
                     searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, 30);
-                } else if(minLength == 0 && maxLength != 0){
+                } else if (minLength == 0 && maxLength != 0) {
                     searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, maxLength);
-                } else if(minLength != 0 && maxLength == 0){
+                } else if (minLength != 0 && maxLength == 0) {
                     searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, 30);
                 } else {
                     searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, maxLength);
@@ -166,7 +164,7 @@ public class AdvancedSearchFragment extends Fragment {
         private int maxLength;
         private View view;
 
-        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int minLength, int maxLength){
+        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int minLength, int maxLength) {
             this.searchTerm = searchTerm;
             this.prefix = prefix;
             this.suffix = suffix;
@@ -176,7 +174,7 @@ public class AdvancedSearchFragment extends Fragment {
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Searching...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -189,7 +187,7 @@ public class AdvancedSearchFragment extends Fragment {
         protected Void doInBackground(Void... params) {
             for (Word word : dictionary.getWordList()) {
                 if (word.getWord().contains(searchTerm) && word.getWord().startsWith(prefix) && word.getWord().endsWith(suffix)) {
-                    if(word.getWord().length() >= minLength && word.getWord().length() <= maxLength){
+                    if (word.getWord().length() >= minLength && word.getWord().length() <= maxLength) {
                         matches.add(word);
                     }
                 }
@@ -199,13 +197,13 @@ public class AdvancedSearchFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
 
-            if(matches.size() > 0){
+            if (matches.size() > 0) {
                 mListener.onAdvancedSearchFragmentInteraction(view, matches);
             } else {
                 Toast.makeText(getContext(), "No results found", Toast.LENGTH_SHORT).show();
@@ -213,13 +211,6 @@ public class AdvancedSearchFragment extends Fragment {
 
         }
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
 
     @Override
     public void onAttach(Activity activity) {
@@ -249,7 +240,6 @@ public class AdvancedSearchFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onAdvancedSearchFragmentInteraction(View view, ArrayList<Word> matches);
     }
 

@@ -9,13 +9,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -33,13 +32,12 @@ import java.util.logging.Handler;
  * create an instance of this fragment.
  */
 public class ScoringFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private Scrabble scrabbleGame;
-    private ArrayAdapter<String> adapter;
+    private PlayerListViewAdapter adapter;
     private ListView players;
     private Player player;
     private ProgressDialog progressDialog;
@@ -55,7 +53,6 @@ public class ScoringFragment extends Fragment {
 
     private boolean hasActiveInternetConnection;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -70,7 +67,7 @@ public class ScoringFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment ScoringFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static ScoringFragment newInstance(String param1, String param2) {
         ScoringFragment fragment = new ScoringFragment();
         Bundle args = new Bundle();
@@ -107,79 +104,19 @@ public class ScoringFragment extends Fragment {
         //Bundle bundle = getArguments();
         this.scrabbleGame = g.getGame();
 
-        Button showScoresButton = (Button) view.findViewById(R.id.btnShowScores);
-        Button tileBreakdownButton = (Button) view.findViewById(R.id.btnTileBreakdown);
-        final Button wordFinderButton = (Button) view.findViewById(R.id.btnWordFinder);
-
-        clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(view.getId() == R.id.btnWordFinder){
-                    if(dictionary == null) {
-                        final AlertDialog.Builder builderConfirm = new AlertDialog.Builder(getActivity());
-                        builderConfirm.setTitle("First-time Setup");
-                        builderConfirm.setMessage("Both the Dictionary and Word Finder features utilise a large database of words. " +
-                                "Due to this, a first-time setup is required to use these features. This setup may take a while, " +
-                                "depending on the speed of your device. Would you like to perform the first-time setup now?");
-
-                        builderConfirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-
-                        builderConfirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                context = getActivity().getApplicationContext();
-                                LoadFragmentTask task = new LoadFragmentTask();
-                                task.execute();
-                            }
-                        });
-
-                        builderConfirm.show();
-                    } else {
-                        context = getActivity().getApplicationContext();
-                        LoadFragmentTask task = new LoadFragmentTask();
-                        task.execute();
-                    }
-                } else {
-                    mListener.onScoringFragmentButtonInteraction(view);
-                }
-
-
-            }
-        };
-
-
-
-        showScoresButton.setOnClickListener(clickListener);
-        tileBreakdownButton.setOnClickListener(clickListener);
-        wordFinderButton.setOnClickListener(clickListener);
-
-        players = (ListView) view.findViewById(android.R.id.list);
-        adapter = new ListViewAdapter(getActivity(), scrabbleGame.getPlayerNamesAsArrayList(), R.layout.row);
+        players = view.findViewById(android.R.id.list);
+        adapter = new PlayerListViewAdapter(getActivity(), scrabbleGame.getPlayers(), R.layout.row_player);
         players.setAdapter(adapter);
         players.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                String playerName = players.getItemAtPosition(position).toString();
-                Player player = scrabbleGame.getPlayerByName(playerName);
+                Player player = adapter.getItem(position);
                 mListener.onScoringFragmentListInteraction(player, scrabbleGame);
             }
         });
 
         return view;
     }
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
 
     @Override
     public void onAttach(Activity activity) {
@@ -209,19 +146,17 @@ public class ScoringFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onScoringFragmentListInteraction(Player player, Scrabble scrabbleGame);
-        public void onScoringFragmentButtonInteraction(View view);
     }
 
     private class LoadFragmentTask extends AsyncTask<Void, Void, Void> {
 
-        public LoadFragmentTask(){
+        public LoadFragmentTask() {
 
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
             progressDialog = new ProgressDialog(getActivity());
@@ -235,7 +170,7 @@ public class ScoringFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if(dictionary == null){
+            if (dictionary == null) {
                 dictionary = new com.example.james.ultimatewordfinderr.Dictionary();
                 final CSVReader csvReader = new CSVReader(context);
                 dictionary.linkCSVReader(csvReader);
@@ -256,8 +191,8 @@ public class ScoringFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }
@@ -268,10 +203,10 @@ public class ScoringFragment extends Fragment {
         }
     }
 
-    private void choose(){
+    private void choose() {
         String alertMessage = "Would you like to open the Word Finder or Basic Dictionary?";
 
-        if(!hasActiveInternetConnection){
+        if (!hasActiveInternetConnection) {
             alertMessage += "\n\nNote: You are not connected to the Internet. You will not be able to view the definitions or synonyms of words. All other features will be available.";
         }
 
@@ -298,7 +233,7 @@ public class ScoringFragment extends Fragment {
         builderSelection.show();
     }
 
-    private void setup(){
+    private void setup() {
         Bundle bundle = new Bundle();
         bundle.putInt("selection", selection);
         Intent intent = new Intent(context, WordFinderActivity.class);
@@ -307,7 +242,7 @@ public class ScoringFragment extends Fragment {
         context.startActivity(intent);
     }
 
-    private boolean hasActiveInternetConnection(){
+    private boolean hasActiveInternetConnection() {
         boolean success = false;
 
         try {
@@ -317,7 +252,7 @@ public class ScoringFragment extends Fragment {
             connection.connect();
             success = connection.getResponseCode() == 200;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("IOException", e.getMessage());
         }
 
         return success;

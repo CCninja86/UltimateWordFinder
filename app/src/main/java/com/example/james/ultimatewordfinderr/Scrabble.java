@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 /**
  * Created by James on 11/11/2015.
  */
-public class Scrabble implements Serializable{
+public class Scrabble implements Serializable {
     private ArrayList<Player> players;
     private ArrayList<Tile> tiles;
     private ArrayList<String> wordHistory;
@@ -37,7 +37,7 @@ public class Scrabble implements Serializable{
         this.wordHistory = new ArrayList<>();
         this.playerMap = new HashMap<>();
 
-        for(Player player : players){
+        for (Player player : players) {
             playerMap.put(player.getName(), player);
         }
     }
@@ -72,17 +72,17 @@ public class Scrabble implements Serializable{
         this.tiles.add(new Tile("Z", 10, false, 1));
     }
 
-    public void removeTile(Tile tile){
-        if(this.getTileCount() > 0){
-            for(Tile tileInArray : this.tiles){
-                if(tile.getLetter().equals(tileInArray.getLetter())){
+    public void removeTile(Tile tile) {
+        if (this.getTileCount() > 0) {
+            for (Tile tileInArray : this.tiles) {
+                if (tile.getLetter().equals(tileInArray.getLetter())) {
                     tileInArray.removeTile();
                 }
             }
         }
     }
 
-    public boolean enoughTilesForWord(String word){
+    public boolean enoughTilesForWord(String word) {
         return this.getTileCount() - word.length() >= 0;
     }
 
@@ -90,11 +90,11 @@ public class Scrabble implements Serializable{
         return this.players;
     }
 
-    public void clearPlayers(){
+    public void clearPlayers() {
         this.players = new ArrayList<>();
     }
 
-    public Map<String, Player> getPlayerMap(){
+    public Map<String, Player> getPlayerMap() {
         return this.playerMap;
     }
 
@@ -128,10 +128,10 @@ public class Scrabble implements Serializable{
         return playerNames;
     }
 
-    public ArrayList<String> getPlayerNamesAsArrayList(){
+    public ArrayList<String> getPlayerNamesAsArrayList() {
         ArrayList<String> playerNames = new ArrayList<>();
 
-        for(Player player : this.players){
+        for (Player player : this.players) {
             playerNames.add(player.getName());
         }
 
@@ -212,41 +212,6 @@ public class Scrabble implements Serializable{
         return winningPlayer;
     }
 
-    // May not actually be practical due to there being no current way to check what letters are on the board/have already been played
-    /*public boolean wordIsPossible(String word) {
-        boolean wordIsPossible = false;
-        String[] words = word.split("-");
-        String wordsJoined = "";
-
-        for (String wordInArray : words) {
-            wordsJoined += wordInArray;
-        }
-
-        String[] letters = wordsJoined.split("");
-        int validTiles = 0;
-
-        for (String letter : letters) {
-            for (Tile tile : this.tiles) {
-                int tempQuantity = tile.getQuantity();
-
-                if (tile.getLetter().equals(letter)) {
-                    if (tile.enoughTiles()) {
-                        validTiles++;
-                        tile.setQuantity(tile.getQuantity() - 1);
-                    }
-                }
-
-                tile.setQuantity(tempQuantity);
-            }
-        }
-
-        if (validTiles == letters.length) {
-            wordIsPossible = true;
-        }
-
-        return wordIsPossible;
-    }*/
-
     public boolean saveGame() {
         Writer writer = null;
 
@@ -289,21 +254,21 @@ public class Scrabble implements Serializable{
             return false;
         } catch (IOException ex) {
             Logger.getLogger(Scrabble.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         } finally {
-            try {
-                writer.flush();
-                writer.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Scrabble.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+            if (writer != null) {
+                try {
+                    writer.flush();
+                    writer.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Scrabble.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
         return true;
     }
 
-    public void loadGame() {
+    /*public void loadGame() {
         BufferedReader bufferedReader = null;
         InputStream is = null;
 
@@ -359,5 +324,5 @@ public class Scrabble implements Serializable{
                 Logger.getLogger(Scrabble.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
+    }*/
 }

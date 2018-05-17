@@ -1,19 +1,19 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:colorBackground">@android:color/background_light</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
     </style>
 
-    <style name="ActionBar" parent="@android:style/Widget.Material.Light.ActionBar">
-        <item name="android:background">@color/colorPrimary</item>
+    <style name="AppTheme.ActionBarOverflow">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
 </resources>
