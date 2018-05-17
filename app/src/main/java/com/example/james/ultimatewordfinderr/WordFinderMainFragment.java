@@ -130,7 +130,6 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
         editTextLettersBoard = (EditText) view.findViewById(R.id.editTextLettersBoard);
         editTextLettersRack = (EditText) view.findViewById(R.id.editTextLettersRack);
         Button btnSearch = (Button) view.findViewById(R.id.btnSearch);
-        Button btnAdvancedSearch = (Button) view.findViewById(R.id.btnAdvancedSearch);
         Button btnExample = (Button) view.findViewById(R.id.btnExample);
 
         editTextLettersRack.addTextChangedListener(new TextWatcher() {
@@ -191,14 +190,6 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
 
                 String boardRegex = patternMatcher.generateBoardRegex(editTextLettersBoard.getText().toString());
                 patternMatcher.getAllWordsMatchingRegex(boardRegex);
-            }
-        });
-
-        btnAdvancedSearch.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                mListener.onSearchFragmentInteraction(view, null);
             }
         });
 

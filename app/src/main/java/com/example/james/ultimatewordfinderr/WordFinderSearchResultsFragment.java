@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
@@ -18,12 +19,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
@@ -99,22 +102,44 @@ public class WordFinderSearchResultsFragment extends Fragment {
         setRetainInstance(true);
 
         final SpeedDialView speedDialView = view.findViewById(R.id.speedDialSearchResults);
-        // TODO: Add Select All FAB
 
-        final TextView textViewNumResults = (TextView) view.findViewById(R.id.textViewNumResults);
+        CheckBox checkBoxOfficialOnly = (CheckBox) view.findViewById(R.id.chkOfficial);
+
+        checkBoxOfficialOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ArrayList<String> officialWords = new ArrayList<>();
+
+                    for(int i = 0; i < adapter.getCount(); i++){
+                        if(dictionary.isWordOfficial(adapter.getItem(i))){
+                            officialWords.add(adapter.getItem(i));
+                        }
+                    }
+
+                    adapter = new ListViewAdapter(getActivity(), officialWords, R.layout.row_result_list);
+                    listResults.setAdapter(adapter);
+                }
+            }
+        });
 
         Bundle bundle = getArguments();
         final Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();
         this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
         this.searchResults = bundle.getStringArrayList("Search Results");
-        this.adapter = new ListViewAdapter(getActivity(), this.searchResults, R.layout.row_result_list);
-        listResults.setAdapter(adapter);
-        textViewNumResults.setText("Found " + listResults.getCount() + " results");
 
-        final Switch switchSmartSelection = (Switch) view.findViewById(R.id.switchSmartSelection);
-        final Switch switchUseOfficialSelection = (Switch) view.findViewById(R.id.switchOfficialSelection);
-        switchSmartSelection.setChecked(true);
+        ArrayList<String> top25Words = new ArrayList<>();
+
+        if(this.searchResults != null){
+            top25Words = getTop25ScoreWords(this.searchResults);
+        } else {
+            Toast.makeText(getActivity(), "Search results is null or empty", Toast.LENGTH_SHORT).show();
+        }
+
+
+        this.adapter = new ListViewAdapter(getActivity(), top25Words, R.layout.row_result_list);
+        listResults.setAdapter(adapter);
 
         final EditText editTextSearch = (EditText) view.findViewById(R.id.editTextSearch);
 
@@ -137,56 +162,11 @@ public class WordFinderSearchResultsFragment extends Fragment {
 
                 adapter = new ListViewAdapter(getActivity(), results, R.layout.row_result_list);
                 listResults.setAdapter(adapter);
-                textViewNumResults.setText("Found " + listResults.getCount() + " results");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
-            }
-        });
-
-
-        switchUseOfficialSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    switchUseOfficialSelection.setText("Use entire list");
-                } else {
-                    switchUseOfficialSelection.setText("Use your selection");
-                }
-
-
-            }
-        });
-
-        switchSmartSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                    alertDialog.setTitle("Are you sure?");
-                    alertDialog.setMessage("Disabling Smart Selection will allow you to select the entire list when clicking 'Select All'." +
-                            "WARNING: Trying to 'Select All' with a large list could cause the app to hang/crash. Are you sure you want to do this?");
-
-                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            switchSmartSelection.setChecked(false);
-                        }
-                    });
-
-                    alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switchSmartSelection.setChecked(true);
-                            dialog.dismiss();
-                        }
-                    });
-
-                    alertDialog.show();
-                }
             }
         });
 
@@ -247,268 +227,6 @@ public class WordFinderSearchResultsFragment extends Fragment {
             }
         });
 
-
-        this.onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String action = "";
-
-                switch (view.getId()) {
-                    case R.id.btnOfficial:
-                        progressDialog = new ProgressDialog(getActivity());
-                        progressDialog.setIndeterminate(true);
-                        progressDialog.setMessage("Checking Official Words...");
-                        progressDialog.show();
-
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Create two new ArrayList objects
-                                //if (!thread.isInterrupted()) {
-                                ArrayList<String> selectedResults = new ArrayList<>();
-                                ArrayList<String> officialWords = new ArrayList<>();
-
-                                if (switchUseOfficialSelection.isChecked()) {
-                                    int len = listResults.getCount();
-                                    SparseBooleanArray checked = listResults.getCheckedItemPositions();
-
-                                    for (int i = 0; i < len; i++) {
-                                        if (checked.get(i)) {
-                                            String item = listResults.getItemAtPosition(i).toString();
-                                            selectedResults.add(item);
-                                        }
-                                    }
-                                } else {
-                                    for (int i = 0; i < listResults.getCount(); i++) {
-                                        String item = listResults.getItemAtPosition(i).toString();
-                                        selectedResults.add(item);
-                                    }
-                                }
-
-                                // If there are words selected, add all those words to the selectedResults list, otherwise notify the user that they must select atleast one word
-                                if (selectedResults.size() < 1) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getActivity(), "Please select at least one word", Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                } else {
-                                    // Initialise some variables
-                                    int officialWordCount = 0;
-                                    int wordCount = 0;
-                                    boolean wordIsValid = false;
-
-                                    // For each word in the list of selected words
-                                    for (String result : selectedResults) {
-                                        float current = (float) wordCount;
-                                        float total = (float) selectedResults.size();
-                                        final float percentage = round((current * 100) / total, 2);
-
-
-                                        final String word = result;
-
-                                        // Check that it's an official Scrabble word
-                                        wordIsValid = dictionary.isWordOfficial(result);
-
-
-                                        // If the word is an official Scrabble word, increase the number of official words and add it to a list
-                                        if (wordIsValid) {
-                                            officialWordCount++;
-                                            officialWords.add(result);
-                                        }
-
-                                        wordCount++;
-
-                                    }
-
-                                    // If the number of selected words is greater than 0
-                                    if (selectedResults.size() > 0) {
-                                        // Based on the number of official Scrabble words found from the selection, display a certain message to the user,
-                                        // then change the list to display just the official words
-                                        if (officialWordCount > 0 && officialWordCount < selectedResults.size()) {
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(getActivity(), "Some of these words are official Scrabble words! The list will now change to display just the official words from your selection.", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-
-                                            searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row_result_list);
-
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    listResults.setAdapter(adapter);
-                                                    textViewNumResults.setText("Found " + listResults.getCount() + " results");
-                                                }
-                                            });
-                                        } else if (officialWordCount == selectedResults.size()) {
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(getActivity(), "All of these words are official Scrabble words! The list will now change to display just the official words from your selection.", Toast.LENGTH_LONG).show();
-                                                    textViewNumResults.setText("Found " + listResults.getCount() + " results");
-                                                }
-                                            });
-
-                                            searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row_result_list);
-
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    listResults.setAdapter(adapter);
-                                                    textViewNumResults.setText("Found " + listResults.getCount() + " results");
-                                                }
-                                            });
-                                        } else if (officialWordCount == 0) {
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(getActivity(), "None of these words are official Scrabble Words.", Toast.LENGTH_LONG).show();
-                                                    textViewNumResults.setText("Found " + listResults.getCount() + " results");
-                                                }
-                                            });
-
-                                            searchResults = officialWords;
-                                            adapter = new ListViewAdapter(getActivity(), searchResults, R.layout.row_result_list);
-
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    listResults.setAdapter(adapter);
-                                                    textViewNumResults.setText("Found " + listResults.getCount() + " results");
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-
-                                if (progressDialog != null && progressDialog.isShowing()) {
-                                    progressDialog.dismiss();
-                                    progressDialog = null;
-                                }
-                            }
-                        }).start();
-
-                        break;
-                    case R.id.btnMinWordScore:
-                        ArrayList<String> selectedResults = new ArrayList<String>();
-
-                        int len = listResults.getCount();
-                        SparseBooleanArray checked = listResults.getCheckedItemPositions();
-
-                        for (int i = 0; i < len; i++) {
-                            if (checked.get(i)) {
-                                String item = listResults.getItemAtPosition(i).toString();
-                                selectedResults.add(item);
-                            }
-                        }
-
-                        if (selectedResults.size() > 1) {
-                            Toast.makeText(getActivity(), "Please only select one word at a time for this feature.", Toast.LENGTH_LONG).show();
-                        } else if (selectedResults.size() == 1) {
-                            Toast.makeText(getActivity(), String.valueOf(dictionary.getBaseWordScore(selectedResults.get(0))), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Please select at least one word", Toast.LENGTH_LONG).show();
-                        }
-
-                        break;
-                    case R.id.btnCompareScores:
-                        ArrayList<String> wordsToCompare = new ArrayList<>();
-
-                        int listLength = listResults.getCount();
-                        SparseBooleanArray wordsChecked = listResults.getCheckedItemPositions();
-
-                        for (int i = 0; i < listLength; i++) {
-                            if (wordsChecked.get(i)) {
-                                String word = listResults.getItemAtPosition(i).toString();
-                                wordsToCompare.add(word);
-                            }
-                        }
-
-                        if (wordsToCompare.size() >= 1) {
-                            for (int i = 0; i < listResults.getAdapter().getCount(); i++) {
-                                listResults.setItemChecked(i, false);
-                            }
-
-                            adapter.notifyDataSetChanged();
-
-                            mListener.onResultsFragmentButtonInteraction("compare", wordsToCompare);
-                        } else if (wordsToCompare.size() == 1) {
-                            Toast.makeText(getActivity(), "Please select at least one word to use this feature", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Please select at least one word", Toast.LENGTH_LONG).show();
-                        }
-
-                        break;
-                    case R.id.btnSelectAll:
-                        int listSize = listResults.getAdapter().getCount();
-
-
-                        if (switchSmartSelection.isChecked()) {
-                            if (listSize > 100) {
-                                int firstVisible = listResults.getFirstVisiblePosition();
-                                int lastVisible = listResults.getLastVisiblePosition();
-
-                                for (int i = firstVisible; i < lastVisible; i++) {
-                                    if (listResults.isItemChecked(i) == false) {
-                                        listResults.setItemChecked(i, true);
-                                        adapter.toggleSelected(new Integer(i));
-                                    }
-                                }
-
-                                Toast.makeText(getActivity(), "More than 100 items in list, selecting all currently visible items...", Toast.LENGTH_LONG).show();
-                            } else {
-                                for (int i = 0; i < listSize; i++) {
-                                    if (listResults.isItemChecked(i) == false) {
-                                        listResults.setItemChecked(i, true);
-                                        adapter.toggleSelected(new Integer(i));
-                                    }
-                                }
-
-                                Toast.makeText(getActivity(), "100 or less items in list, selecting all items in list...", Toast.LENGTH_LONG).show();
-                            }
-
-                        } else {
-                            for (int i = 0; i < listSize; i++) {
-                                if (listResults.isItemChecked(i) == false) {
-                                    listResults.setItemChecked(i, true);
-                                    adapter.toggleSelected(new Integer(i));
-                                }
-                            }
-                        }
-
-
-                        adapter.notifyDataSetChanged();
-                        break;
-                    case R.id.btnDeselectAll:
-                        for (int i = 0; i < listResults.getAdapter().getCount(); i++) {
-                            if (listResults.isItemChecked(i) == true) {
-                                listResults.setItemChecked(i, false);
-                                adapter.toggleSelected(new Integer(i));
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                        break;
-                }
-            }
-        };
-
-        Button btnIsOfficial = (Button) view.findViewById(R.id.btnOfficial);
-        Button btnMinScore = (Button) view.findViewById(R.id.btnMinWordScore);
-        Button btnCompareScores = (Button) view.findViewById(R.id.btnCompareScores);
-        Button btnSelectAll = (Button) view.findViewById(R.id.btnSelectAll);
-        Button btnDeselectAll = (Button) view.findViewById(R.id.btnDeselectAll);
-
-        btnIsOfficial.setOnClickListener(onClickListener);
-        btnMinScore.setOnClickListener(onClickListener);
-        btnCompareScores.setOnClickListener(onClickListener);
-        btnSelectAll.setOnClickListener(onClickListener);
-        btnDeselectAll.setOnClickListener(onClickListener);
-
         Context context = getActivity();
         SharedPreferences sharedPreferences = context.getSharedPreferences("hint", Context.MODE_PRIVATE);
         boolean shown = sharedPreferences.getBoolean("shown", false);
@@ -532,6 +250,35 @@ public class WordFinderSearchResultsFragment extends Fragment {
 
 
         return view;
+    }
+
+    private ArrayList<String> getTop25ScoreWords(ArrayList<String> words){
+        ArrayList<String> top25 = new ArrayList<>();
+        int largestScore = 0;
+
+        for(String word : words){
+            if(dictionary.getBaseWordScore(word) > largestScore){
+                largestScore = dictionary.getBaseWordScore(word);
+                top25.add(word);
+
+                if(top25.size() > 25){
+                    int lowestScore = largestScore;
+                    String lowestScoringWord = "";
+
+                    for(String highWord : top25){
+                        if (dictionary.getBaseWordScore(highWord) < lowestScore){
+                            lowestScore = dictionary.getBaseWordScore(highWord);
+                            lowestScoringWord = highWord;
+                        }
+                    }
+
+                    top25.remove(lowestScoringWord);
+                }
+            }
+
+        }
+
+        return top25;
     }
 
     public static float round(float d, int decimalPlace) {
