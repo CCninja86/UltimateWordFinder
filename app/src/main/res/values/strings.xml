@@ -16,11 +16,10 @@
     <string name="scoring_table_button_word_finder">Word Finder</string>
 
     <string name="word_finder_button_example">Example</string>
-    <string name="word_finder_button_advanced_search">Advanced Search</string>
+    <string name="word_finder_advanced_search">Advanced Search</string>
     <string name="word_finder_button_search">Search</string>
     <string name="word_finder_text_letters_on_board">Letters on Board (? for gaps)</string>
     <string name="word_finder_text_letters_in_rack">Letters in Rack (Leave blank to search for all possible words)</string>
-    <string name="word_finder_checkbox_only_letters_in_rack">Contains Only The Letters In Your Rack</string>
 
     <string name="advanced_search_text_search_term">Search Term</string>
     <string name="advanced_search_text_starts_with">Starts With</string>
@@ -29,9 +28,7 @@
     <string name="advanced_search_word_length_maximum">Number of Letters(maximum, 0 for any)</string>
     <string name="advanced_search_button_search">Search</string>
 
-    <string name="word_finder_results_button_select_all">Select All</string>
-    <string name="word_finder_results_button_deselect_all">Deselect All</string>
-    <string name="word_finder_results_button_is_official">Official?</string>
+    <string name="word_finder_checkbox_official_only">Official Words Only</string>
     <string name="word_finder_results_button_minimum_word_score">Min. Word Score</string>
     <string name="word_finder_results_button_compare_scores">Compare Scores</string>
     <string name="word_finder_results_switch_smart_selection">Smart Selection</string>
@@ -54,4 +51,7 @@
     <string name="add_player_edit_text_hint">Player Name</string>
     <string name="add_player_add_text">Add Player</string>
     <string name="add_player_choose_colour_text">Choose Colour</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

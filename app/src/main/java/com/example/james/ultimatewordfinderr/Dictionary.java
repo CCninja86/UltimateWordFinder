@@ -4,8 +4,10 @@ package com.example.james.ultimatewordfinderr;
 import android.app.ProgressDialog;
 
 import java.io.Serializable;
+import java.io.WriteAbortedException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -51,8 +53,28 @@ public class Dictionary implements Serializable {
         }
     }
 
+    public LinkedHashMap<String, Integer> createWordScoreMap(ArrayList<String> words){
+        LinkedHashMap<String, Integer> wordScoreMap = new LinkedHashMap<>();
+
+        for(String word : words){
+            wordScoreMap.put(word, getBaseWordScore(word));
+        }
+
+        return wordScoreMap;
+    }
+
     public ArrayList<String> getStringWordList() {
         return this.stringWordList;
+    }
+
+    public ArrayList<String> getStringWordList(ArrayList<Word> words){
+        ArrayList<String> list = new ArrayList<>();
+
+        for(Word word : words){
+            list.add(word.getWord());
+        }
+
+        return list;
     }
 
     public ArrayList<Word> getWords(String letter, int position, int length) {

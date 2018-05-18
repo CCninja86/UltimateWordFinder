@@ -17,7 +17,6 @@
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
-        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/src/main/res" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
       </configuration>
     </facet>
@@ -127,6 +126,7 @@
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-compat-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:viewmodel-1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-solver:1.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.savvisingh:ColorPickerDialog-07a82afc4c" level="project" />
@@ -140,11 +140,13 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-ads-lite-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-10.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: nz.co.ninjastudios.datamuseandroid:datamuse-android-1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-clearcut-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-fragment-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.koushikdutta.ion:ion:2.0.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-gass-10.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.QuadFlask:colorpicker-0.0.13" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-ads-10.0.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:runtime-1.1.0" level="project" />

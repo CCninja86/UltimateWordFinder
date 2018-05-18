@@ -27,9 +27,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -270,16 +275,7 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
     @Override
     public void onPatternMatcherGetAllWordsMatchingRegexTaskComplete(ArrayList<Word> matches) {
         if (editTextLettersRack.getText().toString().isEmpty()) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-
-            if (matches.size() > 0) {
-                mListener.onSearchFragmentInteraction(callingView, matches);
-            } else {
-                Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
-            }
+            new SortByValueTask(matches).execute();
         } else {
             patternMatcher.matchWithPlayerPattern(matches, editTextLettersRack.getText().toString(), editTextLettersBoard.getText().toString());
         }
@@ -288,15 +284,58 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
 
     @Override
     public void onPatternMatcherMatchWithPlayerPatternTaskComplete(ArrayList<Word> matches) {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-            progressDialog = null;
+        new SortByValueTask(matches).execute();
+    }
+
+    private class SortByValueTask extends AsyncTask<Void, Void, Void> {
+
+        LinkedHashMap<String, Integer> unsortedMap;
+        LinkedHashMap<String, Integer> sortedMap;
+        ArrayList<Word> matches;
+
+        public SortByValueTask(ArrayList<Word> matches){
+            this.unsortedMap = new LinkedHashMap<>();
+            this.sortedMap = new LinkedHashMap<>();
+            this.matches = matches;
         }
 
-        if (matches.size() > 0) {
-            mListener.onSearchFragmentInteraction(callingView, matches);
-        } else {
-            Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
+        @Override
+        protected void onPreExecute(){
+            progressDialog.setMessage("Processing...");
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            this.unsortedMap = dictionary.createWordScoreMap(dictionary.getStringWordList(this.matches));
+
+            List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
+
+            Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+                @Override
+                public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                    return (o1.getValue()).compareTo(o2.getValue());
+                }
+            });
+
+            for(Map.Entry<String, Integer> entry : list){
+                sortedMap.put(entry.getKey(), entry.getValue());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            if(progressDialog != null && progressDialog.isShowing()){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+
+            if (sortedMap.size() > 0) {
+                mListener.onSearchFragmentInteraction(callingView, sortedMap);
+            } else {
+                Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -318,6 +357,6 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
     }
 
     public interface OnFragmentInteractionListener {
-        public void onSearchFragmentInteraction(View view, ArrayList<Word> searchMatches);
+        public void onSearchFragmentInteraction(View view, LinkedHashMap<String, Integer> searchMatches);
     }
 }

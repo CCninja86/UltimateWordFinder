@@ -12,10 +12,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDefinitionFragment.OnFragmentInteractionListener, SynonymResultListFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener {
+public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDefinitionFragment.OnFragmentInteractionListener, SynonymResultListFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener, WordDetailsFragment.OnFragmentInteractionListener {
 
 
     private com.example.james.ultimatewordfinderr.Dictionary dictionary;
@@ -72,55 +79,81 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onSearchFragmentInteraction(View view, ArrayList<Word> searchMatches) {
+    public void onSearchFragmentInteraction(View view, LinkedHashMap<String, Integer> searchMatches) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
         switch (view.getId()) {
             case R.id.btnSearch:
                 WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
-                ArrayList<String> words = new ArrayList<>();
 
-                for (Word word : searchMatches) {
-                    words.add(word.getWord());
-                }
+                Gson gson = new Gson();
+                String mapJson = gson.toJson(searchMatches, new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
 
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList("Search Results", words);
+                bundle.putString("Search Results", mapJson);
                 searchResultsFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment);
                 fragmentTransaction.addToBackStack(null);
                 break;
-            case R.id.btnAdvancedSearch:
-                AdvancedSearchFragment advancedSearchFragment = new AdvancedSearchFragment();
-                fragmentTransaction.replace(R.id.containerWordFinder, advancedSearchFragment);
-                fragmentTransaction.addToBackStack(null);
-                break;
-
         }
 
         fragmentTransaction.commit();
     }
 
+    private static Map<String, Integer> sortByValue(Map<String, Integer> unsortedMap){
+        List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        Map<String, Integer> sortedMap = new LinkedHashMap<>();
+
+        for(Map.Entry<String, Integer> entry : list){
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
+    }
+
     @Override
     public void onResultsFragmentButtonInteraction(String action, ArrayList<String> selectedWords) {
-        if (action.equals("definition")) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            WordDefinitionFragment wordDefinitionFragment = new WordDefinitionFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("word", selectedWords.get(0));
-            wordDefinitionFragment.setArguments(bundle);
-            fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        } else if (action.equals("compare")) {
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            WordFinderScoreComparisonFragment scoreComparisonFragment = new WordFinderScoreComparisonFragment();
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("wordsToCompare", selectedWords);
-            scoreComparisonFragment.setArguments(bundle);
-            transaction.replace(R.id.containerWordFinder, scoreComparisonFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        switch (action) {
+            case "definition": {
+                WordDefinitionFragment wordDefinitionFragment = new WordDefinitionFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("word", selectedWords.get(0));
+                wordDefinitionFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+            }
+            case "compare": {
+                WordFinderScoreComparisonFragment scoreComparisonFragment = new WordFinderScoreComparisonFragment();
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList("wordsToCompare", selectedWords);
+                scoreComparisonFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.containerWordFinder, scoreComparisonFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+            }
+            case "details":
+                WordDetailsFragment wordDetailsFragment = new WordDetailsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("word", selectedWords.get(0));
+                wordDetailsFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+                break;
         }
     }
 

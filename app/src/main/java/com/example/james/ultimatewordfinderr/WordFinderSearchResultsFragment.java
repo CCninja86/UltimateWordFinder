@@ -7,32 +7,32 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -54,13 +54,20 @@ public class WordFinderSearchResultsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private View.OnClickListener onClickListener;
 
-    private ArrayList<String> searchResults;
-    private ListViewAdapter adapter;
+    private LinkedHashMap<String, Integer> searchResults;
+    private ResultListViewAdapter adapter;
     private Dictionary dictionary;
     ArrayList<String> synonyms = new ArrayList<>();
     private ListView listResults;
 
+    LinkedHashMap<String, Integer> topWords;
+
+    private static int listSizeLimit = 25;
+
+    private Gson gson;
+
     private ProgressDialog progressDialog;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -101,7 +108,61 @@ public class WordFinderSearchResultsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_word_finder_search_results, container, false);
         setRetainInstance(true);
 
-        final SpeedDialView speedDialView = view.findViewById(R.id.speedDialSearchResults);
+        gson = new Gson();
+
+        topWords = new LinkedHashMap<>();
+
+        Bundle bundle = getArguments();
+        final Globals g = Globals.getInstance();
+        this.dictionary = g.getDictionary();
+        this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
+        this.searchResults = gson.fromJson(bundle.getString("Search Results"), new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
+
+
+        if(this.searchResults.size() > listSizeLimit){
+            Toast.makeText(getActivity(), "Showing only the top " + listSizeLimit + " highest scoring words", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity(), "Showing all results", Toast.LENGTH_SHORT).show();
+        }
+
+        Iterator iterator = searchResults.entrySet().iterator();
+        int count = 0;
+
+        while(iterator.hasNext() && (count < listSizeLimit)){
+            Map.Entry pair = (Map.Entry) iterator.next();
+
+            topWords.put((String) pair.getKey(), (Integer) pair.getValue());
+            count++;
+        }
+
+        this.adapter = new ResultListViewAdapter(getActivity(), topWords, R.layout.row_result_list);
+        listResults.setAdapter(adapter);
+
+
+
+        final SpeedDialView speedDialView = view.findViewById(R.id.speedDialCompareScores);
+        speedDialView.setOnChangeListener(new SpeedDialView.OnChangeListener() {
+            @Override
+            public boolean onMainActionSelected() {
+                ArrayList<String> wordsToCompare = new ArrayList<>();
+                for(int i = 0; i < adapter.getCount(); i++){
+                    wordsToCompare.add(adapter.getItem(i));
+                }
+
+                if(wordsToCompare.size() > 1){
+                    mListener.onResultsFragmentButtonInteraction("compare", wordsToCompare);
+                } else if(wordsToCompare.size() < 1){
+                    Toast.makeText(getActivity(), "Please select at least two words to compare with each other", Toast.LENGTH_LONG).show();
+                }
+
+                return false;
+            }
+
+            @Override
+            public void onToggleChanged(boolean isOpen) {
+
+            }
+        });
 
         CheckBox checkBoxOfficialOnly = (CheckBox) view.findViewById(R.id.chkOfficial);
 
@@ -117,72 +178,49 @@ public class WordFinderSearchResultsFragment extends Fragment {
                         }
                     }
 
-                    adapter = new ListViewAdapter(getActivity(), officialWords, R.layout.row_result_list);
+                    LinkedHashMap<String, Integer> officialWordsMap = dictionary.createWordScoreMap(officialWords);
+
+                    adapter = new ResultListViewAdapter(getActivity(), officialWordsMap, R.layout.row_result_list);
+                    listResults.setAdapter(adapter);
+                } else {
+                    adapter = new ResultListViewAdapter(getActivity(), topWords, R.layout.row_result_list);
                     listResults.setAdapter(adapter);
                 }
             }
         });
 
-        Bundle bundle = getArguments();
-        final Globals g = Globals.getInstance();
-        this.dictionary = g.getDictionary();
-        this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
-        this.searchResults = bundle.getStringArrayList("Search Results");
-
-        ArrayList<String> top25Words = new ArrayList<>();
-
-        if(this.searchResults != null){
-            top25Words = getTop25ScoreWords(this.searchResults);
-        } else {
-            Toast.makeText(getActivity(), "Search results is null or empty", Toast.LENGTH_SHORT).show();
-        }
-
-
-        this.adapter = new ListViewAdapter(getActivity(), top25Words, R.layout.row_result_list);
-        listResults.setAdapter(adapter);
-
         final EditText editTextSearch = (EditText) view.findViewById(R.id.editTextSearch);
 
-        editTextSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String search = editTextSearch.getText().toString();
-                ArrayList<String> results = new ArrayList<>();
-
-                for (String word : searchResults) {
-                    if (word.startsWith(search)) {
-                        results.add(word);
-                    }
-                }
-
-                adapter = new ListViewAdapter(getActivity(), results, R.layout.row_result_list);
-                listResults.setAdapter(adapter);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                adapter.toggleSelected(new Integer(position));
-                adapter.notifyDataSetChanged();
-            }
-        });
+//        editTextSearch.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                String search = editTextSearch.getText().toString();
+//                ArrayList<String> results = new ArrayList<>();
+//
+//                for (String word : searchResults) {
+//                    if (word.startsWith(search)) {
+//                        results.add(word);
+//                    }
+//                }
+//
+//                adapter = new ResultListViewAdapter(getActivity(), results, R.layout.row_result_list);
+//                listResults.setAdapter(adapter);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
 
         listResults.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
-
                 Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
                 if (vibrator.hasVibrator()) {
@@ -227,6 +265,17 @@ public class WordFinderSearchResultsFragment extends Fragment {
             }
         });
 
+        listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String word = (String) listResults.getItemAtPosition(position);
+                ArrayList<String> words = new ArrayList<>();
+                words.add(word);
+
+                mListener.onResultsFragmentButtonInteraction("details", words);
+            }
+        });
+
         Context context = getActivity();
         SharedPreferences sharedPreferences = context.getSharedPreferences("hint", Context.MODE_PRIVATE);
         boolean shown = sharedPreferences.getBoolean("shown", false);
@@ -252,34 +301,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
         return view;
     }
 
-    private ArrayList<String> getTop25ScoreWords(ArrayList<String> words){
-        ArrayList<String> top25 = new ArrayList<>();
-        int largestScore = 0;
 
-        for(String word : words){
-            if(dictionary.getBaseWordScore(word) > largestScore){
-                largestScore = dictionary.getBaseWordScore(word);
-                top25.add(word);
-
-                if(top25.size() > 25){
-                    int lowestScore = largestScore;
-                    String lowestScoringWord = "";
-
-                    for(String highWord : top25){
-                        if (dictionary.getBaseWordScore(highWord) < lowestScore){
-                            lowestScore = dictionary.getBaseWordScore(highWord);
-                            lowestScoringWord = highWord;
-                        }
-                    }
-
-                    top25.remove(lowestScoringWord);
-                }
-            }
-
-        }
-
-        return top25;
-    }
 
     public static float round(float d, int decimalPlace) {
         BigDecimal bd = new BigDecimal(Float.toString(d));

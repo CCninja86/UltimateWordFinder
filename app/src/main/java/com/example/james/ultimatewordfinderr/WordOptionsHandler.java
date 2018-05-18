@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.jamesfra.datamuseandroid.DatamuseAndroid;
+import com.example.jamesfra.datamuseandroid.DatamuseAndroidResultsListener;
+import com.example.jamesfra.datamuseandroid.Word;
 import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -30,7 +33,7 @@ import java.util.Set;
  * Created by james on 23/02/2017.
  */
 
-public class WordOptionsHandler implements DatamuseAPIResultsListener {
+public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
     private WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener;
     private WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener;
@@ -42,7 +45,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
     private ProgressDialog progressDialog;
     private static final int MAX_ATTEMPTS = 5;
 
-    private DatamuseAPIResultsListener datamuseAPIResultsListener;
+    private DatamuseAndroidResultsListener datamuseAndroidResultsListener;
 
     public WordOptionsHandler(SynonymResultListFragment.OnFragmentInteractionListener synonymListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener, WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener, Context context, String word) {
         this.word = word;
@@ -52,7 +55,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
         this.dictionaryListener = dictionaryListener;
         this.definitionList = new DefinitionList();
         this.synonyms = new ArrayList<>();
-        this.datamuseAPIResultsListener = this;
+        this.datamuseAndroidResultsListener = this;
     }
 
     public String getWord() {
@@ -74,7 +77,7 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
     }
 
     @Override
-    public void onSynonymResults(ArrayList<String> synonyms) {
+    public void onResultsSuccess(ArrayList<Word> words) {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
             progressDialog = null;
@@ -289,25 +292,9 @@ public class WordOptionsHandler implements DatamuseAPIResultsListener {
                 word = word.toLowerCase().replaceAll(" ", "%20");
             }
 
-            searchUrl = "https://api.datamuse.com/words?rel_syn=" + word;
-
-            Ion.with(context)
-                    .load(searchUrl)
-                    .as(new TypeToken<ArrayList<Synonym>>() {
-                    })
-                    .setCallback(new FutureCallback<ArrayList<Synonym>>() {
-                        @Override
-                        public void onCompleted(Exception e, ArrayList<Synonym> synonymList) {
-                            for (Synonym synonym : synonymList) {
-                                synonyms.add(synonym.getWord());
-                            }
-
-                            datamuseAPIResultsListener.onSynonymResults(synonyms);
-                        }
-                    });
+            new DatamuseAndroid(true).withResultsListener(datamuseAndroidResultsListener).synonymsOf(word).get();
 
             return null;
-
         }
 
         @Override

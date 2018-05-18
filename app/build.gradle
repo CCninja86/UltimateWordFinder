@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.github.savvisingh:ColorPickerDialog:07a82afc4c'
     implementation 'com.github.leinardi:FloatingActionButtonSpeedDial:master-SNAPSHOT'
     implementation 'com.koushikdutta.ion:ion:2.0.1'
+    implementation 'nz.co.ninjastudios.datamuseandroid:datamuse-android:1.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
