@@ -163,7 +163,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onResultsFragmentInteraction(String word, ArrayList<String> synonyms) {
+    public void onResultsFragmentInteraction(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
         loadSynonymsFragment(word, synonyms);
     }
 
@@ -210,15 +210,15 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onDictionaryFragmentInteraction(String word, ArrayList<String> synonyms) {
+    public void onDictionaryFragmentInteraction(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
         loadSynonymsFragment(word, synonyms);
     }
 
-    private void loadSynonymsFragment(String word, ArrayList<String> synonyms) {
+    private void loadSynonymsFragment(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         SynonymResultListFragment synonymFragment = new SynonymResultListFragment();
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList("Synonyms", synonyms);
+        bundle.putSerializable("Synonyms", synonyms);
         bundle.putString("Word", word);
         synonymFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.containerWordFinder, synonymFragment);
@@ -252,7 +252,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onFragmentInteraction(String word, ArrayList<String> synonyms) {
+    public void onFragmentInteraction(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
         loadSynonymsFragment(word, synonyms);
     }
 

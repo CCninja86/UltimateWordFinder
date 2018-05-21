@@ -24,4 +24,12 @@
         android:layout_below="@+id/textViewWord"
         android:layout_centerHorizontal="true"
         android:text="[Pronunciation]" />
+
+    <TextView
+        android:id="@+id/textViewPartOfSpeech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textViewWord"
+        android:layout_toEndOf="@+id/textViewWord"
+        android:text="[part of speech]" />
 </RelativeLayout>

@@ -20,6 +20,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import nz.co.ninjastudios.datamuseandroid.Word;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -28,7 +30,7 @@ import java.util.ArrayList;
  * Use the {@link WordFinderDictionaryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WordFinderDictionaryFragment extends Fragment {
+public class WordFinderDictionaryFragment extends Fragment implements WordOptionsHandlerResultsListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -43,7 +45,9 @@ public class WordFinderDictionaryFragment extends Fragment {
     ArrayList<String> synonyms = new ArrayList<>();
     private ListViewAdapter adapter;
 
-    ProgressDialog progressDialog;
+    private WordOptionsHandlerResultsListener wordOptionsHandlerResultsListener;
+
+    private ProgressDialog progressDialog;
 
     /**
      * Use this factory method to create a new instance of
@@ -82,6 +86,9 @@ public class WordFinderDictionaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_finder_dictionary, container, false);
+
+        wordOptionsHandlerResultsListener = this;
+
         setRetainInstance(true);
         Globals g = Globals.getInstance();
         boolean wordOptionsHintShown = g.isWordOptionsHintShown();
@@ -126,7 +133,14 @@ public class WordFinderDictionaryFragment extends Fragment {
                         definitionList.clearList();
                         synonyms.clear();
                         String word = listViewResults.getItemAtPosition(position).toString();
-                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, null, mListener, getActivity(), word);
+                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(wordOptionsHandlerResultsListener, getActivity(), word);
+
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setMessage("Searching...");
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.setIndeterminate(true);
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
 
                         switch (which) {
                             case 0:
@@ -196,6 +210,26 @@ public class WordFinderDictionaryFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onSynonymsSuccess(String word, ArrayList<Word> synonyms) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        mListener.onDictionaryFragmentInteraction(word, synonyms);
+    }
+
+    @Override
+    public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        mListener.onDictionaryFragmentInteraction(word, definitionList);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -209,7 +243,7 @@ public class WordFinderDictionaryFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         public void onDictionaryFragmentInteraction(String word, DefinitionList definitionList);
 
-        public void onDictionaryFragmentInteraction(String word, ArrayList<String> synonyms);
+        public void onDictionaryFragmentInteraction(String word, ArrayList<Word> synonyms);
     }
 
 }

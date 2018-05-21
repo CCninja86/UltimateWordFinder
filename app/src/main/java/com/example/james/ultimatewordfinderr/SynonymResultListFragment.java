@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import nz.co.ninjastudios.datamuseandroid.Word;
+
 /**
  * Created by james on 2/02/2017.
  */
@@ -29,9 +31,9 @@ public class SynonymResultListFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ListView listResults;
-    private ListViewAdapter adapter;
+    private SynonymsListViewAdapter adapter;
     private TextView textViewNumResults;
-    ArrayList<String> synonyms;
+    ArrayList<Word> synonyms;
 
     public SynonymResultListFragment() {
         // Required empty public constructor
@@ -71,13 +73,13 @@ public class SynonymResultListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_synonym_result_list, container, false);
 
         Bundle bundle = getArguments();
-        synonyms = bundle.getStringArrayList("Synonyms");
+        synonyms = (ArrayList<Word>) bundle.getSerializable("Synonyms");
         String word = bundle.getString("Word");
 
         TextView textViewWord = (TextView) view.findViewById(R.id.textViewWord);
         textViewWord.setText(word);
 
-        adapter = new ListViewAdapter(getActivity(), synonyms, R.layout.row_result_list);
+        adapter = new SynonymsListViewAdapter(getActivity(), synonyms, R.layout.row_result_list);
         listResults = (ListView) view.findViewById(R.id.listViewResults);
         listResults.setAdapter(adapter);
 
@@ -95,15 +97,15 @@ public class SynonymResultListFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String search = editTextSearch.getText().toString();
-                ArrayList<String> results = new ArrayList<>();
+                ArrayList<Word> results = new ArrayList<>();
 
-                for (String word : synonyms) {
-                    if (word.startsWith(search)) {
-                        results.add(word);
+                for (Word synonym : synonyms) {
+                    if (synonym.getWord().startsWith(search)) {
+                        results.add(synonym);
                     }
                 }
 
-                adapter = new ListViewAdapter(getActivity(), results, R.layout.row_result_list);
+                adapter = new SynonymsListViewAdapter(getActivity(), results, R.layout.row_result_list);
                 listResults.setAdapter(adapter);
                 textViewNumResults.setText("Found " + listResults.getCount() + " results");
             }
@@ -118,7 +120,7 @@ public class SynonymResultListFragment extends Fragment {
     }
 
 
-    public void onButtonPressed(String word, ArrayList<String> synonyms) {
+    public void onButtonPressed(String word, ArrayList<Word> synonyms) {
         if (mListener != null) {
             mListener.onFragmentInteraction(word, synonyms);
         }
@@ -152,7 +154,7 @@ public class SynonymResultListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(String word, ArrayList<String> synonyms);
+        void onFragmentInteraction(String word, ArrayList<Word> synonyms);
 
         void onFragmentInteraction(String word, DefinitionList definitionList);
 

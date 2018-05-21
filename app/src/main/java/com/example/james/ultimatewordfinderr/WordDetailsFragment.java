@@ -1,23 +1,24 @@
 package com.example.james.ultimatewordfinderr;
 
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.jamesfra.datamuseandroid.DatamuseAndroid;
-import com.example.jamesfra.datamuseandroid.DatamuseAndroidResultsListener;
-import com.example.jamesfra.datamuseandroid.Word;
-
-import junit.framework.Test;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import nz.co.ninjastudios.datamuseandroid.DatamuseAndroid;
+import nz.co.ninjastudios.datamuseandroid.DatamuseAndroidResultsListener;
+import nz.co.ninjastudios.datamuseandroid.Word;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +28,7 @@ import java.util.ArrayList;
  * Use the {@link WordDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WordDetailsFragment extends Fragment implements DatamuseAndroidResultsListener {
+public class WordDetailsFragment extends Fragment implements DatamuseAndroidResultsListener, WordOptionsHandlerResultsListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -40,10 +41,14 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
     private OnFragmentInteractionListener mListener;
 
     private DatamuseAndroid datamuseAndroid;
-    private DatamuseAndroidResultsListener datamuseAndroidResultsListener;
 
     private TextView textViewWord;
+    private TextView textViewPartOfSpeech;
     private TextView textViewPronunciation;
+
+    private ProgressDialog progressDialog;
+
+    private Map<String, String> partsOfSpeechMap;
 
     public WordDetailsFragment() {
         // Required empty public constructor
@@ -82,6 +87,13 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_details, container, false);
 
+        partsOfSpeechMap = new HashMap<>();
+        partsOfSpeechMap.put("n", "noun");
+        partsOfSpeechMap.put("v", "verb");
+        partsOfSpeechMap.put("adj", "adjective");
+        partsOfSpeechMap.put("adv", "adverb");
+        partsOfSpeechMap.put("u", "unknown");
+
         datamuseAndroid = new DatamuseAndroid(true);
         datamuseAndroid.withResultsListener(this);
 
@@ -89,11 +101,43 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
         String word = bundle.getString("word");
 
         textViewWord = (TextView) view.findViewById(R.id.textViewWord);
+        textViewPartOfSpeech = (TextView) view.findViewById(R.id.textViewPartOfSpeech);
         textViewPronunciation = (TextView) view.findViewById(R.id.textViewPronunciation);
+
+        textViewPartOfSpeech.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder partsOfSpeechLegend = new AlertDialog.Builder(getActivity());
+                partsOfSpeechLegend.setTitle("Parts of Speech Legend");
+
+                StringBuilder partsOfSpeechMapStringBuilder = new StringBuilder();
+
+                for(Map.Entry entry : partsOfSpeechMap.entrySet()){
+                    partsOfSpeechMapStringBuilder.append("\n").append(entry.getKey()).append(": ").append(entry.getValue());
+                }
+
+                partsOfSpeechLegend.setMessage(partsOfSpeechMapStringBuilder.toString());
+
+                partsOfSpeechLegend.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                partsOfSpeechLegend.show();
+            }
+        });
 
         textViewWord.setText(word);
 
         String url = DatamuseAndroid.getRequestUrl();
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Getting word details...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         datamuseAndroid.spelledLike(word).setMetadataFlags(new String[]{"p", "r"}).maxResults(1).get();
 
@@ -126,19 +170,41 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
 
     @Override
     public void onResultsSuccess(ArrayList<Word> words) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
         Word word = words.get(0);
 
         String[] tags = word.getTags();
         String pronunciationString = "";
-
+        String partOfSpeechString = "(";
 
         for (String tag : tags){
-            if(tag.contains("pron")){
+            if(tag.contains("ipa_pron")){
                 pronunciationString = tag.split(":")[1];
+            }
+
+            if(!tag.contains(":")){
+                partOfSpeechString += tag + ",";
             }
         }
 
+        partOfSpeechString = partOfSpeechString.substring(0, partOfSpeechString.length() - 1) + ")";
+
+        textViewPartOfSpeech.setText(partOfSpeechString);
         textViewPronunciation.setText(pronunciationString);
+    }
+
+    @Override
+    public void onSynonymsSuccess(String word, ArrayList<Word> synonyms) {
+
+    }
+
+    @Override
+    public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
+
     }
 
     /**

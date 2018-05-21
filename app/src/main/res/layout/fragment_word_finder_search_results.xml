@@ -6,7 +6,7 @@
     android:layout_marginTop="?attr/actionBarSize"
     tools:context="com.example.james.ultimatewordfinderr.WordFinderSearchResultsFragment">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/listSearchResults"
         android:layout_width="match_parent"
         android:layout_height="462dp"

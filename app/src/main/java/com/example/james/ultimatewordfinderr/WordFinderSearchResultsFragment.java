@@ -8,31 +8,30 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.util.Log;
-import android.util.SparseBooleanArray;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.leinardi.android.speeddial.SpeedDialView;
+import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
+import com.michaelflisar.dragselectrecyclerview.DragSelectionProcessor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import nz.co.ninjastudios.datamuseandroid.Word;
 
 
 /**
@@ -43,7 +42,7 @@ import java.util.Set;
  * Use the {@link WordFinderSearchResultsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WordFinderSearchResultsFragment extends Fragment {
+public class WordFinderSearchResultsFragment extends Fragment implements WordOptionsHandlerResultsListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -55,16 +54,22 @@ public class WordFinderSearchResultsFragment extends Fragment {
     private View.OnClickListener onClickListener;
 
     private LinkedHashMap<String, Integer> searchResults;
-    private ResultListViewAdapter adapter;
     private Dictionary dictionary;
     ArrayList<String> synonyms = new ArrayList<>();
-    private ListView listResults;
+
+    private RecyclerView listResults;
+    private LinearLayoutManager layoutManager;
+    private ResultListViewAdapter adapter;
+    private DragSelectTouchListener dragSelectTouchListener;
+    private DragSelectionProcessor dragSelectionProcessor;
+    private DragSelectionProcessor.Mode mode = DragSelectionProcessor.Mode.Simple;
 
     LinkedHashMap<String, Integer> topWords;
 
     private static int listSizeLimit = 25;
 
     private Gson gson;
+    private WordOptionsHandlerResultsListener wordOptionsHandlerResultsListener;
 
     private ProgressDialog progressDialog;
 
@@ -108,16 +113,15 @@ public class WordFinderSearchResultsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_word_finder_search_results, container, false);
         setRetainInstance(true);
 
-        gson = new Gson();
-
-        topWords = new LinkedHashMap<>();
-
         Bundle bundle = getArguments();
         final Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();
-        this.listResults = (ListView) view.findViewById(R.id.listSearchResults);
-        this.searchResults = gson.fromJson(bundle.getString("Search Results"), new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
 
+        gson = new Gson();
+        wordOptionsHandlerResultsListener = this;
+        topWords = new LinkedHashMap<>();
+
+        this.searchResults = gson.fromJson(bundle.getString("Search Results"), new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
 
         if(this.searchResults.size() > listSizeLimit){
             Toast.makeText(getActivity(), "Showing only the top " + listSizeLimit + " highest scoring words", Toast.LENGTH_LONG).show();
@@ -135,8 +139,61 @@ public class WordFinderSearchResultsFragment extends Fragment {
             count++;
         }
 
-        this.adapter = new ResultListViewAdapter(getActivity(), topWords, R.layout.row_result_list);
+        this.listResults = view.findViewById(R.id.listSearchResults);
+        layoutManager = new LinearLayoutManager(getActivity());
+        listResults.setLayoutManager(layoutManager);
+
+        this.adapter = new ResultListViewAdapter(getActivity(), topWords);
         listResults.setAdapter(adapter);
+
+        listResults.addOnItemTouchListener(dragSelectTouchListener);
+
+        adapter.setClickListener(new ResultListViewAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                String word = (String) adapter.getItemAtPosition(position).getKey();
+                ArrayList<String> words = new ArrayList<>();
+                words.add(word);
+
+                mListener.onResultsFragmentButtonInteraction("details", words);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, int position) {
+                dragSelectTouchListener.startDragSelection(position);
+                return true;
+            }
+        });
+
+        dragSelectionProcessor = new DragSelectionProcessor(new DragSelectionProcessor.ISelectionHandler() {
+            @Override
+            public Set<Integer> getSelection() {
+                return adapter.getSelection();
+            }
+
+            @Override
+            public boolean isSelected(int index) {
+                return adapter.getSelection().contains(index);
+            }
+
+            @Override
+            public void updateSelection(int start, int end, boolean isSelected, boolean calledFromOnStart) {
+                adapter.selectRange(start, end, isSelected);
+            }
+        }).withMode(DragSelectionProcessor.Mode.Simple);
+
+        dragSelectTouchListener = new DragSelectTouchListener()
+                .withSelectListener(dragSelectionProcessor);
+
+        updateSelectionListener();
+
+
+
+
+
+
+
+
 
 
 
@@ -145,13 +202,13 @@ public class WordFinderSearchResultsFragment extends Fragment {
             @Override
             public boolean onMainActionSelected() {
                 ArrayList<String> wordsToCompare = new ArrayList<>();
-                for(int i = 0; i < adapter.getCount(); i++){
-                    wordsToCompare.add(adapter.getItem(i));
+                for(int i = 0; i < adapter.getItemCount(); i++){
+                    wordsToCompare.add((String) adapter.getItemAtPosition(i).getKey());
                 }
 
                 if(wordsToCompare.size() > 1){
                     mListener.onResultsFragmentButtonInteraction("compare", wordsToCompare);
-                } else if(wordsToCompare.size() < 1){
+                } else {
                     Toast.makeText(getActivity(), "Please select at least two words to compare with each other", Toast.LENGTH_LONG).show();
                 }
 
@@ -172,18 +229,18 @@ public class WordFinderSearchResultsFragment extends Fragment {
                 if (isChecked) {
                     ArrayList<String> officialWords = new ArrayList<>();
 
-                    for(int i = 0; i < adapter.getCount(); i++){
-                        if(dictionary.isWordOfficial(adapter.getItem(i))){
-                            officialWords.add(adapter.getItem(i));
+                    for(int i = 0; i < adapter.getItemCount(); i++){
+                        if(dictionary.isWordOfficial((String) adapter.getItemAtPosition(i).getKey())){
+                            officialWords.add((String) adapter.getItemAtPosition(i).getKey());
                         }
                     }
 
                     LinkedHashMap<String, Integer> officialWordsMap = dictionary.createWordScoreMap(officialWords);
 
-                    adapter = new ResultListViewAdapter(getActivity(), officialWordsMap, R.layout.row_result_list);
+                    adapter = new ResultListViewAdapter(getActivity(), officialWordsMap);
                     listResults.setAdapter(adapter);
                 } else {
-                    adapter = new ResultListViewAdapter(getActivity(), topWords, R.layout.row_result_list);
+                    adapter = new ResultListViewAdapter(getActivity(), topWords);
                     listResults.setAdapter(adapter);
                 }
             }
@@ -218,64 +275,6 @@ public class WordFinderSearchResultsFragment extends Fragment {
 //            }
 //        });
 
-        listResults.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-
-                if (vibrator.hasVibrator()) {
-                    vibrator.vibrate(125);
-
-                    try {
-                        Thread.sleep(125);
-                    } catch (InterruptedException e) {
-                        Log.e("InterruptedException", e.getMessage());
-                        Thread.currentThread().interrupt();
-                    }
-                }
-
-                final CharSequence options[] = new CharSequence[]{"Definitions", "Synonyms"};
-
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        synonyms.clear();
-                        String word = listResults.getItemAtPosition(position).toString();
-                        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(null, mListener, null, getActivity(), word);
-
-                        switch (which) {
-                            case 0:
-                                wordOptionsHandler.loadDefinitions();
-                                break;
-                            case 1:
-                                wordOptionsHandler.loadSynonyms();
-                                break;
-                        }
-
-
-                    }
-                });
-
-                builder.show();
-
-
-                return true;
-            }
-        });
-
-        listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String word = (String) listResults.getItemAtPosition(position);
-                ArrayList<String> words = new ArrayList<>();
-                words.add(word);
-
-                mListener.onResultsFragmentButtonInteraction("details", words);
-            }
-        });
-
         Context context = getActivity();
         SharedPreferences sharedPreferences = context.getSharedPreferences("hint", Context.MODE_PRIVATE);
         boolean shown = sharedPreferences.getBoolean("shown", false);
@@ -294,14 +293,16 @@ public class WordFinderSearchResultsFragment extends Fragment {
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("shown", true);
-            editor.commit();
+            editor.apply();
         }
 
 
         return view;
     }
 
-
+    private void updateSelectionListener(){
+        dragSelectionProcessor.withMode(mode);
+    }
 
     public static float round(float d, int decimalPlace) {
         BigDecimal bd = new BigDecimal(Float.toString(d));
@@ -327,6 +328,26 @@ public class WordFinderSearchResultsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onSynonymsSuccess(String word, ArrayList<Word> synonyms) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        mListener.onResultsFragmentInteraction(word, synonyms);
+    }
+
+    @Override
+    public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        mListener.onResultsFragmentInteraction(word, definitionList);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -342,7 +363,7 @@ public class WordFinderSearchResultsFragment extends Fragment {
 
         public void onResultsFragmentInteraction(String word, DefinitionList definitionList);
 
-        public void onResultsFragmentInteraction(String word, ArrayList<String> synonyms);
+        public void onResultsFragmentInteraction(String word, ArrayList<Word> synonyms);
     }
 
 }

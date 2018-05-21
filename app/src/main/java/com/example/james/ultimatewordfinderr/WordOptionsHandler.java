@@ -1,33 +1,24 @@
 package com.example.james.ultimatewordfinderr;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.example.jamesfra.datamuseandroid.DatamuseAndroid;
-import com.example.jamesfra.datamuseandroid.DatamuseAndroidResultsListener;
-import com.example.jamesfra.datamuseandroid.Word;
-import com.google.gson.reflect.TypeToken;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import nz.co.ninjastudios.datamuseandroid.DatamuseAndroid;
+import nz.co.ninjastudios.datamuseandroid.DatamuseAndroidResultsListener;
 
 /**
  * Created by james on 23/02/2017.
@@ -39,23 +30,21 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
     private WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener;
     private SynonymResultListFragment.OnFragmentInteractionListener synonymListener;
     private Context context;
-    private String word;
+    private static String word;
     private DefinitionList definitionList;
     private ArrayList<String> synonyms;
-    private ProgressDialog progressDialog;
     private static final int MAX_ATTEMPTS = 5;
 
-    private DatamuseAndroidResultsListener datamuseAndroidResultsListener;
+    private static DatamuseAndroidResultsListener datamuseAndroidResultsListener;
+    private WordOptionsHandlerResultsListener wordOptionsHandlerResultsListener;
 
-    public WordOptionsHandler(SynonymResultListFragment.OnFragmentInteractionListener synonymListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener, WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener, Context context, String word) {
-        this.word = word;
+    WordOptionsHandler(WordOptionsHandlerResultsListener resultsListener, Context context, String word) {
+        WordOptionsHandler.word = word;
         this.context = context;
-        this.synonymListener = synonymListener;
-        this.wordFinderListener = wordFinderListener;
-        this.dictionaryListener = dictionaryListener;
+        this.wordOptionsHandlerResultsListener = resultsListener;
         this.definitionList = new DefinitionList();
         this.synonyms = new ArrayList<>();
-        this.datamuseAndroidResultsListener = this;
+        WordOptionsHandler.datamuseAndroidResultsListener = this;
     }
 
     public String getWord() {
@@ -77,20 +66,9 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
     }
 
     @Override
-    public void onResultsSuccess(ArrayList<Word> words) {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-
-        if (!synonyms.isEmpty() && synonyms != null) {
-            if (dictionaryListener != null) {
-                dictionaryListener.onDictionaryFragmentInteraction(word, synonyms);
-            } else if (wordFinderListener != null) {
-                wordFinderListener.onResultsFragmentInteraction(word, synonyms);
-            } else {
-                synonymListener.onFragmentInteraction(word, synonyms);
-            }
+    public void onResultsSuccess(ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
+        if (!synonyms.isEmpty()) {
+            wordOptionsHandlerResultsListener.onSynonymsSuccess(word, synonyms);
         } else {
             Toast.makeText(context, "No synonyms found", Toast.LENGTH_SHORT).show();
         }
@@ -104,12 +82,7 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage("Searching...");
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+
         }
 
         @Override
@@ -242,20 +215,9 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
         @Override
         protected void onPostExecute(Void result) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-
             if (definitionList != null) {
                 if (definitionList.getDefinitions().size() > 0) {
-                    if (dictionaryListener != null) {
-                        dictionaryListener.onDictionaryFragmentInteraction(word, definitionList);
-                    } else if (wordFinderListener != null) {
-                        wordFinderListener.onResultsFragmentInteraction(word, definitionList);
-                    } else {
-                        synonymListener.onFragmentInteraction(word, definitionList);
-                    }
+                    wordOptionsHandlerResultsListener.onDefinitionsSuccess(word, definitionList);
                 } else {
                     Toast.makeText(context, "No definitions found", Toast.LENGTH_SHORT).show();
                 }
@@ -267,7 +229,7 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
         }
     }
 
-    private class GetSynonymsTask extends AsyncTask<Object, Void, Void> {
+    private static class GetSynonymsTask extends AsyncTask<Object, Void, Void> {
 
         public GetSynonymsTask() {
 
@@ -275,19 +237,13 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Searching...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+
         }
 
         @Override
         protected Void doInBackground(Object... params) {
             String searchUrl;
 
-            //try {
             if (word.contains(" ")) {
                 word = word.toLowerCase().replaceAll(" ", "%20");
             }
