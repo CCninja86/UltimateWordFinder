@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:columnCount="12"
     android:rowCount="15"
     android:layout_marginTop="?attr/actionBarSize"
@@ -32,4 +33,48 @@
         android:layout_alignBottom="@+id/textViewWord"
         android:layout_toEndOf="@+id/textViewWord"
         android:text="[part of speech]" />
+
+    <at.blogc.android.views.ExpandableTextView
+        android:id="@+id/textViewDefinitions"
+        android:layout_width="match_parent"
+        android:layout_height="195dp"
+        android:layout_alignParentTop="true"
+        android:maxLines="4"
+        android:ellipsize="end"
+        app:animation_duration="1000"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="103dp"
+        android:text="[Definitions]" />
+
+    <TextView
+        android:id="@+id/textViewSynonyms"
+        android:layout_width="match_parent"
+        android:layout_height="163dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewDefinitions"
+        android:layout_marginTop="50dp"
+        android:text="[Synonyms]" />
+
+    <TextView
+        android:id="@+id/textViewDefinitionsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewDefinitions"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-103dp"
+        android:text="Definitions"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewSynonymsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewSynonyms"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-50dp"
+        android:text="Synonyms"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
 </RelativeLayout>

@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.koushikdutta.ion:ion:2.2.1'
     implementation 'nz.co.ninjastudios.datamuseandroid:datamuse-android:1.0.4'
     implementation 'com.github.MFlisar:DragSelectRecyclerView:0.3'
+    implementation 'at.blogc:expandabletextview:1.0.5'
 }
 
 apply plugin: 'com.google.gms.google-services'

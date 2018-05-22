@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
 
     private ItemClickListener clickListener;
 
-    public ResultListViewAdapter(Context context, LinkedHashMap<String, Integer> words) {
+    ResultListViewAdapter(Context context, LinkedHashMap<String, Integer> words) {
         this.context = context;
         this.words = words;
         mSelected = new HashSet<>();
@@ -49,9 +50,9 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
 
     public void toggleSelection(int position){
         if(mSelected.contains(position)){
-            mSelected.add(position);
-        } else {
             mSelected.remove(position);
+        } else {
+            mSelected.add(position);
         }
 
         notifyItemChanged(position);
@@ -96,6 +97,16 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
         return mSelected;
     }
 
+    public ArrayList<String> getSelectedWords() {
+        ArrayList<String> selectedWords = new ArrayList<>();
+
+        for (int position : mSelected){
+            selectedWords.add((String) getItemAtPosition(position).getKey());
+        }
+
+        return selectedWords;
+    }
+
     public void setClickListener(ItemClickListener itemClickListener){
         clickListener = itemClickListener;
     }
@@ -110,17 +121,15 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_result_list, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view);
-
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position){
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position){
         viewHolder.textView.setText((String) getItemAtPosition(position).getKey());
 
         if (mSelected.contains(position)){
-            viewHolder.textView.setBackgroundColor(Color.RED);
+            viewHolder.textView.setBackgroundColor(Color.LTGRAY);
         } else {
             viewHolder.textView.setBackgroundColor(Color.WHITE);
         }
@@ -133,9 +142,9 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
-        public TextView textView;
+        TextView textView;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             this.textView = (TextView) itemView.findViewById(R.id.textViewItem);
             itemView.setOnClickListener(this);
@@ -151,11 +160,8 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
 
         @Override
         public boolean onLongClick(View view) {
-            if(clickListener != null){
-                return clickListener.onItemLongClick(view, getAdapterPosition());
-            }
+            return clickListener != null && clickListener.onItemLongClick(view, getAdapterPosition());
 
-            return false;
         }
     }
 }

@@ -63,6 +63,7 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
     private DragSelectTouchListener dragSelectTouchListener;
     private DragSelectionProcessor dragSelectionProcessor;
     private DragSelectionProcessor.Mode mode = DragSelectionProcessor.Mode.Simple;
+    private ResultListViewAdapter.ItemClickListener itemClickListener;
 
     LinkedHashMap<String, Integer> topWords;
 
@@ -146,9 +147,7 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         this.adapter = new ResultListViewAdapter(getActivity(), topWords);
         listResults.setAdapter(adapter);
 
-        listResults.addOnItemTouchListener(dragSelectTouchListener);
-
-        adapter.setClickListener(new ResultListViewAdapter.ItemClickListener() {
+        itemClickListener = new ResultListViewAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 String word = (String) adapter.getItemAtPosition(position).getKey();
@@ -163,7 +162,9 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
                 dragSelectTouchListener.startDragSelection(position);
                 return true;
             }
-        });
+        };
+
+        adapter.setClickListener(itemClickListener);
 
         dragSelectionProcessor = new DragSelectionProcessor(new DragSelectionProcessor.ISelectionHandler() {
             @Override
@@ -185,25 +186,18 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         dragSelectTouchListener = new DragSelectTouchListener()
                 .withSelectListener(dragSelectionProcessor);
 
-        updateSelectionListener();
-
-
-
-
-
-
-
-
-
-
+        listResults.addOnItemTouchListener(dragSelectTouchListener);
 
         final SpeedDialView speedDialView = view.findViewById(R.id.speedDialCompareScores);
         speedDialView.setOnChangeListener(new SpeedDialView.OnChangeListener() {
             @Override
             public boolean onMainActionSelected() {
-                ArrayList<String> wordsToCompare = new ArrayList<>();
-                for(int i = 0; i < adapter.getItemCount(); i++){
-                    wordsToCompare.add((String) adapter.getItemAtPosition(i).getKey());
+                ArrayList<String> wordsToCompare = adapter.getSelectedWords();
+
+                if(wordsToCompare.size() == 0){
+                    for(int i = 0; i < adapter.getItemCount(); i++){
+                        wordsToCompare.add((String) adapter.getItemAtPosition(i).getKey());
+                    }
                 }
 
                 if(wordsToCompare.size() > 1){
@@ -243,6 +237,8 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
                     adapter = new ResultListViewAdapter(getActivity(), topWords);
                     listResults.setAdapter(adapter);
                 }
+
+                adapter.setClickListener(itemClickListener);
             }
         });
 
@@ -298,10 +294,6 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
 
 
         return view;
-    }
-
-    private void updateSelectionListener(){
-        dragSelectionProcessor.withMode(mode);
     }
 
     public static float round(float d, int decimalPlace) {

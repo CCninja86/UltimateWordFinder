@@ -1,5 +1,6 @@
 package com.example.james.ultimatewordfinderr;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -7,9 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -45,6 +49,12 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
     private TextView textViewWord;
     private TextView textViewPartOfSpeech;
     private TextView textViewPronunciation;
+    private TextView textViewDefinitions;
+    private TextView textViewSynonyms;
+    private Button buttonViewMore;
+
+    private boolean definitionsExpandable;
+    private boolean expand;
 
     private ProgressDialog progressDialog;
 
@@ -100,10 +110,15 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
         Bundle bundle = getArguments();
         String word = bundle.getString("word");
 
-        textViewWord = (TextView) view.findViewById(R.id.textViewWord);
-        textViewPartOfSpeech = (TextView) view.findViewById(R.id.textViewPartOfSpeech);
-        textViewPronunciation = (TextView) view.findViewById(R.id.textViewPronunciation);
+        textViewWord = view.findViewById(R.id.textViewWord);
+        textViewPartOfSpeech = view.findViewById(R.id.textViewPartOfSpeech);
+        textViewPronunciation = view.findViewById(R.id.textViewPronunciation);
+        textViewDefinitions = view.findViewById(R.id.textViewDefinitions);
+        textViewSynonyms = view.findViewById(R.id.textViewSynonyms);
+        buttonViewMore = view.findViewById(R.id.buttonViewMore);
+        buttonViewMore.setVisibility(View.INVISIBLE);
 
+        
         textViewPartOfSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +148,8 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
 
         String url = DatamuseAndroid.getRequestUrl();
 
+        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(this, getActivity(), word);
+
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Getting word details...");
         progressDialog.setIndeterminate(true);
@@ -140,6 +157,10 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
         progressDialog.show();
 
         datamuseAndroid.spelledLike(word).setMetadataFlags(new String[]{"p", "r"}).maxResults(1).get();
+        wordOptionsHandler.loadDefinitions();
+        wordOptionsHandler.loadSynonyms();
+
+
 
         return view;
     }
@@ -170,16 +191,11 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
 
     @Override
     public void onResultsSuccess(ArrayList<Word> words) {
-        if(progressDialog != null && progressDialog.isShowing()){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-
         Word word = words.get(0);
 
         String[] tags = word.getTags();
         String pronunciationString = "";
-        String partOfSpeechString = "(";
+        StringBuilder partOfSpeechStringBuilder = new StringBuilder();
 
         for (String tag : tags){
             if(tag.contains("ipa_pron")){
@@ -187,24 +203,61 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
             }
 
             if(!tag.contains(":")){
-                partOfSpeechString += tag + ",";
+                partOfSpeechStringBuilder.append(tag).append(",");
             }
         }
 
-        partOfSpeechString = partOfSpeechString.substring(0, partOfSpeechString.length() - 1) + ")";
+        if(partOfSpeechStringBuilder.toString().length() > 0){
+            partOfSpeechStringBuilder.insert(0, new char[]{'('}, 0, 1);
+            partOfSpeechStringBuilder.replace(partOfSpeechStringBuilder.toString().lastIndexOf(","), partOfSpeechStringBuilder.toString().lastIndexOf(",") + 1, "");
+            partOfSpeechStringBuilder.append(")");
 
-        textViewPartOfSpeech.setText(partOfSpeechString);
+            textViewPartOfSpeech.setText(partOfSpeechStringBuilder.toString());
+        } else {
+            textViewPartOfSpeech.setText("[u]");
+        }
+
         textViewPronunciation.setText(pronunciationString);
     }
 
     @Override
     public void onSynonymsSuccess(String word, ArrayList<Word> synonyms) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
 
+        StringBuilder synonymsStringBuilder = new StringBuilder();
+
+        for(Word synonym : synonyms){
+            synonymsStringBuilder.append(synonym.getWord()).append(",");
+        }
+
+        if(synonyms.size() > 0){
+            String synonymsString = synonymsStringBuilder.toString().substring(0, synonymsStringBuilder.toString().length() - 1);
+            textViewSynonyms.setText(synonymsString);
+        } else {
+            textViewSynonyms.setText("No synonyms found");
+        }
     }
 
     @Override
     public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
+        StringBuilder definitionStringBuilder = new StringBuilder();
+        String definitionsString = "";
 
+        for (int i = 0; i < 2; i++){
+            Definition definition = definitionList.getDefinitions().get(i);
+            definitionStringBuilder.append("\n\n").append(i + 1).append(". ").append(definition.getDefinition());
+        }
+
+        definitionsString = definitionStringBuilder.toString().trim();
+
+        if(definitionList.getDefinitions().size() > 0){
+            textViewDefinitions.setText(definitionsString);
+        } else {
+            textViewDefinitions.setText("No definitions found");
+        }
     }
 
     /**
