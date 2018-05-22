@@ -115,10 +115,8 @@ public class WordDetailsFragment extends Fragment implements DatamuseAndroidResu
         textViewPronunciation = view.findViewById(R.id.textViewPronunciation);
         textViewDefinitions = view.findViewById(R.id.textViewDefinitions);
         textViewSynonyms = view.findViewById(R.id.textViewSynonyms);
-        buttonViewMore = view.findViewById(R.id.buttonViewMore);
-        buttonViewMore.setVisibility(View.INVISIBLE);
 
-        
+
         textViewPartOfSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
