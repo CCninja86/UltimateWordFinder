@@ -4,8 +4,8 @@ package com.example.james.ultimatewordfinderr;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -79,7 +79,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
                 switch (item.getItemId()) {
                     case R.id.action_players:
@@ -147,7 +147,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
         if (savedInstanceState == null) {
             Fragment scoringFragment = new ScoringFragment();
             scoringFragment.setArguments(bundle);
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.container, scoringFragment);
             fragmentTransaction.commit();
         }
@@ -166,7 +166,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
         switch (item.getItemId()) {
             case R.id.itemHelpFeedback:
                 HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
-                transaction = getFragmentManager().beginTransaction();
+                transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, helpFeedbackFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -182,7 +182,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
         Bundle bundle = new Bundle();
         bundle.putSerializable("Player", player);
         playerDetailsFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, playerDetailsFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -190,7 +190,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
 
     @Override
     public void onPlayerDetailsFragmentInteraction(String action, final Player player) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         switch (action) {
             case "Add Score":
@@ -279,7 +279,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
 
     @Override
     public void onAddWordsFragmentInteraction(View view) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment scoringFragment = new ScoringFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Scrabble Game", scrabbleGame);
@@ -299,7 +299,7 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
         switch (option) {
             case "Report Bug":
                 BugReportFragment bugReportFragment = new BugReportFragment();
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, bugReportFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();

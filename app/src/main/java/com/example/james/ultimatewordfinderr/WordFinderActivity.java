@@ -1,7 +1,8 @@
 package com.example.james.ultimatewordfinderr;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDefinitionFragment.OnFragmentInteractionListener, SynonymResultListFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener, WordDetailsFragment.OnFragmentInteractionListener {
+public class WordFinderActivity extends AppCompatActivity implements WordFinderMainFragment.OnFragmentInteractionListener, AdvancedSearchFragment.OnFragmentInteractionListener, WordFinderScoreComparisonFragment.OnFragmentInteractionListener, WordFinderDictionaryFragment.OnFragmentInteractionListener, WordDetailsDefinitionsTabFragment.OnFragmentInteractionListener, WordDetailsSynonymsTabFragment.OnFragmentInteractionListener, WordFinderSearchResultsFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener, BugReportFragment.OnFragmentInteractionListener {
 
 
     private com.example.james.ultimatewordfinderr.Dictionary dictionary;
@@ -40,7 +41,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         Bundle bundle = getIntent().getBundleExtra("selection");
         int selection = bundle.getInt("selection");
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         if (savedInstanceState == null) {
             if (selection == 1) {
@@ -68,7 +69,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         switch (item.getItemId()) {
             case R.id.itemHelpFeedback:
                 HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.containerWordFinder, helpFeedbackFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -80,7 +81,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onSearchFragmentInteraction(View view, LinkedHashMap<String, Integer> searchMatches) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         switch (view.getId()) {
             case R.id.btnSearch:
@@ -121,15 +122,15 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onResultsFragmentButtonInteraction(String action, ArrayList<String> selectedWords) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         switch (action) {
             case "definition": {
-                WordDefinitionFragment wordDefinitionFragment = new WordDefinitionFragment();
+                WordDetailsDefinitionsTabFragment wordDetailsDefinitionsTabFragment = new WordDetailsDefinitionsTabFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("word", selectedWords.get(0));
-                wordDefinitionFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
+                wordDetailsDefinitionsTabFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsDefinitionsTabFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
@@ -145,13 +146,9 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
                 break;
             }
             case "details":
-                WordDetailsFragment wordDetailsFragment = new WordDetailsFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("word", selectedWords.get(0));
-                wordDetailsFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                Intent intent = new Intent(this, WordDetailsTabbedActivity.class);
+                intent.putExtra("word", selectedWords.get(0));
+                startActivity(intent);
 
                 break;
         }
@@ -169,7 +166,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onAdvancedSearchFragmentInteraction(View view, ArrayList<Word> matches) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
         ArrayList<String> words = new ArrayList<>();
 
@@ -215,32 +212,32 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     private void loadSynonymsFragment(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        SynonymResultListFragment synonymFragment = new SynonymResultListFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        WordDetailsSynonymsTabFragment wordDetailsSynonymsTabFragment = new WordDetailsSynonymsTabFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Synonyms", synonyms);
         bundle.putString("Word", word);
-        synonymFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.containerWordFinder, synonymFragment);
+        wordDetailsSynonymsTabFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsSynonymsTabFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     private void loadDefinitionsFragment(String word, DefinitionList definitionList) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        WordDefinitionFragment wordDefinitionFragment = new WordDefinitionFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        WordDetailsDefinitionsTabFragment wordDetailsDefinitionsTabFragment = new WordDetailsDefinitionsTabFragment();
         Bundle bundle = new Bundle();
         bundle.putString("Definition List", new Gson().toJson(definitionList));
         bundle.putString("Word", word);
-        wordDefinitionFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.containerWordFinder, wordDefinitionFragment);
+        wordDetailsDefinitionsTabFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsDefinitionsTabFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     @Override
     public void onFragmentInteraction(String option) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (option) {
             case "Report Bug":
                 BugReportFragment bugReportFragment = new BugReportFragment();

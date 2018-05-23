@@ -3,6 +3,8 @@ package com.example.james.ultimatewordfinderr;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,81 +12,85 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import nz.co.ninjastudios.datamuseandroid.Word;
 
 /**
  * Created by James on 30/11/2015.
  */
-public class SynonymsListViewAdapter extends ArrayAdapter<Word> {
+public class SynonymsListViewAdapter extends RecyclerView.Adapter<SynonymsListViewAdapter.ViewHolder> {
 
     private ArrayList<Word> words;
-    private ArrayList<Integer> selectedItems;
-    private int layout;
+    private Context context;
 
-    public SynonymsListViewAdapter(Activity context, ArrayList<Word> words, int layout) {
-        super(context, layout, words);
-        this.layout = layout;
+    private ResultListViewAdapter.ItemClickListener clickListener;
+
+    SynonymsListViewAdapter(Context context, ArrayList<Word> words) {
+        this.context = context;
         this.words = words;
-        this.selectedItems = new ArrayList<>();
     }
 
-    public ArrayList<Integer> getSelectedItems() {
-        return this.selectedItems;
-    }
-
-    public void toggleSelected(Integer position) {
-        if (selectedItems.contains(position)) {
-            selectedItems.remove(position);
-        } else {
-            selectedItems.add(position);
-        }
-    }
-
-    @Override
-    public int getCount() {
+    public int getCount(){
         return words.size();
     }
 
-    @Override
-    public Word getItem(int position) {
+    public Word getItemAtPosition(int position){
         return words.get(position);
     }
 
+    public void setClickListener(ResultListViewAdapter.ItemClickListener itemClickListener){
+        clickListener = itemClickListener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+        boolean onItemLongClick(View view, int position);
+    }
+
+    @NonNull
     @Override
-    public long getItemId(int position) {
-        return position;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_result_list, parent, false);
+
+        return new SynonymsListViewAdapter.ViewHolder(view);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.textView.setText(getItemAtPosition(position).getWord());
+    }
 
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout, null);
+    @Override
+    public int getItemCount() {
+        return words.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+
+        TextView textView;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            this.textView = (TextView) itemView.findViewById(R.id.textViewItem);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
-        String word = words.get(position).getWord();
-
-        if (word != null) {
-            TextView textView = (TextView) convertView.findViewById(R.id.textViewItem);
-
-            if (textView != null) {
-                textView.setText(word);
+        @Override
+        public void onClick(View view) {
+            if(clickListener != null){
+                clickListener.onItemClick(view, getAdapterPosition());
             }
         }
 
-        if (selectedItems.contains(position)) {
-            convertView.setSelected(true);
-            convertView.setPressed(true);
-            convertView.setBackgroundColor(Color.LTGRAY);
-        } else {
-            convertView.setSelected(false);
-            convertView.setPressed(false);
-            convertView.setBackgroundColor(Color.TRANSPARENT);
-        }
+        @Override
+        public boolean onLongClick(View view) {
+            return clickListener != null && clickListener.onItemLongClick(view, getAdapterPosition());
 
-        return convertView;
+        }
     }
 
 }

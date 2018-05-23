@@ -53,6 +53,7 @@ dependencies {
     implementation 'nz.co.ninjastudios.datamuseandroid:datamuse-android:1.0.4'
     implementation 'com.github.MFlisar:DragSelectRecyclerView:0.3'
     implementation 'at.blogc:expandabletextview:1.0.5'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

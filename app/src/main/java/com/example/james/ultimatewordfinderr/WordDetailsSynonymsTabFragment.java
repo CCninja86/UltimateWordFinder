@@ -1,8 +1,12 @@
 package com.example.james.ultimatewordfinderr;
 
-import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,25 +21,35 @@ import java.util.ArrayList;
 import nz.co.ninjastudios.datamuseandroid.Word;
 
 /**
- * Created by james on 2/02/2017.
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link WordDetailsSynonymsTabFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link WordDetailsSynonymsTabFragment#newInstance} factory method to
+ * create an instance of this fragment.
  */
-
-public class SynonymResultListFragment extends Fragment {
+public class WordDetailsSynonymsTabFragment extends Fragment implements WordOptionsHandlerResultsListener {
+    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    private ListView listResults;
+    private RecyclerView listResults;
+    private LinearLayoutManager layoutManager;
     private SynonymsListViewAdapter adapter;
+
     private TextView textViewNumResults;
     ArrayList<Word> synonyms;
 
-    public SynonymResultListFragment() {
+    private ProgressDialog progressDialog;
+
+    public WordDetailsSynonymsTabFragment() {
         // Required empty public constructor
     }
 
@@ -45,11 +59,11 @@ public class SynonymResultListFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ResultListFragment.
+     * @return A new instance of fragment WordDetailsSynonymsTabFragment.
      */
-
-    public static SynonymResultListFragment newInstance(String param1, String param2) {
-        SynonymResultListFragment fragment = new SynonymResultListFragment();
+    // TODO: Rename and change types and number of parameters
+    public static WordDetailsSynonymsTabFragment newInstance(String param1, String param2) {
+        WordDetailsSynonymsTabFragment fragment = new WordDetailsSynonymsTabFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -70,23 +84,22 @@ public class SynonymResultListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_synonym_result_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_word_details_synonyms_tab, container, false);
 
         Bundle bundle = getArguments();
-        synonyms = (ArrayList<Word>) bundle.getSerializable("Synonyms");
         String word = bundle.getString("Word");
+        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(this, getActivity(), word);
+        wordOptionsHandler.loadSynonyms();
 
-        TextView textViewWord = (TextView) view.findViewById(R.id.textViewWord);
-        textViewWord.setText(word);
 
-        adapter = new SynonymsListViewAdapter(getActivity(), synonyms, R.layout.row_result_list);
-        listResults = (ListView) view.findViewById(R.id.listViewResults);
-        listResults.setAdapter(adapter);
+        listResults = view.findViewById(R.id.listViewResults);
+        layoutManager = new LinearLayoutManager(getActivity());
+        listResults.setLayoutManager(layoutManager);
 
-        textViewNumResults = (TextView) view.findViewById(R.id.textViewNumResults);
-        textViewNumResults.setText("Found " + synonyms.size() + " results");
+        textViewNumResults = view.findViewById(R.id.textViewNumResults);
 
-        final EditText editTextSearch = (EditText) view.findViewById(R.id.editTextSearch);
+
+        /*final EditText editTextSearch = view.findViewById(R.id.editTextSearch);
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -114,12 +127,12 @@ public class SynonymResultListFragment extends Fragment {
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
 
         return view;
     }
 
-
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String word, ArrayList<Word> synonyms) {
         if (mListener != null) {
             mListener.onFragmentInteraction(word, synonyms);
@@ -141,6 +154,23 @@ public class SynonymResultListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onSynonymsSuccess(String word, ArrayList<Word> synonyms) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        this.synonyms = synonyms;
+        adapter = new SynonymsListViewAdapter(getActivity(), synonyms);
+        listResults.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
+
     }
 
     /**

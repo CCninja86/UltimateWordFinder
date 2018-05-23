@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.james.ultimatewordfinderr.WordDetailsActivity"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        style="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:theme="@style/AppTheme">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingtoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|snap">
+
+            <TextView
+                android:id="@+id/textViewWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center|top"
+                android:layout_weight="1"
+                android:text="[Word]"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                app:layout_anchorGravity="top|center" />
+
+            <TextView
+                android:id="@+id/textViewPronunciation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="[Pronunciation]"
+                app:layout_anchor="@+id/fabViewMore"
+                app:layout_anchorGravity="bottom|center" />
+
+            <TextView
+                android:id="@+id/textViewPartOfSpeech"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:layout_marginStart="85dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/textViewWord"
+                android:layout_weight="1"
+                android:text="[part of speech]"
+                app:layout_anchor="@+id/textViewWord"
+                app:layout_anchorGravity="right|center" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/textViewSynonyms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:text="[Synonyms]" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <at.blogc.android.views.ExpandableTextView
+                android:id="@+id/textViewDefinitions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="135dp"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="[Definitions]"
+                app:animation_duration="1000" />
+        </android.support.v4.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/fabViewMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/relativeLayout"
+        app:layout_anchorGravity="right|center"
+        app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior">
+
+    </com.leinardi.android.speeddial.SpeedDialView>
+
+</android.support.design.widget.CoordinatorLayout>

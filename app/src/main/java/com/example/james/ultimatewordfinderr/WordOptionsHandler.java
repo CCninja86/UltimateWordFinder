@@ -26,9 +26,6 @@ import nz.co.ninjastudios.datamuseandroid.DatamuseAndroidResultsListener;
 
 public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
-    private WordFinderSearchResultsFragment.OnFragmentInteractionListener wordFinderListener;
-    private WordFinderDictionaryFragment.OnFragmentInteractionListener dictionaryListener;
-    private SynonymResultListFragment.OnFragmentInteractionListener synonymListener;
     private Context context;
     private static String word;
     private DefinitionList definitionList;
