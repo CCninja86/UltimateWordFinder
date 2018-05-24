@@ -227,16 +227,16 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
             Toast.makeText(this, "Word not found", Toast.LENGTH_SHORT).show();
         }
 
-        new CheckOfficialStatus(word).execute();
+        new CheckOfficialStatusTask(word).execute();
     }
 
-    private class CheckOfficialStatus extends AsyncTask<Void, Void, Void> {
+    private class CheckOfficialStatusTask extends AsyncTask<Void, Void, Void> {
 
         private String word;
         private String url;
         private boolean official;
 
-        public CheckOfficialStatus(String word){
+        public CheckOfficialStatusTask(String word){
             this.word = word;
             this.url = "https://wordfind.com/word/" + word;
             this.official = false;
