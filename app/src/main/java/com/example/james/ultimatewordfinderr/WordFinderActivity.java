@@ -202,13 +202,10 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onDictionaryFragmentInteraction(String word, DefinitionList definitionList) {
-        loadDefinitionsFragment(word, definitionList);
-    }
-
-    @Override
-    public void onDictionaryFragmentInteraction(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
-        loadSynonymsFragment(word, synonyms);
+    public void onDictionaryFragmentInteraction(String word) {
+        Intent intent = new Intent(this, WordDetailsTabbedActivity.class);
+        intent.putExtra("word", word);
+        startActivity(intent);
     }
 
     private void loadSynonymsFragment(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {

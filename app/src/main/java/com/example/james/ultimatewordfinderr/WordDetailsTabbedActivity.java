@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -17,9 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +55,8 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
 
     private Context context;
 
+    private String word;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +77,7 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
         appBarLayout.setLayoutParams(appBarLayoutParams);
 
 
-        String word = getIntent().getStringExtra("word");
+        word = getIntent().getStringExtra("word");
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -185,33 +195,81 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
             progressDialog = null;
         }
 
-        Word word = words.get(0);
+        if(words.size() > 0){
+            Word word = words.get(0);
 
-        String[] tags = word.getTags();
-        String pronunciationString = "";
-        StringBuilder partOfSpeechStringBuilder = new StringBuilder();
+            String[] tags = word.getTags();
+            String pronunciationString = "";
+            StringBuilder partOfSpeechStringBuilder = new StringBuilder();
 
-        for (String tag : tags){
-            if(tag.contains("ipa_pron")){
-                pronunciationString = tag.split(":")[1];
+            for (String tag : tags){
+                if(tag.contains("ipa_pron")){
+                    pronunciationString = tag.split(":")[1];
+                }
+
+                if(!tag.contains(":")){
+                    partOfSpeechStringBuilder.append(tag).append(",");
+                }
             }
 
-            if(!tag.contains(":")){
-                partOfSpeechStringBuilder.append(tag).append(",");
+            if(partOfSpeechStringBuilder.toString().length() > 0){
+                partOfSpeechStringBuilder.insert(0, new char[]{'('}, 0, 1);
+                partOfSpeechStringBuilder.replace(partOfSpeechStringBuilder.toString().lastIndexOf(","), partOfSpeechStringBuilder.toString().lastIndexOf(",") + 1, "");
+                partOfSpeechStringBuilder.append(")");
+
+                textViewPartOfSpeech.setText(partOfSpeechStringBuilder.toString());
+            } else {
+                textViewPartOfSpeech.setText("[u]");
             }
-        }
 
-        if(partOfSpeechStringBuilder.toString().length() > 0){
-            partOfSpeechStringBuilder.insert(0, new char[]{'('}, 0, 1);
-            partOfSpeechStringBuilder.replace(partOfSpeechStringBuilder.toString().lastIndexOf(","), partOfSpeechStringBuilder.toString().lastIndexOf(",") + 1, "");
-            partOfSpeechStringBuilder.append(")");
-
-            textViewPartOfSpeech.setText(partOfSpeechStringBuilder.toString());
+            textViewPronunciation.setText(pronunciationString);
         } else {
-            textViewPartOfSpeech.setText("[u]");
+            Toast.makeText(this, "Word not found", Toast.LENGTH_SHORT).show();
         }
 
-        textViewPronunciation.setText(pronunciationString);
+        new CheckOfficialStatus(word).execute();
+    }
+
+    private class CheckOfficialStatus extends AsyncTask<Void, Void, Void> {
+
+        private String word;
+        private String url;
+        private boolean official;
+
+        public CheckOfficialStatus(String word){
+            this.word = word;
+            this.url = "https://wordfind.com/word/" + word;
+            this.official = false;
+        }
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Document document = Jsoup.connect(url).get();
+
+                Elements resultElements = document.select("p.letters > span");
+
+                if(resultElements.size() > 0 && resultElements.get(0) != null){
+                    if(resultElements.get(0).text().equals("Yes!")){
+                        official = true;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            Toast.makeText(context, "Updated offical status", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

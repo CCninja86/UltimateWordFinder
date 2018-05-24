@@ -91,6 +91,7 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
         WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(this, getActivity(), word);
         wordOptionsHandler.loadDefinitions();
 
+
         return view;
     }
 
@@ -101,11 +102,6 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
 
     @Override
     public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
-        if(progressDialog != null && progressDialog.isShowing()){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-
         prepareListData(definitionList);
     }
 

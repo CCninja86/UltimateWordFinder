@@ -88,15 +88,17 @@ public class WordDetailsSynonymsTabFragment extends Fragment implements WordOpti
 
         Bundle bundle = getArguments();
         String word = bundle.getString("Word");
+
+
         WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(this, getActivity(), word);
         wordOptionsHandler.loadSynonyms();
-
 
         listResults = view.findViewById(R.id.listViewResults);
         layoutManager = new LinearLayoutManager(getActivity());
         listResults.setLayoutManager(layoutManager);
 
         textViewNumResults = view.findViewById(R.id.textViewNumResults);
+
 
 
         /*final EditText editTextSearch = view.findViewById(R.id.editTextSearch);
@@ -158,11 +160,6 @@ public class WordDetailsSynonymsTabFragment extends Fragment implements WordOpti
 
     @Override
     public void onSynonymsSuccess(String word, ArrayList<Word> synonyms) {
-        if(progressDialog != null && progressDialog.isShowing()){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-
         this.synonyms = synonyms;
         adapter = new SynonymsListViewAdapter(getActivity(), synonyms);
         listResults.setAdapter(adapter);
