@@ -47,7 +47,9 @@ public class WordDetailsSynonymsTabFragment extends Fragment implements WordOpti
     private TextView textViewNumResults;
     ArrayList<Word> synonyms;
 
-    private ProgressDialog progressDialog;
+    private WordOptionsHandler wordOptionsHandler;
+
+    private TextView textViewNoSynonymsFound;
 
     public WordDetailsSynonymsTabFragment() {
         // Required empty public constructor
@@ -90,7 +92,7 @@ public class WordDetailsSynonymsTabFragment extends Fragment implements WordOpti
         String word = bundle.getString("Word");
 
 
-        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(this, getActivity(), word);
+        wordOptionsHandler = new WordOptionsHandler(this, getActivity(), word);
         wordOptionsHandler.loadSynonyms();
 
         listResults = view.findViewById(R.id.listViewResults);
@@ -142,6 +144,12 @@ public class WordDetailsSynonymsTabFragment extends Fragment implements WordOpti
     }
 
     @Override
+    public void onStop(){
+        super.onStop();
+        wordOptionsHandler.cancelExecution();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -163,6 +171,8 @@ public class WordDetailsSynonymsTabFragment extends Fragment implements WordOpti
         this.synonyms = synonyms;
         adapter = new SynonymsListViewAdapter(getActivity(), synonyms);
         listResults.setAdapter(adapter);
+
+        mListener.onSynonymsResultsLoaded(synonyms.size());
     }
 
     @Override
@@ -186,5 +196,7 @@ public class WordDetailsSynonymsTabFragment extends Fragment implements WordOpti
         void onFragmentInteraction(String word, DefinitionList definitionList);
 
         void onFragmentInteraction(String option);
+
+        void onSynonymsResultsLoaded(int numResults);
     }
 }

@@ -246,6 +246,11 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
+    public void onSynonymsResultsLoaded(int numResults) {
+
+    }
+
+    @Override
     public void onFragmentInteraction(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
         loadSynonymsFragment(word, synonyms);
     }
@@ -253,5 +258,10 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     @Override
     public void onFragmentInteraction(String word, DefinitionList definitionList) {
         loadDefinitionsFragment(word, definitionList);
+    }
+
+    @Override
+    public void onDefinitionsResultsLoaded(int numResults) {
+
     }
 }

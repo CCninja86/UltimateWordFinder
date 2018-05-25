@@ -45,6 +45,7 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
     private TextView textViewPartOfSpeech;
     private TextView textViewPronunciation;
     private SpeedDialView buttonViewMore;
+    private TabLayout tabLayout;
 
     private boolean definitionsExpandable;
     private boolean expand;
@@ -79,7 +80,7 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
 
         word = getIntent().getStringExtra("word");
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), word);
@@ -158,8 +159,8 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
 
         datamuseAndroid.spelledLike(word).setMetadataFlags(new String[]{"p", "r"}).maxResults(1).get();
 
-    }
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,11 +182,6 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
@@ -225,52 +221,11 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
             textViewPronunciation.setText(pronunciationString);
         } else {
             Toast.makeText(this, "Word not found", Toast.LENGTH_SHORT).show();
-        }
-
-        new CheckOfficialStatusTask(word).execute();
-    }
-
-    private class CheckOfficialStatusTask extends AsyncTask<Void, Void, Void> {
-
-        private String word;
-        private String url;
-        private boolean official;
-
-        public CheckOfficialStatusTask(String word){
-            this.word = word;
-            this.url = "https://wordfind.com/word/" + word;
-            this.official = false;
-        }
-
-        @Override
-        protected void onPreExecute(){
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                Document document = Jsoup.connect(url).get();
-
-                Elements resultElements = document.select("p.letters > span");
-
-                if(resultElements.size() > 0 && resultElements.get(0) != null){
-                    if(resultElements.get(0).text().equals("Yes!")){
-                        official = true;
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result){
-            Toast.makeText(context, "Updated offical status", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
+
+
 
     @Override
     public void onFragmentInteraction(String word, ArrayList<Word> synonyms) {
@@ -285,5 +240,15 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
     @Override
     public void onFragmentInteraction(String option) {
 
+    }
+
+    @Override
+    public void onSynonymsResultsLoaded(int numResults) {
+        tabLayout.getTabAt(1).setText(tabLayout.getTabAt(1).getText().toString() + " (" + numResults + ")");
+    }
+
+    @Override
+    public void onDefinitionsResultsLoaded(int numResults) {
+        tabLayout.getTabAt(0).setText(tabLayout.getTabAt(0).getText().toString() + " (" + numResults + ")");
     }
 }

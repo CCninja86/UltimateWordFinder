@@ -112,8 +112,6 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_finder_search_results, container, false);
-        setRetainInstance(true);
-
         Bundle bundle = getArguments();
         final Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();

@@ -8,9 +8,9 @@ import java.util.ArrayList;
  */
 public class DefinitionList implements Serializable {
 
-    ArrayList<Definition> definitions;
+    private ArrayList<Definition> definitions;
 
-    public DefinitionList() {
+    DefinitionList() {
         definitions = new ArrayList<>();
     }
 
@@ -39,7 +39,7 @@ public class DefinitionList implements Serializable {
             }
         }
 
-        return contains;
+        return !contains;
     }
 
     public void trimStrings() {

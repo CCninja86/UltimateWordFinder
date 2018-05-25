@@ -3,16 +3,24 @@ package com.example.james.ultimatewordfinderr;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +52,9 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
     List<String> listHeader;
     HashMap<String, List<String>> listChild;
 
-    private ProgressDialog progressDialog;
+    private WordOptionsHandler wordOptionsHandler;
+
+    private TextView textViewNoDefinitions;
 
     public WordDetailsDefinitionsTabFragment() {
         // Required empty public constructor
@@ -88,11 +98,16 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
 
         listView = view.findViewById(R.id.expandableListView);
 
-        WordOptionsHandler wordOptionsHandler = new WordOptionsHandler(this, getActivity(), word);
+        wordOptionsHandler = new WordOptionsHandler(this, getActivity(), word);
         wordOptionsHandler.loadDefinitions();
 
-
         return view;
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        wordOptionsHandler.cancelExecution();
     }
 
     @Override
@@ -103,6 +118,8 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
     @Override
     public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
         prepareListData(definitionList);
+        new CheckOfficialStatusTask(word).execute();
+        mListener.onDefinitionsResultsLoaded(definitionList.getDefinitions().size());
     }
 
     private void prepareListData(DefinitionList definitionList) {
@@ -129,10 +146,52 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
 
     }
 
+    private class CheckOfficialStatusTask extends AsyncTask<Void, Void, Void> {
+
+        private String word;
+        private String url;
+        private boolean official;
+
+        public CheckOfficialStatusTask(String word){
+            this.word = word;
+            this.url = "https://wordfind.com/word/" + word;
+            this.official = false;
+        }
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Document document = Jsoup.connect(url).get();
+
+                Elements resultElements = document.select("p.letters > span");
+
+                if(resultElements.size() > 0 && resultElements.get(0) != null){
+                    if(resultElements.get(0).text().equals("Yes!")){
+                        official = true;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            Toast.makeText(getActivity(), "Updated offical status for " + word, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(int numResults) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onDefinitionsResultsLoaded(numResults);
         }
     }
 
@@ -164,7 +223,6 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onDefinitionsResultsLoaded(int numResults);
     }
 }

@@ -35,6 +35,9 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
     private static DatamuseAndroidResultsListener datamuseAndroidResultsListener;
     private WordOptionsHandlerResultsListener wordOptionsHandlerResultsListener;
 
+    private GetDefinitionsTask getDefinitionsTask;
+    private GetSynonymsTask getSynonymsTask;
+
     WordOptionsHandler(WordOptionsHandlerResultsListener resultsListener, Context context, String word) {
         WordOptionsHandler.word = word;
         this.context = context;
@@ -53,22 +56,28 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
     }
 
     public void loadDefinitions() {
-        GetDefinitionsTask getDefinitionsTask = new GetDefinitionsTask();
+        getDefinitionsTask = new GetDefinitionsTask();
         getDefinitionsTask.execute();
     }
 
     public void loadSynonyms() {
-        GetSynonymsTask getSynonymsTask = new GetSynonymsTask();
+        getSynonymsTask = new GetSynonymsTask();
         getSynonymsTask.execute();
+    }
+
+    public void cancelExecution(){
+        if(getDefinitionsTask != null && !getDefinitionsTask.isCancelled()){
+            getDefinitionsTask.cancel(true);
+        }
+
+        if(getSynonymsTask != null && !getSynonymsTask.isCancelled()){
+            getSynonymsTask.cancel(true);
+        }
     }
 
     @Override
     public void onResultsSuccess(ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
-        if (!synonyms.isEmpty()) {
-            wordOptionsHandlerResultsListener.onSynonymsSuccess(word, synonyms);
-        } else {
-            Toast.makeText(context, "No synonyms found", Toast.LENGTH_SHORT).show();
-        }
+        wordOptionsHandlerResultsListener.onSynonymsSuccess(word, synonyms);
     }
 
     private class GetDefinitionsTask extends AsyncTask<Void, Void, Void> {
@@ -84,126 +93,128 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String searchUrl;
-            ArrayList<String> definitions = new ArrayList<>();
-            ArrayList<String> subjectHeaders = new ArrayList<>();
-            int numAttempts = 0;
+            if(!isCancelled()){
+                String searchUrl;
+                ArrayList<String> definitions = new ArrayList<>();
+                ArrayList<String> subjectHeaders = new ArrayList<>();
+                int numAttempts = 0;
 
-            while (numAttempts < MAX_ATTEMPTS) {
-                try {
-                    searchUrl = "http://www.dictionary.com/browse/" + word;
-                    Document document = Jsoup.connect(searchUrl).userAgent("Mozilla/5.0 (Linux; Android 5.1.1; Vodafone Smart ultra 6"
-                            + " Build/LMY47V) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91"
-                            + " Mobile Safari/537.36").referrer("http://www.google.com").get();
-
-
-                    Elements definitionElements = document.getElementsByClass("_14Msm");
+                while (numAttempts < MAX_ATTEMPTS) {
+                    try {
+                        searchUrl = "http://www.dictionary.com/browse/" + word;
+                        Document document = Jsoup.connect(searchUrl).userAgent("Mozilla/5.0 (Linux; Android 5.1.1; Vodafone Smart ultra 6"
+                                + " Build/LMY47V) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91"
+                                + " Mobile Safari/537.36").referrer("http://www.google.com").get();
 
 
-                    for (Element element : definitionElements) {
-                        Elements childElements = element.children();
+                        Elements definitionElements = document.getElementsByClass("_14Msm");
 
-                        for (Element child : childElements) {
-                            if (child.hasClass("dbox-italic")) {
-                                String sublistHeader = child.text();
-                                subjectHeaders.add(sublistHeader);
+
+                        for (Element element : definitionElements) {
+                            Elements childElements = element.children();
+
+                            for (Element child : childElements) {
+                                if (child.hasClass("dbox-italic")) {
+                                    String sublistHeader = child.text();
+                                    subjectHeaders.add(sublistHeader);
+                                }
+                            }
+
+                            String definition = element.text();
+
+                            if (!definition.startsWith("see:")) {
+                                definitions.add(definition);
                             }
                         }
 
-                        String definition = element.text();
+                        // Remove duplicates from sublist header array, and remove any false positives
+                        Set<String> temp = new HashSet<>();
+                        temp.addAll(subjectHeaders);
+                        subjectHeaders.clear();
+                        subjectHeaders.addAll(temp);
 
-                        if (!definition.startsWith("see:")) {
-                            definitions.add(definition);
+                        Iterator<String> iterator = subjectHeaders.iterator();
+
+                        while (iterator.hasNext()) {
+                            String header = iterator.next();
+
+                            if (!Character.isUpperCase(header.charAt(0))) {
+                                iterator.remove();
+                            }
                         }
-                    }
 
-                    // Remove duplicates from sublist header array, and remove any false positives
-                    Set<String> temp = new HashSet<>();
-                    temp.addAll(subjectHeaders);
-                    subjectHeaders.clear();
-                    subjectHeaders.addAll(temp);
+                        for (String definition : definitions) {
+                            for (String header : subjectHeaders) {
+                                if (definition.startsWith(header)) {
+                                    String subject = definition.substring(0, definition.indexOf("."));
+                                    String[] definitionSublist = null;
 
-                    Iterator<String> iterator = subjectHeaders.iterator();
+                                    if (!definition.contains("etc.")) {
+                                        definitionSublist = definition.split("\\.");
+                                    } else {
+                                        StringBuilder stringBuilder = new StringBuilder(definition);
 
-                    while (iterator.hasNext()) {
-                        String header = iterator.next();
+                                        for (int i = 0; i < definition.length(); i++) {
+                                            String character = String.valueOf(definition.charAt(i));
 
-                        if (!Character.isUpperCase(header.charAt(0))) {
-                            iterator.remove();
-                        }
-                    }
+                                            if (character.equals(".")) {
+                                                String trailingSubstring = definition.substring(i - 3, i);
 
-                    for (String definition : definitions) {
-                        for (String header : subjectHeaders) {
-                            if (definition.startsWith(header)) {
-                                String subject = definition.substring(0, definition.indexOf("."));
-                                String[] definitionSublist = null;
+                                                if (trailingSubstring.equals("etc")) {
+                                                    stringBuilder.setCharAt(i, ',');
+                                                    stringBuilder.setCharAt(i + 1, ' ');
+                                                }
+                                            }
+                                        }
 
-                                if (!definition.contains("etc.")) {
-                                    definitionSublist = definition.split("\\.");
-                                } else {
-                                    StringBuilder stringBuilder = new StringBuilder(definition);
+                                        definitionSublist = stringBuilder.toString().split("\\.");
+                                    }
 
-                                    for (int i = 0; i < definition.length(); i++) {
-                                        String character = String.valueOf(definition.charAt(i));
 
-                                        if (character.equals(".")) {
-                                            String trailingSubstring = definition.substring(i - 3, i);
+                                    for (String def : definitionSublist) {
+                                        if (!subjectHeaders.contains(def + ".")) {
+                                            Definition definitionObject = new Definition();
+                                            definitionObject.setSubject(subject);
+                                            definitionObject.setDefinition(def);
 
-                                            if (trailingSubstring.equals("etc")) {
-                                                stringBuilder.setCharAt(i, ',');
-                                                stringBuilder.setCharAt(i + 1, ' ');
+                                            if (definitionList.containsDefinition(definition)) {
+                                                definitionList.addDefinition(definitionObject);
                                             }
                                         }
                                     }
 
-                                    definitionSublist = stringBuilder.toString().split("\\.");
                                 }
+                            }
 
-
-                                for (String def : definitionSublist) {
-                                    if (!subjectHeaders.contains(def + ".")) {
-                                        Definition definitionObject = new Definition();
-                                        definitionObject.setSubject(subject);
-                                        definitionObject.setDefinition(def);
-
-                                        if (!definitionList.containsDefinition(definition)) {
-                                            definitionList.addDefinition(definitionObject);
-                                        }
-                                    }
-                                }
-
+                            if (definitionList.containsDefinition(definition)) {
+                                Definition definitionObject = new Definition();
+                                definitionObject.setDefinition(definition);
+                                definitionList.addDefinition(definitionObject);
                             }
                         }
 
-                        if (!definitionList.containsDefinition(definition)) {
-                            Definition definitionObject = new Definition();
-                            definitionObject.setDefinition(definition);
-                            definitionList.addDefinition(definitionObject);
+                        Iterator<Definition> definitionIterator = definitionList.getDefinitions().iterator();
+
+                        while (definitionIterator.hasNext()) {
+                            Definition definition = definitionIterator.next();
+
+                            if (subjectHeaders.contains(definition.getDefinition().substring(0, definition.getDefinition().indexOf(".") + 1))) {
+                                definitionIterator.remove();
+                            }
                         }
-                    }
 
-                    Iterator<Definition> definitionIterator = definitionList.getDefinitions().iterator();
+                        definitionList.trimStrings();
 
-                    while (definitionIterator.hasNext()) {
-                        Definition definition = definitionIterator.next();
-
-                        if (subjectHeaders.contains(definition.getDefinition().substring(0, definition.getDefinition().indexOf(".") + 1))) {
-                            definitionIterator.remove();
+                        if (definitionList.getDefinitions().size() < 1) {
+                            numAttempts++;
+                        } else {
+                            break;
                         }
-                    }
-
-                    definitionList.trimStrings();
-
-                    if (definitionList.getDefinitions().size() < 1) {
+                    } catch (MalformedURLException e) {
+                        Log.e("MalformedURLException", e.getMessage());
+                    } catch (IOException e) {
                         numAttempts++;
-                    } else {
-                        break;
                     }
-                } catch (MalformedURLException e) {
-                    Log.e("MalformedURLException", e.getMessage());
-                } catch (IOException e) {
-                    numAttempts++;
                 }
             }
 
@@ -239,13 +250,15 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
         @Override
         protected Void doInBackground(Object... params) {
-            String searchUrl;
+            if(!isCancelled()){
+                String searchUrl;
 
-            if (word.contains(" ")) {
-                word = word.toLowerCase().replaceAll(" ", "%20");
+                if (word.contains(" ")) {
+                    word = word.toLowerCase().replaceAll(" ", "%20");
+                }
+
+                new DatamuseAndroid(true).withResultsListener(datamuseAndroidResultsListener).synonymsOf(word).get();
             }
-
-            new DatamuseAndroid(true).withResultsListener(datamuseAndroidResultsListener).synonymsOf(word).get();
 
             return null;
         }

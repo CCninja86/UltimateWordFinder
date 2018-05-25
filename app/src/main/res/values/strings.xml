@@ -56,4 +56,7 @@
     <string name="title_activity_word_details_tabbed">WordDetailsTabbedActivity</string>
     <string name="tab_text_1">Definitions</string>
     <string name="tab_text_2">Synonyms</string>
+
+    <string name="no_definitions">No definitions found</string>
+    <string name="no_synonyms">No synonyms found</string>
 </resources>
