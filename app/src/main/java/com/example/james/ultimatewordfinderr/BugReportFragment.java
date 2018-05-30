@@ -14,10 +14,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.async.http.body.JSONObjectBody;
+import com.koushikdutta.ion.Ion;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -41,6 +48,8 @@ public class BugReportFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private String priority;
+
+    private ProgressDialog progressDialog;
 
     public BugReportFragment() {
         // Required empty public constructor
@@ -107,24 +116,11 @@ public class BugReportFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Will figure out Trello API later
+                String title = editTextTitle.getText().toString().trim();
+                String description = editTextDescription.getText().toString().trim();
 
-                /*TrelloCard trelloCard = new TrelloCard("[BUG]" + textViewTitle.getText().toString(), textViewDescription.getText().toString(), "bottom", null, "58904d9b0fff4d29dab1fe0e");
-                Gson gson = new Gson();
-                String json = gson.toJson(trelloCard);
-
-                TrelloAPITask trelloAPITask = new TrelloAPITask("https://api.trello.com/1/cards", "POST", "application/json", json);
-                trelloAPITask.execute();*/
-
-                // In the meantime, just send an email
-
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/html");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"ccninja86developer@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "[BUG] [" + priority + "] " + editTextTitle.getText().toString());
-                intent.putExtra(Intent.EXTRA_TEXT, editTextDescription.getText().toString());
-                startActivity(Intent.createChooser(intent, "Send Email"));
-
+                GitHubIssue gitHubIssue = new GitHubIssue(title, description, priority);
+                new CreateIssueOnGitHubTask(gitHubIssue).execute();
             }
         });
 
@@ -132,62 +128,63 @@ public class BugReportFragment extends Fragment {
         return view;
     }
 
-    private class TrelloAPITask extends AsyncTask<Void, Void, Void> {
+    private void setPriority(String priority) {
+        this.priority = priority;
+    }
 
-        String url;
-        String requestMethod;
-        String contentType;
-        String body;
-        ProgressDialog progressDialog;
+    private class CreateIssueOnGitHubTask extends AsyncTask<Void, Void, Void> {
 
-        public TrelloAPITask(String url, String requestMethod, String contentType, String body) {
-            this.url = url;
-            this.requestMethod = requestMethod;
-            this.contentType = contentType;
-            this.body = body;
+        private GitHubIssue gitHubIssue;
+
+        public CreateIssueOnGitHubTask(GitHubIssue gitHubIssue){
+            this.gitHubIssue = gitHubIssue;
         }
 
         @Override
-        protected void onPreExecute() {
+        protected void onPreExecute(){
             progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Submitting...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Sending...");
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            HttpsURLConnection connection;
+        protected Void doInBackground(Void... voids) {
+            JsonObject json = new JsonObject();
+            json.addProperty("title", "[" + gitHubIssue.getPriority() + "] " + gitHubIssue.getTitle());
+            json.addProperty("description", gitHubIssue.getDescription());
 
-            try {
-                URL connUrl = new URL(url);
-                connection = (HttpsURLConnection) connUrl.openConnection();
-                connection.setRequestMethod(requestMethod);
-                connection.addRequestProperty("Content-Type", contentType);
-                connection.setRequestProperty("Content-Length", body);
-                connection.getOutputStream().write(body.getBytes("UTF8"));
-            } catch (MalformedURLException e) {
-                Log.e("MalformedURLException", e.getMessage());
-            } catch (IOException e) {
-                Log.e("IOException", e.getMessage());
-            }
+            Ion.with(getActivity())
+                    .load("https://api.github.com/repos/CCninja86/UltimateWordFinder/issues")
+                    .setHeader("Content-Type", "application/json")
+                    .setHeader("Authorization", "token 66148cd2f5d886d6933f04764bebeb8e21895b26")
+                    .setJsonObjectBody(json)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            if(progressDialog != null && progressDialog.isShowing()){
+                                progressDialog.dismiss();
+                                progressDialog = null;
+                            }
+
+                            if(result != null){
+                                Toast.makeText(getActivity(), "Bug report uploaded successfully", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Log.e("GitHubIssue Error", e.getMessage());
+                            }
+                        }
+                    });
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-        }
-    }
+        protected void onPostExecute(Void result){
 
-    private void setPriority(String priority) {
-        this.priority = priority;
+        }
     }
 
 

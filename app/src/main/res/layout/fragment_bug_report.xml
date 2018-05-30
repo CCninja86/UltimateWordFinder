@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:layout_alignParentRight="true"
         android:background="@color/colorAccent"
         android:text="Submit" />
@@ -38,53 +39,53 @@
         android:layout_centerHorizontal="true" />
 
     <RadioGroup
+        android:id="@+id/radioGroupPriority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnSubmit"
-        android:layout_alignRight="@+id/textViewPriority"
-        android:layout_alignEnd="@+id/textViewPriority"
-        android:id="@+id/radioGroupPriority">
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="135dp">
 
         <RadioButton
-            android:text="Low"
+            android:id="@+id/radioButtonLow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButtonLow"
             android:layout_above="@+id/radioButtonMedium"
             android:layout_alignLeft="@+id/radioButtonMedium"
             android:layout_alignStart="@+id/radioButtonMedium"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Low" />
 
         <RadioButton
-            android:text="Medium"
+            android:id="@+id/radioButtonMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButtonMedium"
             android:layout_above="@+id/radioButtonHigh"
             android:layout_alignLeft="@+id/radioButtonHigh"
             android:layout_alignStart="@+id/radioButtonHigh"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Medium" />
 
         <RadioButton
-            android:text="High"
+            android:id="@+id/radioButtonHigh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButtonHigh"
-            android:layout_marginBottom="81dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_weight="1" />
+            android:layout_marginBottom="81dp"
+            android:layout_weight="1"
+            android:text="High" />
 
     </RadioGroup>
 
     <TextView
-        android:text="Priority"
+        android:id="@+id/textViewPriority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewPriority"
-        android:textSize="24sp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/radioGroupPriority"
+        android:layout_centerHorizontal="true"
+        android:text="Priority"
+        android:textSize="24sp" />
 
     <EditText
         android:layout_width="wrap_content"
