@@ -33,6 +33,7 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
     private ArrayList<String> synonyms;
     private static final int MAX_ATTEMPTS = 5;
 
+    private DatamuseAndroid datamuseAndroid;
     private static DatamuseAndroidResultsListener datamuseAndroidResultsListener;
     private WordOptionsHandlerResultsListener wordOptionsHandlerResultsListener;
 
@@ -46,6 +47,9 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
         this.definitionList = new DefinitionList();
         this.synonyms = new ArrayList<>();
         WordOptionsHandler.datamuseAndroidResultsListener = this;
+
+        datamuseAndroid = new DatamuseAndroid(true);
+        datamuseAndroid.setResultsListener(datamuseAndroidResultsListener);
     }
 
     public String getWord() {
@@ -80,24 +84,11 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
     public void onResultsSuccess(ArrayList<nz.co.ninjastudios.datamuseandroid.Word> words) {
         if(words.size() == 1 && words.get(0).getDefs().length > 0){
             DefinitionList definitionList = new DefinitionList();
-            StringBuilder definitionStringBuilder = new StringBuilder();
 
             for(String definition : words.get(0).getDefs()){
-                for(int i = 0; i < definition.length(); i++){
-                    char charValue = definition.charAt(i);
-
-                    if(charValue == '\\'){
-                        definitionStringBuilder.append('-');
-                    } else {
-                        definitionStringBuilder.append(charValue);
-                    }
-                }
-
-                definition = definitionStringBuilder.toString();
-
                 Definition wordDefinition = new Definition();
-                wordDefinition.setPartOfSpeech(definition.split("-")[0]);
-                wordDefinition.setDefinition(definition.split("-")[1]);
+                wordDefinition.setPartOfSpeech(definition.split("\t")[0]);
+                wordDefinition.setDefinition(definition.split("\t")[1]);
 
                 definitionList.addDefinition(wordDefinition);
             }
@@ -106,6 +97,8 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
         } else {
             wordOptionsHandlerResultsListener.onSynonymsSuccess(word, words);
         }
+
+
     }
 
     private class GetDefinitionsTask extends AsyncTask<Void, Void, Void> {
@@ -122,12 +115,10 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
         @Override
         protected Void doInBackground(Void... params) {
             if(!isCancelled()){
-                new DatamuseAndroid(true)
-                        .withResultsListener(datamuseAndroidResultsListener)
-                        .spelledLike(word)
-                        .setMetadataFlags(new String[]{"d"})
-                        .maxResults(1)
-                        .get();
+                datamuseAndroid.spelledLike(word);
+                datamuseAndroid.setMetadataFlags(new String[]{"d"});
+                datamuseAndroid.maxResults(1);
+                datamuseAndroid.get();
             }
 
             return null;
@@ -135,12 +126,11 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
         @Override
         protected void onPostExecute(Void result) {
-
-
+            new CheckOfficialStatusTask(word).execute();
         }
     }
 
-    private static class GetSynonymsTask extends AsyncTask<Object, Void, Void> {
+    private class GetSynonymsTask extends AsyncTask<Object, Void, Void> {
 
         public GetSynonymsTask() {
 
@@ -158,7 +148,8 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
                     word = word.toLowerCase().replaceAll(" ", "%20");
                 }
 
-                new DatamuseAndroid(true).withResultsListener(datamuseAndroidResultsListener).synonymsOf(word).get();
+                datamuseAndroid.synonymsOf(word);
+                datamuseAndroid.get();
             }
 
             return null;
@@ -167,6 +158,50 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
         @Override
         protected void onPostExecute(Void result) {
 
+
+        }
+    }
+
+    private class CheckOfficialStatusTask extends AsyncTask<Void, Void, Void> {
+
+        private String word;
+        private String url;
+        private boolean official;
+
+        public CheckOfficialStatusTask(String word){
+            this.word = word;
+            this.url = "https://wordfind.com/word/" + word;
+            this.official = false;
+        }
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Document document = Jsoup.connect(url).get();
+
+                Elements resultElements = document.select("p.letters > span");
+
+                if(resultElements.size() > 0 && resultElements.get(0) != null){
+                    if(resultElements.get(0).text().equals("Yes!")){
+                        official = true;
+                    }
+                }
+
+                // TODO: Make request to future custom backend to update status
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
 
         }
     }

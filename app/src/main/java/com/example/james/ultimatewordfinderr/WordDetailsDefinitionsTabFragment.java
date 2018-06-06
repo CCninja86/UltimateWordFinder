@@ -118,7 +118,6 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
     @Override
     public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
         prepareListData(definitionList);
-        new CheckOfficialStatusTask(word).execute();
         mListener.onDefinitionsResultsLoaded(definitionList.getDefinitions().size());
     }
 
@@ -133,7 +132,7 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
             listHeader.add("Definition " + (i + 1));
 
             List<String> definitionParts = new ArrayList<>();
-            definitionParts.add(definition.getSubject());
+            definitionParts.add(definition.getPartOfSpeech());
             definitionParts.add(definition.getDefinition());
 
             listChild.put(listHeader.get(i), definitionParts);
@@ -146,47 +145,7 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
 
     }
 
-    private class CheckOfficialStatusTask extends AsyncTask<Void, Void, Void> {
 
-        private String word;
-        private String url;
-        private boolean official;
-
-        public CheckOfficialStatusTask(String word){
-            this.word = word;
-            this.url = "https://wordfind.com/word/" + word;
-            this.official = false;
-        }
-
-        @Override
-        protected void onPreExecute(){
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                Document document = Jsoup.connect(url).get();
-
-                Elements resultElements = document.select("p.letters > span");
-
-                if(resultElements.size() > 0 && resultElements.get(0) != null){
-                    if(resultElements.get(0).text().equals("Yes!")){
-                        official = true;
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result){
-            Toast.makeText(getActivity(), "Updated offical status for " + word, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(int numResults) {

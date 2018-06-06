@@ -48,8 +48,8 @@ public class DefinitionList implements Serializable {
                 definition.setDefinition(definition.getDefinition().trim());
             }
 
-            if (definition.getSubject() != null) {
-                definition.setSubject(definition.getSubject().trim());
+            if (definition.getPartOfSpeech() != null) {
+                definition.setPartOfSpeech(definition.getPartOfSpeech().trim());
             }
         }
     }

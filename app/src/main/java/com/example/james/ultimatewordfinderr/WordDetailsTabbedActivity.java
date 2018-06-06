@@ -114,9 +114,6 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
         partsOfSpeechMap.put("adv", "adverb");
         partsOfSpeechMap.put("u", "unknown");
 
-        datamuseAndroid = new DatamuseAndroid(true);
-        datamuseAndroid.withResultsListener(this);
-
         textViewWord = findViewById(R.id.textViewWord);
         textViewPartOfSpeech = findViewById(R.id.textViewPartOfSpeech);
         textViewPronunciation = findViewById(R.id.textViewPronunciation);
@@ -149,15 +146,18 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
 
         textViewWord.setText(word);
 
-        String url = DatamuseAndroid.getRequestUrl();
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Getting word details...");
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        datamuseAndroid.spelledLike(word).setMetadataFlags(new String[]{"p", "r"}).maxResults(1).get();
+        datamuseAndroid = new DatamuseAndroid(true);
+        datamuseAndroid.setResultsListener(this);
+        datamuseAndroid.spelledLike(word);
+        datamuseAndroid.setMetadataFlags(new String[]{"p", "r"});
+        datamuseAndroid.maxResults(1);
+        datamuseAndroid.get();
 
 
     }
