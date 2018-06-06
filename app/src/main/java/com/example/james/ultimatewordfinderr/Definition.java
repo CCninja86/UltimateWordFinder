@@ -5,7 +5,7 @@ package com.example.james.ultimatewordfinderr;
  */
 public class Definition {
 
-    private String subject;
+    private String partOfSpeech;
     private String definition;
 
 
@@ -13,12 +13,12 @@ public class Definition {
 
     }
 
-    public String getSubject() {
-        return subject;
+    public String getPartOfSpeech() {
+        return partOfSpeech;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setPartOfSpeech(String partOfSpeech) {
+        this.partOfSpeech = partOfSpeech;
     }
 
     public String getDefinition() {

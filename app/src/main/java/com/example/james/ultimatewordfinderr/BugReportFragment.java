@@ -158,7 +158,7 @@ public class BugReportFragment extends Fragment {
             Ion.with(getActivity())
                     .load("https://api.github.com/repos/CCninja86/UltimateWordFinder/issues")
                     .setHeader("Content-Type", "application/json")
-                    .setHeader("Authorization", "token 66148cd2f5d886d6933f04764bebeb8e21895b26")
+                    .setHeader("Authorization", "CCninja86")
                     .setJsonObjectBody(json)
                     .asJsonObject()
                     .setCallback(new FutureCallback<JsonObject>() {

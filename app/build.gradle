@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.github.savvisingh:ColorPickerDialog:07a82afc4c'
     implementation 'com.github.leinardi:FloatingActionButtonSpeedDial:master-SNAPSHOT'
     implementation 'com.koushikdutta.ion:ion:2.2.1'
-    implementation 'nz.co.ninjastudios.datamuseandroid:datamuse-android:1.0.4'
+    implementation 'nz.co.ninjastudios.datamuseandroid:datamuse-android:1.0.6'
     implementation 'com.github.MFlisar:DragSelectRecyclerView:0.3'
     implementation 'at.blogc:expandabletextview:1.0.5'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
