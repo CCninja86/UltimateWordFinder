@@ -112,6 +112,9 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_finder_search_results, container, false);
+
+
+
         Bundle bundle = getArguments();
         final Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();
@@ -121,6 +124,7 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         topWords = new LinkedHashMap<>();
 
         this.searchResults = gson.fromJson(bundle.getString("Search Results"), new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
+        mListener.onResultsFragmentLoaded(this.searchResults);
 
         if(this.searchResults.size() > listSizeLimit){
             Toast.makeText(getActivity(), "Showing only the top " + listSizeLimit + " highest scoring words", Toast.LENGTH_LONG).show();
@@ -314,6 +318,7 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener.onResultsFragmentClosed();
 
         mListener = null;
     }
@@ -338,22 +343,16 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         mListener.onResultsFragmentInteraction(word, definitionList);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        public void onResultsFragmentButtonInteraction(String action, ArrayList<String> selectedWords);
+        void onResultsFragmentButtonInteraction(String action, ArrayList<String> selectedWords);
 
-        public void onResultsFragmentInteraction(String word, DefinitionList definitionList);
+        void onResultsFragmentInteraction(String word, DefinitionList definitionList);
 
-        public void onResultsFragmentInteraction(String word, ArrayList<Word> synonyms);
+        void onResultsFragmentInteraction(String word, ArrayList<Word> synonyms);
+
+        void onResultsFragmentLoaded(LinkedHashMap<String, Integer> searchResults);
+
+        void onResultsFragmentClosed();
     }
 
 }

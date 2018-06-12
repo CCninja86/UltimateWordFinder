@@ -1,7 +1,7 @@
 package com.example.james.ultimatewordfinderr;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,18 +76,18 @@ public class AdvancedSearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advanced_search, container, false);
 
-        final SeekBar seekBarNumLettersMin = (SeekBar) view.findViewById(R.id.seekBarNumLettersMin);
-        final SeekBar seekBarNumLettersMax = (SeekBar) view.findViewById(R.id.seekBarNumLettersMax);
-        final TextView txtSeekBarMinProgress = (TextView) view.findViewById(R.id.txtSeekBarMinProgress);
-        final TextView txtSeekBarMaxProgress = (TextView) view.findViewById(R.id.txtSeekBarMaxProgress);
+        final SeekBar seekBarNumLettersMin = view.findViewById(R.id.seekBarNumLettersMin);
+        final SeekBar seekBarNumLettersMax = view.findViewById(R.id.seekBarNumLettersMax);
+        final TextView txtSeekBarMinProgress = view.findViewById(R.id.txtSeekBarMinProgress);
+        final TextView txtSeekBarMaxProgress = view.findViewById(R.id.txtSeekBarMaxProgress);
         int numMinLetters = seekBarNumLettersMin.getProgress();
         int numMaxLetters = seekBarNumLettersMax.getProgress();
         txtSeekBarMinProgress.setText(String.valueOf(numMinLetters));
         txtSeekBarMaxProgress.setText(String.valueOf(numMaxLetters));
-        Button btnAdvancedSearch = (Button) view.findViewById(R.id.btnAdvancedSearch);
-        final TextView editTextSearchTerm = (TextView) view.findViewById(R.id.editTextSearchTerm);
-        final TextView editTextStartsWith = (TextView) view.findViewById(R.id.editTextStartsWith);
-        final TextView editTextEndsWith = (TextView) view.findViewById(R.id.editTextEndsWith);
+        Button btnAdvancedSearch = view.findViewById(R.id.btnAdvancedSearch);
+        final TextView editTextContains = view.findViewById(R.id.editTextContains);
+        final TextView editTextStartsWith = view.findViewById(R.id.editTextStartsWith);
+        final TextView editTextEndsWith = view.findViewById(R.id.editTextEndsWith);
 
         matches = new ArrayList<>();
         Globals g = Globals.getInstance();
@@ -130,24 +132,41 @@ public class AdvancedSearchFragment extends Fragment {
         btnAdvancedSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String searchTerm = editTextSearchTerm.getText().toString();
+                String contains = editTextContains.getText().toString();
                 String prefix = editTextStartsWith.getText().toString();
                 String suffix = editTextEndsWith.getText().toString();
                 int minLength = seekBarNumLettersMin.getProgress();
                 int maxLength = seekBarNumLettersMax.getProgress();
-                SearchWordsTask searchWordsTask = null;
 
-                if (minLength == 0 && maxLength == 0) {
-                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, 30);
-                } else if (minLength == 0 && maxLength != 0) {
-                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, maxLength);
-                } else if (minLength != 0 && maxLength == 0) {
-                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, 30);
+                if(minLength <= maxLength){
+                    Map<String, String> filterMap = new HashMap<>();
+                    filterMap.put("Contains", contains);
+                    filterMap.put("Prefix", prefix);
+                    filterMap.put("Suffix", suffix);
+                    filterMap.put("Minimum Word Length", String.valueOf(minLength));
+                    filterMap.put("Maximum Word Length", String.valueOf(maxLength));
+
+                    mListener.onAdvancedSearchFragmentInteraction(view, filterMap);
                 } else {
-                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, maxLength);
+                    Toast.makeText(getActivity(), "Minimum word length must not be greater than maximum word length", Toast.LENGTH_LONG).show();
                 }
 
-                searchWordsTask.execute();
+
+
+
+//                SearchWordsTask searchWordsTask = null;
+//
+//                if (minLength == 0 && maxLength == 0) {
+//                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, 30);
+//                } else if (minLength == 0 && maxLength != 0) {
+//                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, maxLength);
+//                } else if (minLength != 0 && maxLength == 0) {
+//                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, 30);
+//                } else {
+//                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, maxLength);
+//                }
+//
+//                searchWordsTask.execute();
             }
         });
 
@@ -155,62 +174,90 @@ public class AdvancedSearchFragment extends Fragment {
         return view;
     }
 
-    private class SearchWordsTask extends AsyncTask<Void, Void, Void> {
-
-        private String searchTerm;
-        private String prefix;
-        private String suffix;
-        private int minLength;
-        private int maxLength;
-        private View view;
-
-        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int minLength, int maxLength) {
-            this.searchTerm = searchTerm;
-            this.prefix = prefix;
-            this.suffix = suffix;
-            this.minLength = minLength;
-            this.maxLength = maxLength;
-            this.view = view;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Searching...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            for (Word word : dictionary.getWordList()) {
-                if (word.getWord().contains(searchTerm) && word.getWord().startsWith(prefix) && word.getWord().endsWith(suffix)) {
-                    if (word.getWord().length() >= minLength && word.getWord().length() <= maxLength) {
-                        matches.add(word);
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-
-            if (matches.size() > 0) {
-                mListener.onAdvancedSearchFragmentInteraction(view, matches);
-            } else {
-                Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
+//    private class ApplyFilterTask extends AsyncTask<Void, Void, Void> {
+//
+//        private String contains;
+//        private String prefix;
+//        private String suffix;
+//        private int minLength;
+//        private int maxLength;
+//
+//        private Map<String, String> filter;
+//
+//        public ApplyFilterTask(String contains, String prefix, String suffix, int minLength, int maxLength){
+//            this.contains = contains;
+//            this.prefix = prefix;
+//            this.suffix = suffix;
+//            this.minLength = minLength;
+//            this.maxLength = maxLength;
+//
+//            this.filter = new HashMap<>();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//
+//
+//            return null;
+//        }
+//    }
+//
+//    private class SearchWordsTask extends AsyncTask<Void, Void, Void> {
+//
+//        private String searchTerm;
+//        private String prefix;
+//        private String suffix;
+//        private int minLength;
+//        private int maxLength;
+//        private View view;
+//
+//        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int minLength, int maxLength) {
+//            this.searchTerm = searchTerm;
+//            this.prefix = prefix;
+//            this.suffix = suffix;
+//            this.minLength = minLength;
+//            this.maxLength = maxLength;
+//            this.view = view;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            progressDialog = new ProgressDialog(getActivity());
+//            progressDialog.setMessage("Searching...");
+//            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            for (Word word : dictionary.getWordList()) {
+//                if (word.getWord().contains(searchTerm) && word.getWord().startsWith(prefix) && word.getWord().endsWith(suffix)) {
+//                    if (word.getWord().length() >= minLength && word.getWord().length() <= maxLength) {
+//                        matches.add(word);
+//                    }
+//                }
+//            }
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            if (progressDialog != null && progressDialog.isShowing()) {
+//                progressDialog.dismiss();
+//                progressDialog = null;
+//            }
+//
+//            if (matches.size() > 0) {
+//                mListener.onAdvancedSearchFragmentInteraction(view, matches);
+//            } else {
+//                Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
+//            }
+//
+//        }
+//    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -240,7 +287,7 @@ public class AdvancedSearchFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onAdvancedSearchFragmentInteraction(View view, ArrayList<Word> matches);
+        public void onAdvancedSearchFragmentInteraction(View view, Map<String, String> filters);
     }
 
 }

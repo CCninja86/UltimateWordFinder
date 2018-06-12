@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/return"
+        android:orderInCategory="300"
+        android:title="@string/action_return"
+        android:icon="@drawable/back_return_button"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/filter"
+        android:orderInCategory="200"
+        android:title="@string/action_filter"
+        android:icon="@drawable/filter_results_button"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

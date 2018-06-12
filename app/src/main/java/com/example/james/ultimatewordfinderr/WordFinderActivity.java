@@ -30,12 +30,18 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     private WordFinderMainFragment wordFinderMainFragment;
     private WordFinderDictionaryFragment wordFinderDictionaryFragment;
 
+    private Toolbar toolbar;
+
+    private LinkedHashMap<String, Integer> searchResults;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_finder);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.word_finder_activity_toolbar);
+        this.searchResults = new LinkedHashMap<>();
+
+        toolbar = (Toolbar) findViewById(R.id.word_finder_activity_toolbar);
         setSupportActionBar(toolbar);
 
         Bundle bundle = getIntent().getBundleExtra("selection");
@@ -56,11 +62,39 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         }
     }
 
+    public void showFilterButton(){
+        toolbar.getMenu().findItem(R.id.filter).setVisible(true);
+    }
+
+    public void hideFilterButton(){
+        toolbar.getMenu().findItem(R.id.filter).setVisible(false);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
+        inflater.inflate(R.menu.word_finder_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.filter);
+        menuItem.setVisible(false);
+
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                hideFilterButton();
+
+                AdvancedSearchFragment advancedSearchFragment = new AdvancedSearchFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.containerWordFinder, advancedSearchFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+                return true;
+            }
+        });
+
+
         return true;
     }
 
@@ -85,6 +119,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
         switch (view.getId()) {
             case R.id.btnSearch:
+
                 WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
 
                 Gson gson = new Gson();
@@ -95,6 +130,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
                 searchResultsFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment);
                 fragmentTransaction.addToBackStack(null);
+
                 break;
         }
 
@@ -165,17 +201,58 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public void onAdvancedSearchFragmentInteraction(View view, ArrayList<Word> matches) {
+    public void onResultsFragmentLoaded(LinkedHashMap<String, Integer> searchResults) {
+        this.searchResults = searchResults;
+        showFilterButton();
+    }
+
+    @Override
+    public void onResultsFragmentClosed() {
+        hideFilterButton();
+    }
+
+    @Override
+    public void onAdvancedSearchFragmentInteraction(View view, Map<String, String> filters) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
-        ArrayList<String> words = new ArrayList<>();
+        LinkedHashMap<String, Integer> words = new LinkedHashMap<>();
 
-        for (Word word : matches) {
-            words.add(word.getWord());
+        for (Map.Entry entry : searchResults.entrySet()) {
+            String word = (String) entry.getKey();
+            int wordScore = (int) entry.getValue();
+            boolean matchesFilters = false;
+
+            int minWordLength = Integer.parseInt(filters.get("Minimum Word Length"));
+            int maxWordLength = Integer.parseInt(filters.get("Maximum Word Length"));
+
+            if(word.contains(filters.get("Contains"))
+                    && word.startsWith(filters.get("Prefix"))
+                    && word.endsWith(filters.get("Suffix"))){
+
+                if(maxWordLength != 0){
+                    if(word.length() > minWordLength && word.length() < maxWordLength){
+                        matchesFilters = true;
+                    }
+                } else if(minWordLength != 0){
+                    if(word.length() > minWordLength){
+                        matchesFilters = true;
+                    }
+                } else {
+                    matchesFilters = true;
+                }
+
+            }
+
+            if(matchesFilters){
+                words.put(word, wordScore);
+            }
         }
 
+        Gson gson = new Gson();
+        String json = gson.toJson(words, new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
+
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList("Search Results", words);
+        bundle.putString("Search Results", json);
         searchResultsFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment);
         fragmentTransaction.addToBackStack(null);
