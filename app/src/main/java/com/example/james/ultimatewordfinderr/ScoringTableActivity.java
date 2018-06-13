@@ -287,11 +287,13 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
     public void onFragmentInteraction(String option) {
         switch (option) {
             case "Report Bug":
-                BugReportFragment bugReportFragment = new BugReportFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, bugReportFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                // TODO: Implement WIP Bug Report screen
+
+//                BugReportFragment bugReportFragment = new BugReportFragment();
+//                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.container, bugReportFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
         }
     }
 

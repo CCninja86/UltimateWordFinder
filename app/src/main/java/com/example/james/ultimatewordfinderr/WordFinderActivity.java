@@ -344,12 +344,15 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         fragmentTransaction = fragmentManager.beginTransaction();
         switch (option) {
             case "Report Bug":
-                BugReportFragment bugReportFragment = new BugReportFragment();
-                fragmentTransaction.replace(R.id.containerWordFinder, bugReportFragment, "BUG_REPORT");
-                fragmentTransaction.addToBackStack("bugReportFragment");
-                fragmentTransaction.commit();
+                // TODO: Finish WIP Bug Report screen
+
+//                BugReportFragment bugReportFragment = new BugReportFragment();
+//                fragmentTransaction.replace(R.id.containerWordFinder, bugReportFragment, "BUG_REPORT");
+//                fragmentTransaction.addToBackStack("bugReportFragment");
                 break;
         }
+
+        fragmentTransaction.commit();
     }
 
     @Override
