@@ -224,9 +224,9 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         checkBoxOfficialOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    ArrayList<String> officialWords = new ArrayList<>();
+                ArrayList<String> officialWords = new ArrayList<>();
 
+                if (isChecked) {
                     for (int i = 0; i < adapter.getItemCount(); i++) {
                         if (dictionary.isWordOfficial((String) adapter.getItemAtPosition(i).getKey())) {
                             officialWords.add((String) adapter.getItemAtPosition(i).getKey());
@@ -244,7 +244,7 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
 
                 adapter.setClickListener(itemClickListener);
 
-                if(adapter.getItemCount() > listSizeLimit){
+                if(officialWords.size() > listSizeLimit){
                     Toast.makeText(getActivity(), "Showing only the top " + listSizeLimit + " highest scoring words", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getActivity(), "Showing all results", Toast.LENGTH_SHORT).show();
