@@ -19,6 +19,8 @@ public class Dictionary implements Serializable {
     private DatabaseHandler database;
     CSVReader csvReader;
 
+    private Scrabble scrabbleGame;
+
     /**
      * '
      * Creates a new Dictionary object with the list of words from the text file (from the database.txt once done transferring)
@@ -29,6 +31,7 @@ public class Dictionary implements Serializable {
         this.wordList = new ArrayList<>();
         this.stringWordList = new ArrayList<>();
         this.wordMap = new HashMap<String, Word>();
+        this.scrabbleGame = Globals.getInstance().getGame();
     }
 
     /**
@@ -181,25 +184,7 @@ public class Dictionary implements Serializable {
      * @return the letter score for the specified letter
      */
     public int getLetterScore(String letter) {
-        int score = 0;
-
-        if ("eaionrtlsu".contains(letter)) {
-            score = 1;
-        } else if ("dg".contains(letter)) {
-            score = 2;
-        } else if ("bcmp".contains(letter)) {
-            score = 3;
-        } else if ("fhvwy".contains(letter)) {
-            score = 4;
-        } else if ("k".contains(letter)) {
-            score = 5;
-        } else if ("jx".contains(letter)) {
-            score = 8;
-        } else if ("qz".contains(letter)) {
-            score = 10;
-        }
-
-        return score;
+        return scrabbleGame.getTileByLetter(letter).getPoints();
     }
 
     public void linkDatabase(DatabaseHandler database) {
