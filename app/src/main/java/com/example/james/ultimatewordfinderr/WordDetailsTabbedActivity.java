@@ -72,7 +72,7 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
         // Disable Toolbar scrolling so the toolbar plays nice with the Lists
-        AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams)  toolbar.getLayoutParams();
+        AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
         toolbarLayoutParams.setScrollFlags(0);
         toolbar.setLayoutParams(toolbarLayoutParams);
 
@@ -130,7 +130,7 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
 
                 StringBuilder partsOfSpeechMapStringBuilder = new StringBuilder();
 
-                for(Map.Entry entry : partsOfSpeechMap.entrySet()){
+                for (Map.Entry entry : partsOfSpeechMap.entrySet()) {
                     partsOfSpeechMapStringBuilder.append("\n").append(entry.getKey()).append(": ").append(entry.getValue());
                 }
 
@@ -166,14 +166,14 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
 
         return true;
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         onSupportNavigateUp();
     }
 
@@ -201,29 +201,29 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
 
     @Override
     public void onResultsSuccess(ArrayList<Word> words) {
-        if(progressDialog != null && progressDialog.isShowing()){
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
             progressDialog = null;
         }
 
-        if(words.size() > 0){
+        if (words.size() > 0) {
             Word word = words.get(0);
 
             String[] tags = word.getTags();
             String pronunciationString = "";
             StringBuilder partOfSpeechStringBuilder = new StringBuilder();
 
-            for (String tag : tags){
-                if(tag.contains("ipa_pron")){
+            for (String tag : tags) {
+                if (tag.contains("ipa_pron")) {
                     pronunciationString = tag.split(":")[1];
                 }
 
-                if(!tag.contains(":")){
+                if (!tag.contains(":")) {
                     partOfSpeechStringBuilder.append(tag).append(",");
                 }
             }
 
-            if(partOfSpeechStringBuilder.toString().length() > 0){
+            if (partOfSpeechStringBuilder.toString().length() > 0) {
                 partOfSpeechStringBuilder.insert(0, new char[]{'('}, 0, 1);
                 partOfSpeechStringBuilder.replace(partOfSpeechStringBuilder.toString().lastIndexOf(","), partOfSpeechStringBuilder.toString().lastIndexOf(",") + 1, "");
                 partOfSpeechStringBuilder.append(")");
@@ -239,7 +239,6 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
             finish();
         }
     }
-
 
 
     @Override

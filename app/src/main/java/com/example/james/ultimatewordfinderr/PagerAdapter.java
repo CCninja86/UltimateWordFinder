@@ -10,7 +10,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     private int numOfTabs;
     private String word;
 
-    PagerAdapter(FragmentManager fragmentManager, int numOfTabs, String word){
+    PagerAdapter(FragmentManager fragmentManager, int numOfTabs, String word) {
         super(fragmentManager);
         this.numOfTabs = numOfTabs;
         this.word = word;
@@ -21,7 +21,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Bundle bundle = new Bundle();
         bundle.putString("Word", this.word);
-        switch (position){
+        switch (position) {
             case 0:
                 WordDetailsDefinitionsTabFragment wordDetailsDefinitionsTabFragment = new WordDetailsDefinitionsTabFragment();
                 wordDetailsDefinitionsTabFragment.setArguments(bundle);

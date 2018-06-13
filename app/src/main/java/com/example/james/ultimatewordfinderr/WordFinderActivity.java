@@ -73,31 +73,31 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         WordFinderSearchResultsFragment wordFinderSearchResultsFragment = (WordFinderSearchResultsFragment) fragmentManager.findFragmentByTag("SEARCH_RESULTS");
         AdvancedSearchFragment advancedSearchFragment = (AdvancedSearchFragment) fragmentManager.findFragmentByTag("ADVANCED_SEARCH");
         WordFinderScoreComparisonFragment wordFinderScoreComparisonFragment = (WordFinderScoreComparisonFragment) fragmentManager.findFragmentByTag("SCORE_COMPARISON");
         WordFinderMainFragment wordFinderMainFragment = (WordFinderMainFragment) fragmentManager.findFragmentByTag("WORD_FINDER_MAIN");
         WordFinderDictionaryFragment wordFinderDictionaryFragment = (WordFinderDictionaryFragment) fragmentManager.findFragmentByTag("DICTIONARY");
 
-        if(wordFinderSearchResultsFragment != null && wordFinderSearchResultsFragment.isVisible()){
+        if (wordFinderSearchResultsFragment != null && wordFinderSearchResultsFragment.isVisible()) {
             fragmentManager.popBackStack("wordFinderMainFragment", 0);
-        } else if((advancedSearchFragment != null && advancedSearchFragment.isVisible())
-                || (wordFinderScoreComparisonFragment != null && wordFinderScoreComparisonFragment.isVisible())){
+        } else if ((advancedSearchFragment != null && advancedSearchFragment.isVisible())
+                || (wordFinderScoreComparisonFragment != null && wordFinderScoreComparisonFragment.isVisible())) {
             fragmentManager.popBackStack("searchResultsFragment", 0);
-        } else if((wordFinderMainFragment != null && wordFinderMainFragment.isVisible())
-                || (wordFinderDictionaryFragment != null && wordFinderDictionaryFragment.isVisible())){
+        } else if ((wordFinderMainFragment != null && wordFinderMainFragment.isVisible())
+                || (wordFinderDictionaryFragment != null && wordFinderDictionaryFragment.isVisible())) {
             finish();
         }
 
         return true;
     }
 
-    public void showFilterButton(){
+    public void showFilterButton() {
         toolbar.getMenu().findItem(R.id.filter).setVisible(true);
     }
 
-    public void hideFilterButton(){
+    public void hideFilterButton() {
         toolbar.getMenu().findItem(R.id.filter).setVisible(false);
     }
 
@@ -154,7 +154,8 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
                 WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
 
                 Gson gson = new Gson();
-                String mapJson = gson.toJson(searchMatches, new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
+                String mapJson = gson.toJson(searchMatches, new TypeToken<LinkedHashMap<String, Integer>>() {
+                }.getType());
 
                 Bundle bundle = new Bundle();
                 bundle.putString("Search Results", mapJson);
@@ -168,7 +169,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         fragmentTransaction.commit();
     }
 
-    private static Map<String, Integer> sortByValue(Map<String, Integer> unsortedMap){
+    private static Map<String, Integer> sortByValue(Map<String, Integer> unsortedMap) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
 
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
@@ -180,7 +181,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
         Map<String, Integer> sortedMap = new LinkedHashMap<>();
 
-        for(Map.Entry<String, Integer> entry : list){
+        for (Map.Entry<String, Integer> entry : list) {
             sortedMap.put(entry.getKey(), entry.getValue());
         }
 
@@ -258,16 +259,16 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
             int minWordLength = Integer.parseInt(filters.get("Minimum Word Length"));
             int maxWordLength = Integer.parseInt(filters.get("Maximum Word Length"));
 
-            if(word.contains(filters.get("Contains"))
+            if (word.contains(filters.get("Contains"))
                     && word.startsWith(filters.get("Prefix"))
-                    && word.endsWith(filters.get("Suffix"))){
+                    && word.endsWith(filters.get("Suffix"))) {
 
-                if(maxWordLength != 0){
-                    if(word.length() > minWordLength && word.length() < maxWordLength){
+                if (maxWordLength != 0) {
+                    if (word.length() > minWordLength && word.length() < maxWordLength) {
                         matchesFilters = true;
                     }
-                } else if(minWordLength != 0){
-                    if(word.length() > minWordLength){
+                } else if (minWordLength != 0) {
+                    if (word.length() > minWordLength) {
                         matchesFilters = true;
                     }
                 } else {
@@ -276,13 +277,14 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
             }
 
-            if(matchesFilters){
+            if (matchesFilters) {
                 words.put(word, wordScore);
             }
         }
 
         Gson gson = new Gson();
-        String json = gson.toJson(words, new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
+        String json = gson.toJson(words, new TypeToken<LinkedHashMap<String, Integer>>() {
+        }.getType());
 
         Bundle bundle = new Bundle();
         bundle.putString("Search Results", json);

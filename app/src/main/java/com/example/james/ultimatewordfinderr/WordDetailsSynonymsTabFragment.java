@@ -140,7 +140,7 @@ public class WordDetailsSynonymsTabFragment extends Fragment implements WordOpti
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         wordOptionsHandler.cancelExecution();
     }

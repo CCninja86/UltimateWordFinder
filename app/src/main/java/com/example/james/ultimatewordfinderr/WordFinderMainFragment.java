@@ -293,14 +293,14 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
         LinkedHashMap<String, Integer> sortedMap;
         ArrayList<Word> matches;
 
-        public SortByValueTask(ArrayList<Word> matches){
+        public SortByValueTask(ArrayList<Word> matches) {
             this.unsortedMap = new LinkedHashMap<>();
             this.sortedMap = new LinkedHashMap<>();
             this.matches = matches;
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progressDialog.setMessage("Processing...");
         }
 
@@ -317,7 +317,7 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
                 }
             });
 
-            for(Map.Entry<String, Integer> entry : list){
+            for (Map.Entry<String, Integer> entry : list) {
                 sortedMap.put(entry.getKey(), entry.getValue());
             }
 
@@ -325,8 +325,8 @@ public class WordFinderMainFragment extends Fragment implements PatternMatcherRe
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            if(progressDialog != null && progressDialog.isShowing()){
+        protected void onPostExecute(Void result) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
             }

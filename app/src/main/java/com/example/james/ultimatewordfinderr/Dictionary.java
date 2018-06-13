@@ -53,10 +53,10 @@ public class Dictionary implements Serializable {
         }
     }
 
-    public LinkedHashMap<String, Integer> createWordScoreMap(ArrayList<String> words){
+    public LinkedHashMap<String, Integer> createWordScoreMap(ArrayList<String> words) {
         LinkedHashMap<String, Integer> wordScoreMap = new LinkedHashMap<>();
 
-        for(String word : words){
+        for (String word : words) {
             wordScoreMap.put(word, getBaseWordScore(word));
         }
 
@@ -67,10 +67,10 @@ public class Dictionary implements Serializable {
         return this.stringWordList;
     }
 
-    public ArrayList<String> getStringWordList(ArrayList<Word> words){
+    public ArrayList<String> getStringWordList(ArrayList<Word> words) {
         ArrayList<String> list = new ArrayList<>();
 
-        for(Word word : words){
+        for (Word word : words) {
             list.add(word.getWord());
         }
 

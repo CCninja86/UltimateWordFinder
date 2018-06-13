@@ -32,12 +32,12 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
         mSelected = new HashSet<>();
     }
 
-    public Map.Entry getItemAtPosition(int position){
+    public Map.Entry getItemAtPosition(int position) {
         Map.Entry entryToReturn = null;
         int index = 0;
 
-        for (Map.Entry entry : words.entrySet()){
-            if (index == position){
+        for (Map.Entry entry : words.entrySet()) {
+            if (index == position) {
                 entryToReturn = entry;
                 break;
             }
@@ -48,8 +48,8 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
         return entryToReturn;
     }
 
-    public void toggleSelection(int position){
-        if(mSelected.contains(position)){
+    public void toggleSelection(int position) {
+        if (mSelected.contains(position)) {
             mSelected.remove(position);
         } else {
             mSelected.add(position);
@@ -58,8 +58,8 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
         notifyItemChanged(position);
     }
 
-    public void select(int position, boolean selected){
-        if(selected){
+    public void select(int position, boolean selected) {
+        if (selected) {
             mSelected.add(position);
         } else {
             mSelected.remove(position);
@@ -68,9 +68,9 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
         notifyItemChanged(position);
     }
 
-    public void selectRange(int start, int end, boolean selected){
-        for(int i = start; i <= end; i++){
-            if(selected){
+    public void selectRange(int start, int end, boolean selected) {
+        for (int i = start; i <= end; i++) {
+            if (selected) {
                 mSelected.add(i);
             } else {
                 mSelected.remove(i);
@@ -80,13 +80,13 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
         notifyItemRangeChanged(start, end - start + 1);
     }
 
-    public void deselectAll(){
+    public void deselectAll() {
         mSelected.clear();
         notifyDataSetChanged();
     }
 
-    public void selectAll(){
-        for (int i = 0; i < words.size(); i++){
+    public void selectAll() {
+        for (int i = 0; i < words.size(); i++) {
             mSelected.add(i);
         }
 
@@ -100,19 +100,20 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
     public ArrayList<String> getSelectedWords() {
         ArrayList<String> selectedWords = new ArrayList<>();
 
-        for (int position : mSelected){
+        for (int position : mSelected) {
             selectedWords.add((String) getItemAtPosition(position).getKey());
         }
 
         return selectedWords;
     }
 
-    public void setClickListener(ItemClickListener itemClickListener){
+    public void setClickListener(ItemClickListener itemClickListener) {
         clickListener = itemClickListener;
     }
 
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+
         boolean onItemLongClick(View view, int position);
     }
 
@@ -125,10 +126,10 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position){
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.textView.setText((String) getItemAtPosition(position).getKey());
 
-        if (mSelected.contains(position)){
+        if (mSelected.contains(position)) {
             viewHolder.textView.setBackgroundColor(Color.LTGRAY);
         } else {
             viewHolder.textView.setBackgroundColor(Color.WHITE);
@@ -140,7 +141,7 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
         return words.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView textView;
 
@@ -153,7 +154,7 @@ public class ResultListViewAdapter extends RecyclerView.Adapter<ResultListViewAd
 
         @Override
         public void onClick(View view) {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onItemClick(view, getAdapterPosition());
             }
         }

@@ -33,20 +33,21 @@ public class SynonymsListViewAdapter extends RecyclerView.Adapter<SynonymsListVi
         this.words = words;
     }
 
-    public int getCount(){
+    public int getCount() {
         return words.size();
     }
 
-    public Word getItemAtPosition(int position){
+    public Word getItemAtPosition(int position) {
         return words.get(position);
     }
 
-    public void setClickListener(ResultListViewAdapter.ItemClickListener itemClickListener){
+    public void setClickListener(ResultListViewAdapter.ItemClickListener itemClickListener) {
         clickListener = itemClickListener;
     }
 
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+
         boolean onItemLongClick(View view, int position);
     }
 
@@ -68,7 +69,7 @@ public class SynonymsListViewAdapter extends RecyclerView.Adapter<SynonymsListVi
         return words.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView textView;
 
@@ -81,7 +82,7 @@ public class SynonymsListViewAdapter extends RecyclerView.Adapter<SynonymsListVi
 
         @Override
         public void onClick(View view) {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onItemClick(view, getAdapterPosition());
             }
         }

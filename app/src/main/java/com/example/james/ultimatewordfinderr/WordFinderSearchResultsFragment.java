@@ -124,10 +124,11 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         wordOptionsHandlerResultsListener = this;
         topWords = new LinkedHashMap<>();
 
-        this.searchResults = gson.fromJson(bundle.getString("Search Results"), new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
+        this.searchResults = gson.fromJson(bundle.getString("Search Results"), new TypeToken<LinkedHashMap<String, Integer>>() {
+        }.getType());
         mListener.onResultsFragmentLoaded(this.searchResults);
 
-        if(this.searchResults.size() > listSizeLimit){
+        if (this.searchResults.size() > listSizeLimit) {
             Toast.makeText(getActivity(), "Showing only the top " + listSizeLimit + " highest scoring words", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getActivity(), "Showing all results", Toast.LENGTH_SHORT).show();
@@ -136,7 +137,7 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         Iterator iterator = searchResults.entrySet().iterator();
         int count = 0;
 
-        while(iterator.hasNext() && (count < listSizeLimit)){
+        while (iterator.hasNext() && (count < listSizeLimit)) {
             Map.Entry pair = (Map.Entry) iterator.next();
 
             topWords.put((String) pair.getKey(), (Integer) pair.getValue());
@@ -197,13 +198,13 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
             public boolean onMainActionSelected() {
                 ArrayList<String> wordsToCompare = adapter.getSelectedWords();
 
-                if(wordsToCompare.size() == 0){
-                    for(int i = 0; i < adapter.getItemCount(); i++){
+                if (wordsToCompare.size() == 0) {
+                    for (int i = 0; i < adapter.getItemCount(); i++) {
                         wordsToCompare.add((String) adapter.getItemAtPosition(i).getKey());
                     }
                 }
 
-                if(wordsToCompare.size() > 1){
+                if (wordsToCompare.size() > 1) {
                     mListener.onResultsFragmentButtonInteraction("compare", wordsToCompare);
                 } else {
                     Toast.makeText(getActivity(), "Please select at least two words to compare with each other", Toast.LENGTH_LONG).show();
@@ -226,8 +227,8 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
                 if (isChecked) {
                     ArrayList<String> officialWords = new ArrayList<>();
 
-                    for(int i = 0; i < adapter.getItemCount(); i++){
-                        if(dictionary.isWordOfficial((String) adapter.getItemAtPosition(i).getKey())){
+                    for (int i = 0; i < adapter.getItemCount(); i++) {
+                        if (dictionary.isWordOfficial((String) adapter.getItemAtPosition(i).getKey())) {
                             officialWords.add((String) adapter.getItemAtPosition(i).getKey());
                         }
                     }
@@ -326,7 +327,7 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
 
     @Override
     public void onSynonymsSuccess(String word, ArrayList<Word> synonyms) {
-        if(progressDialog != null && progressDialog.isShowing()){
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
             progressDialog = null;
         }
@@ -336,7 +337,7 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
 
     @Override
     public void onDefinitionsSuccess(String word, DefinitionList definitionList) {
-        if(progressDialog != null && progressDialog.isShowing()){
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
             progressDialog = null;
         }

@@ -136,12 +136,12 @@ public class BugReportFragment extends Fragment {
 
         private GitHubIssue gitHubIssue;
 
-        public CreateIssueOnGitHubTask(GitHubIssue gitHubIssue){
+        public CreateIssueOnGitHubTask(GitHubIssue gitHubIssue) {
             this.gitHubIssue = gitHubIssue;
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Sending...");
             progressDialog.setIndeterminate(true);
@@ -164,12 +164,12 @@ public class BugReportFragment extends Fragment {
                     .setCallback(new FutureCallback<JsonObject>() {
                         @Override
                         public void onCompleted(Exception e, JsonObject result) {
-                            if(progressDialog != null && progressDialog.isShowing()){
+                            if (progressDialog != null && progressDialog.isShowing()) {
                                 progressDialog.dismiss();
                                 progressDialog = null;
                             }
 
-                            if(result != null){
+                            if (result != null) {
                                 Toast.makeText(getActivity(), "Bug report uploaded successfully", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -182,7 +182,7 @@ public class BugReportFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
 
         }
     }

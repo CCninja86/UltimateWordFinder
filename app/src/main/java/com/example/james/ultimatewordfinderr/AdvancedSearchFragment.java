@@ -138,7 +138,7 @@ public class AdvancedSearchFragment extends Fragment {
                 int minLength = seekBarNumLettersMin.getProgress();
                 int maxLength = seekBarNumLettersMax.getProgress();
 
-                if(minLength <= maxLength){
+                if (minLength <= maxLength) {
                     Map<String, String> filterMap = new HashMap<>();
                     filterMap.put("Contains", contains);
                     filterMap.put("Prefix", prefix);
@@ -150,8 +150,6 @@ public class AdvancedSearchFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "Minimum word length must not be greater than maximum word length", Toast.LENGTH_LONG).show();
                 }
-
-
 
 
 //                SearchWordsTask searchWordsTask = null;

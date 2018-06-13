@@ -102,7 +102,7 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         wordOptionsHandler.cancelExecution();
     }
@@ -141,7 +141,6 @@ public class WordDetailsDefinitionsTabFragment extends Fragment implements WordO
         listView.setAdapter(listAdapter);
 
     }
-
 
 
     public void onButtonPressed(int numResults) {

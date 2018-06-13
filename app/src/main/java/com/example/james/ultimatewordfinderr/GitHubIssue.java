@@ -12,13 +12,13 @@ public class GitHubIssue {
     private String[] assignees;
     private String priority;
 
-    public GitHubIssue(String title, String description, String priority){
+    public GitHubIssue(String title, String description, String priority) {
         this.title = title;
         this.description = description;
         this.priority = priority;
     }
 
-    public GitHubIssue(){
+    public GitHubIssue() {
 
     }
 
@@ -70,9 +70,10 @@ public class GitHubIssue {
         this.priority = priority;
     }
 
-    public String toJson(){
+    public String toJson() {
         Gson gson = new Gson();
 
-        return gson.toJson(this, new TypeToken<GitHubIssue>(){}.getType());
+        return gson.toJson(this, new TypeToken<GitHubIssue>() {
+        }.getType());
     }
 }

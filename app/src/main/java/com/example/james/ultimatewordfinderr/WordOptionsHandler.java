@@ -70,22 +70,22 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
         getSynonymsTask.execute();
     }
 
-    public void cancelExecution(){
-        if(getDefinitionsTask != null && !getDefinitionsTask.isCancelled()){
+    public void cancelExecution() {
+        if (getDefinitionsTask != null && !getDefinitionsTask.isCancelled()) {
             getDefinitionsTask.cancel(true);
         }
 
-        if(getSynonymsTask != null && !getSynonymsTask.isCancelled()){
+        if (getSynonymsTask != null && !getSynonymsTask.isCancelled()) {
             getSynonymsTask.cancel(true);
         }
     }
 
     @Override
     public void onResultsSuccess(ArrayList<nz.co.ninjastudios.datamuseandroid.Word> words) {
-        if(words.size() == 1 && words.get(0).getDefs().length > 0){
+        if (words.size() == 1 && words.get(0).getDefs().length > 0) {
             DefinitionList definitionList = new DefinitionList();
 
-            for(String definition : words.get(0).getDefs()){
+            for (String definition : words.get(0).getDefs()) {
                 Definition wordDefinition = new Definition();
                 wordDefinition.setPartOfSpeech(definition.split("\t")[0]);
                 wordDefinition.setDefinition(definition.split("\t")[1]);
@@ -114,7 +114,7 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if(!isCancelled()){
+            if (!isCancelled()) {
                 datamuseAndroid.spelledLike(word);
                 datamuseAndroid.setMetadataFlags(new String[]{"d"});
                 datamuseAndroid.maxResults(1);
@@ -143,7 +143,7 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
         @Override
         protected Void doInBackground(Object... params) {
-            if(!isCancelled()){
+            if (!isCancelled()) {
                 if (word.contains(" ")) {
                     word = word.toLowerCase().replaceAll(" ", "%20");
                 }
@@ -168,14 +168,14 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
         private String url;
         private boolean official;
 
-        public CheckOfficialStatusTask(String word){
+        public CheckOfficialStatusTask(String word) {
             this.word = word;
             this.url = "https://wordfind.com/word/" + word;
             this.official = false;
         }
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
 
         }
 
@@ -186,8 +186,8 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
 
                 Elements resultElements = document.select("p.letters > span");
 
-                if(resultElements.size() > 0 && resultElements.get(0) != null){
-                    if(resultElements.get(0).text().equals("Yes!")){
+                if (resultElements.size() > 0 && resultElements.get(0) != null) {
+                    if (resultElements.get(0).text().equals("Yes!")) {
                         official = true;
                     }
                 }
@@ -201,7 +201,7 @@ public class WordOptionsHandler implements DatamuseAndroidResultsListener {
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
 
         }
     }
