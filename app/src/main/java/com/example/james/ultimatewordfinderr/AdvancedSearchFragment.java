@@ -149,112 +149,12 @@ public class AdvancedSearchFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "Minimum word length must not be greater than maximum word length", Toast.LENGTH_LONG).show();
                 }
-
-
-//                SearchWordsTask searchWordsTask = null;
-//
-//                if (minLength == 0 && maxLength == 0) {
-//                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, 30);
-//                } else if (minLength == 0 && maxLength != 0) {
-//                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, 0, maxLength);
-//                } else if (minLength != 0 && maxLength == 0) {
-//                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, 30);
-//                } else {
-//                    searchWordsTask = new SearchWordsTask(view, searchTerm, prefix, suffix, minLength, maxLength);
-//                }
-//
-//                searchWordsTask.execute();
             }
         });
 
 
         return view;
     }
-
-//    private class ApplyFilterTask extends AsyncTask<Void, Void, Void> {
-//
-//        private String contains;
-//        private String prefix;
-//        private String suffix;
-//        private int minLength;
-//        private int maxLength;
-//
-//        private Map<String, String> filter;
-//
-//        public ApplyFilterTask(String contains, String prefix, String suffix, int minLength, int maxLength){
-//            this.contains = contains;
-//            this.prefix = prefix;
-//            this.suffix = suffix;
-//            this.minLength = minLength;
-//            this.maxLength = maxLength;
-//
-//            this.filter = new HashMap<>();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//
-//
-//            return null;
-//        }
-//    }
-//
-//    private class SearchWordsTask extends AsyncTask<Void, Void, Void> {
-//
-//        private String searchTerm;
-//        private String prefix;
-//        private String suffix;
-//        private int minLength;
-//        private int maxLength;
-//        private View view;
-//
-//        public SearchWordsTask(View view, String searchTerm, String prefix, String suffix, int minLength, int maxLength) {
-//            this.searchTerm = searchTerm;
-//            this.prefix = prefix;
-//            this.suffix = suffix;
-//            this.minLength = minLength;
-//            this.maxLength = maxLength;
-//            this.view = view;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            progressDialog = new ProgressDialog(getActivity());
-//            progressDialog.setMessage("Searching...");
-//            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//            progressDialog.setIndeterminate(true);
-//            progressDialog.setCancelable(false);
-//            progressDialog.show();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            for (Word word : dictionary.getWordList()) {
-//                if (word.getWord().contains(searchTerm) && word.getWord().startsWith(prefix) && word.getWord().endsWith(suffix)) {
-//                    if (word.getWord().length() >= minLength && word.getWord().length() <= maxLength) {
-//                        matches.add(word);
-//                    }
-//                }
-//            }
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            if (progressDialog != null && progressDialog.isShowing()) {
-//                progressDialog.dismiss();
-//                progressDialog = null;
-//            }
-//
-//            if (matches.size() > 0) {
-//                mListener.onAdvancedSearchFragmentInteraction(view, matches);
-//            } else {
-//                Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
-//            }
-//
-//        }
-//    }
 
     @Override
     public void onAttach(Activity activity) {
