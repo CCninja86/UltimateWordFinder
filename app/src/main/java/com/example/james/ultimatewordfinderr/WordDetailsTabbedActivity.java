@@ -66,6 +66,9 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
         // Disable Toolbar scrolling so the toolbar plays nice with the Lists
@@ -160,6 +163,18 @@ public class WordDetailsTabbedActivity extends AppCompatActivity implements Word
         datamuseAndroid.get();
 
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed(){
+        onSupportNavigateUp();
     }
 
     @Override

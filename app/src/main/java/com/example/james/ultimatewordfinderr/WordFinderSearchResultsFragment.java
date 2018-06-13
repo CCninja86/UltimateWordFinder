@@ -113,7 +113,8 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_word_finder_search_results, container, false);
 
-
+        ((WordFinderActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((WordFinderActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Bundle bundle = getArguments();
         final Globals g = Globals.getInstance();

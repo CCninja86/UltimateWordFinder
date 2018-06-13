@@ -1,6 +1,7 @@
 package com.example.james.ultimatewordfinderr;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,6 +30,8 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     private com.example.james.ultimatewordfinderr.Dictionary dictionary;
     private WordFinderMainFragment wordFinderMainFragment;
     private WordFinderDictionaryFragment wordFinderDictionaryFragment;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     private Toolbar toolbar;
 
@@ -39,27 +42,55 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_finder);
 
+        fragmentManager = getSupportFragmentManager();
+
         this.searchResults = new LinkedHashMap<>();
 
         toolbar = (Toolbar) findViewById(R.id.word_finder_activity_toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Bundle bundle = getIntent().getBundleExtra("selection");
         int selection = bundle.getInt("selection");
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
         if (savedInstanceState == null) {
             if (selection == 1) {
                 wordFinderDictionaryFragment = new WordFinderDictionaryFragment();
-                fragmentTransaction.replace(R.id.containerWordFinder, wordFinderDictionaryFragment);
+                fragmentTransaction.replace(R.id.containerWordFinder, wordFinderDictionaryFragment, "DICTIONARY");
+                fragmentTransaction.addToBackStack("wordFinderDictionaryFragment");
             } else {
                 wordFinderMainFragment = new WordFinderMainFragment();
-                fragmentTransaction.replace(R.id.containerWordFinder, wordFinderMainFragment);
+                fragmentTransaction.replace(R.id.containerWordFinder, wordFinderMainFragment, "WORD_FINDER_MAIN");
+                fragmentTransaction.addToBackStack("wordFinderMainFragment");
             }
 
             fragmentTransaction.commit();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        WordFinderSearchResultsFragment wordFinderSearchResultsFragment = (WordFinderSearchResultsFragment) fragmentManager.findFragmentByTag("SEARCH_RESULTS");
+        AdvancedSearchFragment advancedSearchFragment = (AdvancedSearchFragment) fragmentManager.findFragmentByTag("ADVANCED_SEARCH");
+        WordFinderScoreComparisonFragment wordFinderScoreComparisonFragment = (WordFinderScoreComparisonFragment) fragmentManager.findFragmentByTag("SCORE_COMPARISON");
+        WordFinderMainFragment wordFinderMainFragment = (WordFinderMainFragment) fragmentManager.findFragmentByTag("WORD_FINDER_MAIN");
+        WordFinderDictionaryFragment wordFinderDictionaryFragment = (WordFinderDictionaryFragment) fragmentManager.findFragmentByTag("DICTIONARY");
+
+        if(wordFinderSearchResultsFragment != null && wordFinderSearchResultsFragment.isVisible()){
+            fragmentManager.popBackStack("wordFinderMainFragment", 0);
+        } else if((advancedSearchFragment != null && advancedSearchFragment.isVisible())
+                || (wordFinderScoreComparisonFragment != null && wordFinderScoreComparisonFragment.isVisible())){
+            fragmentManager.popBackStack("searchResultsFragment", 0);
+        } else if((wordFinderMainFragment != null && wordFinderMainFragment.isVisible())
+                || (wordFinderDictionaryFragment != null && wordFinderDictionaryFragment.isVisible())){
+            finish();
+        }
+
+        return true;
     }
 
     public void showFilterButton(){
@@ -85,9 +116,9 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
                 hideFilterButton();
 
                 AdvancedSearchFragment advancedSearchFragment = new AdvancedSearchFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.containerWordFinder, advancedSearchFragment);
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.containerWordFinder, advancedSearchFragment, "ADVANCED_SEARCH");
+                fragmentTransaction.addToBackStack("advancedSearchFragment");
                 fragmentTransaction.commit();
 
                 return true;
@@ -103,10 +134,10 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         switch (item.getItemId()) {
             case R.id.itemHelpFeedback:
                 HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.containerWordFinder, helpFeedbackFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.containerWordFinder, helpFeedbackFragment, "HELP_FEEDBACK");
+                fragmentTransaction.addToBackStack("helpFeedbackFragment");
+                fragmentTransaction.commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -115,7 +146,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onSearchFragmentInteraction(View view, LinkedHashMap<String, Integer> searchMatches) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
         switch (view.getId()) {
             case R.id.btnSearch:
@@ -128,8 +159,8 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
                 Bundle bundle = new Bundle();
                 bundle.putString("Search Results", mapJson);
                 searchResultsFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment);
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment, "SEARCH_RESULTS");
+                fragmentTransaction.addToBackStack("searchResultsFragment");
 
                 break;
         }
@@ -158,7 +189,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onResultsFragmentButtonInteraction(String action, ArrayList<String> selectedWords) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
         switch (action) {
             case "definition": {
@@ -166,18 +197,20 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
                 Bundle bundle = new Bundle();
                 bundle.putString("word", selectedWords.get(0));
                 wordDetailsDefinitionsTabFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsDefinitionsTabFragment);
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsDefinitionsTabFragment, "WORD_DETAILS_DEFINITIONS");
+                fragmentTransaction.addToBackStack("wordDetailsDefinitionsTabFragment");
                 fragmentTransaction.commit();
                 break;
             }
             case "compare": {
+                hideFilterButton();
+
                 WordFinderScoreComparisonFragment scoreComparisonFragment = new WordFinderScoreComparisonFragment();
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("wordsToCompare", selectedWords);
                 scoreComparisonFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.containerWordFinder, scoreComparisonFragment);
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.containerWordFinder, scoreComparisonFragment, "SCORE_COMPARISON");
+                fragmentTransaction.addToBackStack("scoreComparisonFragment");
                 fragmentTransaction.commit();
                 break;
             }
@@ -213,7 +246,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onAdvancedSearchFragmentInteraction(View view, Map<String, String> filters) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
         WordFinderSearchResultsFragment searchResultsFragment = new WordFinderSearchResultsFragment();
         LinkedHashMap<String, Integer> words = new LinkedHashMap<>();
 
@@ -254,8 +287,8 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
         Bundle bundle = new Bundle();
         bundle.putString("Search Results", json);
         searchResultsFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.containerWordFinder, searchResultsFragment, "SEARCH_RESULTS");
+        fragmentTransaction.addToBackStack("searchResultsFragment");
         fragmentTransaction.commit();
     }
 
@@ -266,11 +299,7 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
-        if (wordFinderMainFragment != null) {
-            wordFinderMainFragment.backButtonWasPressed();
-        }
+        onSupportNavigateUp();
     }
 
     @Override
@@ -286,37 +315,37 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     }
 
     private void loadSynonymsFragment(String word, ArrayList<nz.co.ninjastudios.datamuseandroid.Word> synonyms) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
         WordDetailsSynonymsTabFragment wordDetailsSynonymsTabFragment = new WordDetailsSynonymsTabFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Synonyms", synonyms);
         bundle.putString("Word", word);
         wordDetailsSynonymsTabFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsSynonymsTabFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsSynonymsTabFragment, "WORD_DETAILS_SYNONYMS");
+        fragmentTransaction.addToBackStack("wordDetailsSynonymsTabFragment");
         fragmentTransaction.commit();
     }
 
     private void loadDefinitionsFragment(String word, DefinitionList definitionList) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
         WordDetailsDefinitionsTabFragment wordDetailsDefinitionsTabFragment = new WordDetailsDefinitionsTabFragment();
         Bundle bundle = new Bundle();
         bundle.putString("Definition List", new Gson().toJson(definitionList));
         bundle.putString("Word", word);
         wordDetailsDefinitionsTabFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsDefinitionsTabFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.containerWordFinder, wordDetailsDefinitionsTabFragment, "WORD_DETAILS_DEFINITIONS");
+        fragmentTransaction.addToBackStack("wordDetailsDefinitionsTabFragment");
         fragmentTransaction.commit();
     }
 
     @Override
     public void onFragmentInteraction(String option) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
         switch (option) {
             case "Report Bug":
                 BugReportFragment bugReportFragment = new BugReportFragment();
-                fragmentTransaction.replace(R.id.containerWordFinder, bugReportFragment);
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.containerWordFinder, bugReportFragment, "BUG_REPORT");
+                fragmentTransaction.addToBackStack("bugReportFragment");
                 fragmentTransaction.commit();
                 break;
         }

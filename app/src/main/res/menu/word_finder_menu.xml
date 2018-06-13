@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/return"
-        android:orderInCategory="300"
-        android:title="@string/action_return"
-        android:icon="@drawable/back_return_button"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/filter"
         android:orderInCategory="200"
         android:title="@string/action_filter"
