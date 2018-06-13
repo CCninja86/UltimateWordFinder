@@ -243,6 +243,12 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
                 }
 
                 adapter.setClickListener(itemClickListener);
+
+                if(adapter.getItemCount() > listSizeLimit){
+                    Toast.makeText(getActivity(), "Showing only the top " + listSizeLimit + " highest scoring words", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), "Showing all results", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
