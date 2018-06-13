@@ -55,21 +55,18 @@ public class Player implements Serializable {
             String letter = letters[i];
 
             if (!letter.equals("")) {
-                for (Tile tile : tiles) {
-                    if (tile.getLetter().equals(letter)) {
-                        int letterPoints = tile.getPoints();
+                Tile tile = scrabbleGame.getTileByLetter(letter);
+                int letterPoints = tile.getPoints();
 
-                        if (doubleLetterBonuses.contains(tile.getLetter())) {
-                            letterPoints *= 2;
-                            doubleLetterBonuses.remove(tile.getLetter());
-                        } else if (tripleLetterBonuses.contains(tile.getLetter())) {
-                            letterPoints *= 3;
-                            tripleLetterBonuses.remove(tile.getLetter());
-                        }
-
-                        totalPoints += letterPoints;
-                    }
+                if (doubleLetterBonuses.contains(tile.getLetter())) {
+                    letterPoints *= 2;
+                    doubleLetterBonuses.remove(tile.getLetter());
+                } else if (tripleLetterBonuses.contains(tile.getLetter())) {
+                    letterPoints *= 3;
+                    tripleLetterBonuses.remove(tile.getLetter());
                 }
+
+                totalPoints += letterPoints;
             }
         }
 
