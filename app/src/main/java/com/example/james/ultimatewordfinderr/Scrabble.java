@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 public class Scrabble implements Serializable {
     private ArrayList<Player> players;
     private ArrayList<Tile> tiles;
+    private Map<String, Tile> tileMap;
     private ArrayList<String> wordHistory;
     private int totalTiles = 100;
 
@@ -31,6 +32,7 @@ public class Scrabble implements Serializable {
         this.tiles = new ArrayList<>();
         this.wordHistory = new ArrayList<>();
         this.playerMap = new HashMap<>();
+        this.tileMap = new HashMap<>();
 
         for (Player player : players) {
             playerMap.put(player.getName(), player);
@@ -65,6 +67,14 @@ public class Scrabble implements Serializable {
         this.tiles.add(new Tile("X", 8, false, 1));
         this.tiles.add(new Tile("Y", 4, false, 2));
         this.tiles.add(new Tile("Z", 10, false, 1));
+
+        initialiseTileMap();
+    }
+
+    private void initialiseTileMap(){
+        for (Tile tile : tiles){
+            tileMap.put(tile.getLetter(), tile);
+        }
     }
 
     public void removeTile(Tile tile) {
@@ -156,15 +166,11 @@ public class Scrabble implements Serializable {
     }
 
     public Tile getTileByLetter(String letter) {
-        Tile tileToReturn = null;
-
-        for (Tile tile : this.tiles) {
-            if (tile.getLetter().equals(letter)) {
-                tileToReturn = tile;
-            }
+        if(tileMap.containsKey(letter)){
+            return tileMap.get(letter);
+        } else {
+            return null;
         }
-
-        return tileToReturn;
     }
 
     public ArrayList<String> getWordHistory() {

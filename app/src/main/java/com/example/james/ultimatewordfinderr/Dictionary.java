@@ -166,14 +166,6 @@ public class Dictionary implements Serializable {
     }
 
     public boolean isWordOfficial(String word) {
-        //boolean isOfficial = false;
-
-        /*for(Word wordInDictionary : this.wordList){
-            if(wordInDictionary.getWord().equals(word)){
-                isOfficial = wordInDictionary.isWordOfficial();
-            }
-        }*/
-
         return this.wordMap.get(word).isWordOfficial();
     }
 
@@ -184,7 +176,13 @@ public class Dictionary implements Serializable {
      * @return the letter score for the specified letter
      */
     public int getLetterScore(String letter) {
-        return scrabbleGame.getTileByLetter(letter).getPoints();
+        Tile tile = scrabbleGame.getTileByLetter(letter);
+
+        if(tile != null){
+            return tile.getPoints();
+        }
+
+        return 0;
     }
 
     public void linkDatabase(DatabaseHandler database) {
