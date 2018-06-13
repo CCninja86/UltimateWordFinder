@@ -146,10 +146,10 @@ public class BugReportFragment extends Fragment {
             json.addProperty("title", "[" + gitHubIssue.getPriority() + "] " + gitHubIssue.getTitle());
             json.addProperty("description", gitHubIssue.getDescription());
 
+            // TODO: Integrate custom backend
             Ion.with(getActivity())
-                    .load("https://api.github.com/repos/CCninja86/UltimateWordFinder/issues")
+                    .load("https://example.com/backend")
                     .setHeader("Content-Type", "application/json")
-                    .setHeader("Authorization", "CCninja86")
                     .setJsonObjectBody(json)
                     .asJsonObject()
                     .setCallback(new FutureCallback<JsonObject>() {
