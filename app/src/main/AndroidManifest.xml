@@ -35,7 +35,9 @@
         <activity
             android:name=".WordDetailsTabbedActivity"
             android:label="@string/title_activity_word_details_tabbed"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".AboutAppActivity" />
+        <activity android:name=".CreditsActivity"></activity>
     </application>
 
 </manifest>

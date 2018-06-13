@@ -61,4 +61,17 @@
 
     <string name="no_definitions">No definitions found</string>
     <string name="no_synonyms">No synonyms found</string>
+
+    <string name="credits_activity_text">Some icons in this app designed by Freepik, Dave Gandy, Google, and SimpleIcon</string>
+    <string name="about_app_text">This app is a free and open-source app for Android, licensed under GPL-2.0.\n\n
+                                    You can use this app to:\n\n
+
+                                    - Track scores in word games\n
+                                    - Solve anagrams\n
+                                    - Find words using patterns\n
+                                    - Filter results using filters, including contains, starts with, ends with, and minimum/maximum word length\n
+                                    - Compare the base scores of word (based on the scores of letter tiles in Scrabble)\n
+                                    - View word details including pronunciation, parts of speech, definitions, and synonyms\n\n
+
+        Note: The word details screen requires an active internet connection. Everything else will work fully offline.</string>
 </resources>

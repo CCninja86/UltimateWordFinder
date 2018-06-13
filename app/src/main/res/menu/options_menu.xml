@@ -3,4 +3,10 @@
 
     <item android:title="Help &amp; Feedback"
         android:id="@+id/itemHelpFeedback" />
+
+    <item android:title="About App"
+        android:id="@+id/aboutApp"/>
+
+    <item android:title="Acknowledgements"
+        android:id="@+id/acknowledgements"/>
 </menu>

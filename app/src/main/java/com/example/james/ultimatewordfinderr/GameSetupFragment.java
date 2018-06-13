@@ -1,8 +1,7 @@
 package com.example.james.ultimatewordfinderr;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link android.app.Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link GameSetupFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
@@ -109,7 +108,7 @@ public class GameSetupFragment extends Fragment {
                         bundle.putSerializable("players", players);
                         AddPlayerFragment addPlayerFragment = new AddPlayerFragment();
                         addPlayerFragment.setArguments(bundle);
-                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.containerGameSetup, addPlayerFragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();

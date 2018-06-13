@@ -154,11 +154,21 @@ public class ScoringTableActivity extends AppCompatActivity implements ScoringFr
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemHelpFeedback:
+                android.app.FragmentTransaction helpFeedbackFragmentTransaction = getFragmentManager().beginTransaction();
                 HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
-                transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, helpFeedbackFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                helpFeedbackFragmentTransaction.replace(R.id.container, helpFeedbackFragment);
+                helpFeedbackFragmentTransaction.addToBackStack(null);
+                helpFeedbackFragmentTransaction.commit();
+                return true;
+            case R.id.aboutApp:
+                Intent aboutAppIntent = new Intent(this, AboutAppActivity.class);
+                startActivity(aboutAppIntent);
+
+                return true;
+            case R.id.acknowledgements:
+                Intent acknowledgementsIntent = new Intent(this, CreditsActivity.class);
+                startActivity(acknowledgementsIntent);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

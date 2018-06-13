@@ -1,16 +1,18 @@
 package com.example.james.ultimatewordfinderr;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-public class GameSetupActivity extends AppCompatActivity implements GameSetupFragment.OnFragmentInteractionListener, AddPlayerFragment.OnFragmentInteractionListener {
+public class GameSetupActivity extends AppCompatActivity implements GameSetupFragment.OnFragmentInteractionListener, AddPlayerFragment.OnFragmentInteractionListener, HelpFeedbackFragment.OnFragmentInteractionListener {
 
 
     @Override
@@ -31,24 +33,34 @@ public class GameSetupActivity extends AppCompatActivity implements GameSetupFra
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_game_setup, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.itemHelpFeedback:
+                HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.containerGameSetup, helpFeedbackFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                return true;
+            case R.id.aboutApp:
+                Intent aboutAppIntent = new Intent(this, AboutAppActivity.class);
+                startActivity(aboutAppIntent);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                return true;
+            case R.id.acknowledgements:
+                Intent acknowledgementsIntent = new Intent(this, CreditsActivity.class);
+                startActivity(acknowledgementsIntent);
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -71,5 +83,10 @@ public class GameSetupActivity extends AppCompatActivity implements GameSetupFra
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.containerGameSetup, gameSetupFragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(String option) {
+
     }
 }

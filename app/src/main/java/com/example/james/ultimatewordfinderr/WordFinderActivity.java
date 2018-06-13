@@ -132,11 +132,21 @@ public class WordFinderActivity extends AppCompatActivity implements WordFinderM
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemHelpFeedback:
+                android.app.FragmentTransaction helpFeedbackFragmentTransaction = getFragmentManager().beginTransaction();
                 HelpFeedbackFragment helpFeedbackFragment = new HelpFeedbackFragment();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerWordFinder, helpFeedbackFragment, "HELP_FEEDBACK");
-                fragmentTransaction.addToBackStack("helpFeedbackFragment");
-                fragmentTransaction.commit();
+                helpFeedbackFragmentTransaction.replace(R.id.containerWordFinder, helpFeedbackFragment, "HELP_FEEDBACK");
+                helpFeedbackFragmentTransaction.addToBackStack("helpFeedbackFragment");
+                helpFeedbackFragmentTransaction.commit();
+                return true;
+            case R.id.aboutApp:
+                Intent aboutAppIntent = new Intent(this, AboutAppActivity.class);
+                startActivity(aboutAppIntent);
+
+                return true;
+            case R.id.acknowledgements:
+                Intent acknowledgementsIntent = new Intent(this, CreditsActivity.class);
+                startActivity(acknowledgementsIntent);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
