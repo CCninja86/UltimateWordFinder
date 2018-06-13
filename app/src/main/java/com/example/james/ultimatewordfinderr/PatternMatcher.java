@@ -1,13 +1,9 @@
 package com.example.james.ultimatewordfinderr;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.view.View;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

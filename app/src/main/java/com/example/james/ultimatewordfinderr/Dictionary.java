@@ -4,7 +4,6 @@ package com.example.james.ultimatewordfinderr;
 import android.app.ProgressDialog;
 
 import java.io.Serializable;
-import java.io.WriteAbortedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

@@ -2,21 +2,13 @@ package com.example.james.ultimatewordfinderr;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
-import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 import nz.co.ninjastudios.datamuseandroid.DatamuseAndroid;
 import nz.co.ninjastudios.datamuseandroid.DatamuseAndroidResultsListener;

@@ -1,10 +1,9 @@
 package com.example.james.ultimatewordfinderr;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

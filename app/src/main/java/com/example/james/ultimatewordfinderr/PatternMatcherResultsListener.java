@@ -1,7 +1,5 @@
 package com.example.james.ultimatewordfinderr;
 
-import android.view.View;
-
 import java.util.ArrayList;
 
 /**
