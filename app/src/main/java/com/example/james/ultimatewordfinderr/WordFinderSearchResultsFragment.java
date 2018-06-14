@@ -74,6 +74,9 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
 
     private ProgressDialog progressDialog;
 
+    private boolean showOnlyOfficial;
+    private boolean showAll;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -120,12 +123,14 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
         final Globals g = Globals.getInstance();
         this.dictionary = g.getDictionary();
 
+        showOnlyOfficial = false;
+        showAll = false;
+
         gson = new Gson();
         wordOptionsHandlerResultsListener = this;
         topWords = new LinkedHashMap<>();
 
-        this.searchResults = gson.fromJson(bundle.getString("Search Results"), new TypeToken<LinkedHashMap<String, Integer>>() {
-        }.getType());
+        this.searchResults = gson.fromJson(bundle.getString("Search Results"), new TypeToken<LinkedHashMap<String, Integer>>() {}.getType());
         mListener.onResultsFragmentLoaded(this.searchResults);
 
         if (this.searchResults.size() > listSizeLimit) {
@@ -219,7 +224,8 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
             }
         });
 
-        CheckBox checkBoxOfficialOnly = (CheckBox) view.findViewById(R.id.chkOfficial);
+        CheckBox checkBoxOfficialOnly = view.findViewById(R.id.chkOfficial);
+        CheckBox checkBoxShowAll = view.findViewById(R.id.checkBoxShowAll);
 
         checkBoxOfficialOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -227,22 +233,31 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
                 ArrayList<String> officialWords = new ArrayList<>();
 
                 if (isChecked) {
-                    for (int i = 0; i < adapter.getItemCount(); i++) {
-                        if (dictionary.isWordOfficial((String) adapter.getItemAtPosition(i).getKey())) {
-                            officialWords.add((String) adapter.getItemAtPosition(i).getKey());
-                        }
-                    }
+                    showOnlyOfficial = true;
 
-                    LinkedHashMap<String, Integer> officialWordsMap = dictionary.createWordScoreMap(officialWords);
-
-                    adapter = new ResultListViewAdapter(getActivity(), officialWordsMap);
-                    listResults.setAdapter(adapter);
+                    updateList();
                 } else {
-                    adapter = new ResultListViewAdapter(getActivity(), topWords);
-                    listResults.setAdapter(adapter);
+                    showOnlyOfficial = false;
+
+                    updateList();
                 }
 
-                adapter.setClickListener(itemClickListener);
+
+            }
+        });
+
+        checkBoxShowAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    showAll = true;
+
+                    updateList();
+                } else {
+                    showAll = false;
+
+                    updateList();
+                }
             }
         });
 
@@ -298,6 +313,36 @@ public class WordFinderSearchResultsFragment extends Fragment implements WordOpt
 
 
         return view;
+    }
+
+    private void updateList(){
+        LinkedHashMap<String, Integer> wordsToShow = searchResults;
+
+        if(showOnlyOfficial) {
+            for (String word : wordsToShow.keySet()){
+                if (!dictionary.isWordOfficial(word)) {
+                    wordsToShow.remove(word);
+                }
+            }
+        }
+
+        if(!showAll){
+            int count = 0;
+
+            for(Map.Entry entry : wordsToShow.entrySet()){
+                if(count >= listSizeLimit){
+                    String key = (String) entry.getKey();
+                    wordsToShow.remove(key);
+                }
+
+                count++;
+            }
+        }
+
+        adapter = new ResultListViewAdapter(getActivity(), wordsToShow);
+        listResults.setAdapter(adapter);
+
+        adapter.setClickListener(itemClickListener);
     }
 
     public static float round(float d, int decimalPlace) {

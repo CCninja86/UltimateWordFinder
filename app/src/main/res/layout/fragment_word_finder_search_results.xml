@@ -35,4 +35,12 @@
         android:layout_alignParentTop="true"
         android:text="@string/word_finder_checkbox_official_only" />
 
+    <CheckBox
+        android:id="@+id/checkBoxShowAll"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/chkOfficial"
+        android:text="Show All Results" />
+
 </RelativeLayout>
