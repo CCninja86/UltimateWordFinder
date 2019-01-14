@@ -4,6 +4,8 @@
 
 This project has been moved to GitLab, please go here to get the latest version: https://gitlab.com/CCninja86/UltimateWordFinder
 
+---------------------------------------------------------------------------------------------------------------------------------
+
 This project is licensed under the terms of the GPL-2.0 license.
 
 ### Download
