@@ -1,5 +1,9 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/CCninja86/UltimateWordFinder.png?columns=all)](https://waffle.io/CCninja86/UltimateWordFinder?utm_source=badge) [![Build Status](https://travis-ci.org/CCninja86/UltimateWordFinder.svg?branch=master)](https://travis-ci.org/CCninja86/UltimateWordFinder)
 
+## PLEASE READ ##
+
+This project has been moved to GitLab, please go here to get the latest version: https://gitlab.com/CCninja86/UltimateWordFinder
+
 This project is licensed under the terms of the GPL-2.0 license.
 
 ### Download
